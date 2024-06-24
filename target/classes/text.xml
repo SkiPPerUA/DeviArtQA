@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="landing_page">{"en":"Landing page","ru":"Лендинг"}</entry>
+    <entry key="name">{"en":"Name","ru":"Название"}</entry>
+    <entry key="archived">{"en":"Archived","ru":"Архивный"}</entry>
+    <entry key="code">{"en":"Code","ru":"Код"}</entry>
+    <entry key="tracker_URL">{"en":"Tracker URL","ru":"Трекер URL"}</entry>
+    <entry key="direct_links">{"en":"Direct links","ru":"Прямые ссылки"}</entry>
+    <entry key="traffic_source">{"en":"Traffic source","ru":"Источник трафика"}</entry>
+    <entry key="product">{"en":"Product","ru":"Продукт"}</entry>
+    <entry key="offers">{"en":"Offers","ru":"Офферы"}</entry>
+    <entry key="payouts">{"en":"Payouts","ru":"Выплаты"}</entry>
+    <entry key="landing_pages">{"en":"Landing pages","ru":"Лендинги"}</entry>
+    <entry key="partner_landing_pages">{"en":"Partner landing pages","ru":"Партнерские лендинги"}</entry>
+    <entry key="pre_landing_pages">{"en":"Prelanding pages","ru":"Прелендинги"}</entry>
+    <entry key="pre_landing_page">{"en":"Prelanding page","ru":"Прелендинг"}</entry>
+    <entry key="url_postback">URL Postback</entry>
+    <entry key="postback_type">{"en":"Postback Type","ru":"Тип запроса Postback"}</entry>
+    <entry key="redirect_url_if_offer_disabled">{"en":"Redirect URL if offer disabled","ru":"URL перенаправления при отключенном оффере"}</entry>
+    <entry key="refresh_time">{"en":"Refresh time","ru":"Время редактирования"}</entry>
+    <entry key="addition_time">{"en":"Addition time","ru":"Время добавления"}</entry>
+    <entry key="italy">{"en":"Italy","ru":"Италия"}</entry>
+    <entry key="active">{"en":"Active","ru":"Активен"}</entry>
+    <entry key="disabled">{"en":"Disabled","ru":"Не активен"}</entry>
+    <entry key="waiting_for_processing">{"en":"Waiting for processing","ru":"Ожидает обработки"}</entry>
+    <entry key="processing">{"en":"Processing","ru":"Обработка"}</entry>
+    <entry key="error_of_addition">{"en":"Error of addition","ru":"Ошибка добавления"}</entry>
+    <entry key="all">{"en":"All","ru":"Все"}</entry>
+    <entry key="new">{"en":"New","ru":"Новый"}</entry>
+    <entry key="payment_on_delivery">{"en":"Payment on delivery","ru":"Оплата при доставке"}</entry>
+    <entry key="not_paid">{"en":"Not paid","ru":"Не оплачен"}</entry>
+    <entry key="additional_selling">{"en":"Additional selling","ru":"Дополнительная продажа"}</entry>
+    <entry key="address">{"en":"Address","ru":"Адрес"}</entry>
+    <entry key="select_payment_type">Select Payment Type</entry>
+    <entry key="cash">{"en":"Cash","ru":"Наличные"}</entry>
+    <entry key="cards">{"en":"Cards","ru":"Карты"}</entry>
+    <entry key="currency">{"en":"Currency","ru":"Валюта"}</entry>
+    <entry key="company_name">{"en":"Company name","ru":"Название компании"}</entry>
+    <entry key="registration_number">{"en":"Registration number","ru":"Регистрационный номер"}</entry>
+    <entry key="legal_address">{"en":"Legal address","ru":"Юридический адрес"}</entry>
+    <entry key="tax_number">{"en":"Tax number","ru":"Налоговый номер (VAT)"}</entry>
+    <entry key="email">Email</entry>
+    <entry key="invoice_number_template">{"en":"Invoice number template","ru":"Шаблон номера инвойса"}</entry>
+    <entry key="invoice_corrective_number_template">{"en":"Invoice corrective number template","ru":"Шаблон корректирующего номера инвойса"}</entry>
+</properties>
