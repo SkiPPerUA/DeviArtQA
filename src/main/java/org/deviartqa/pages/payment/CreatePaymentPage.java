@@ -33,6 +33,8 @@ public class CreatePaymentPage extends CabinetPage {
 
     public CreatePaymentPage setPayment_type(String data){
         super.setPayment_type(data);
+//        new Widget(Locators.page.locator("//select[@name='"+pageLoc+"[payment_type]']")).click();
+//        choseDrop(data);
         return this;
     }
 

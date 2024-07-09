@@ -62,4 +62,8 @@ public class DBconnector {
             throw new RuntimeException(e);
         }
     }
+
+    public String getSchema() {
+        return schema;
+    }
 }

@@ -1,4 +1,4 @@
-package deviartTests.pageTests;
+package deviartTests.pageTests.accounting;
 
 import deviartTests.BaseTest;
 import org.deviartqa.core.DBconnector;

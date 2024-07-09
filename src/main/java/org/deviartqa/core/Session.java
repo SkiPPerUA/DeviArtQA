@@ -11,11 +11,10 @@ public abstract class Session {
     private static Browser browser;
     private static Page page;
     public static BrowserContext context;
-    private static Playwright playwright;
 
     private static void start(){
         if (browser == null) {
-            playwright = Playwright.create();
+            Playwright playwright = Playwright.create();
             playwright.selectors().setTestIdAttribute("name");
             browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
                     .setHeadless(TestScenario.headless)

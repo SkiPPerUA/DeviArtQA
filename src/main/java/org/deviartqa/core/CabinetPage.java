@@ -75,8 +75,18 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setSend_date(String data) {
+        new Widget(Locators.page.locator("//input[@id='send_date']")).clear().fill(data);
+        return this;
+    }
+
     protected CabinetPage setCompany_name(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[company_name]")).fill(data);
+        return this;
+    }
+
+    protected CabinetPage setExtra_price(String data) {
+        new Widget(Locators.page.locator("//input[@id='extra_price']")).fill(data);
         return this;
     }
 
@@ -231,6 +241,21 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setValid_approve_percent(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[valid_approve_percent]")).fill(data);
+        return this;
+    }
+
+    protected CabinetPage setRate_from(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[rate_from]")).fill(data);
+        return this;
+    }
+
+    protected CabinetPage setRate_to(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[rate_to]")).fill(data);
+        return this;
+    }
+
     protected CabinetPage setCount_type_product(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[count_type_product]")).fill(data);
         return this;
@@ -239,6 +264,13 @@ public abstract class CabinetPage extends SitePage{
     protected CabinetPage setType(String data) {
         new Widget(Locators.page.locator("//button[@data-id='type']")).click();
         choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setTypeContainer(String data) {
+        new Widget(Locators.page.locator("//span[contains(@id,'type-container')]")).click();
+        new Widget(Locators.page.locator("//input[contains(@class,'search__field')]")).fill(data);
+        new Widget(Locators.page.locator("//*[contains(text(),'"+data+"')]")).click();
         return this;
     }
 

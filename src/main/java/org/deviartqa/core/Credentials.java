@@ -16,7 +16,9 @@ public class Credentials {
         }else if (role == RoleCred.webmaster && TestScenario.env.equals("prime")){
             cred = "ltk1evbomcogdjl3a23btd6get";
         }else if (role == RoleCred.admin && TestScenario.env.equals("sandbox")){
-            cred = "ritv15menf66sfp0150imk4i5j";
+            cred = "oivtlf8ht6t6forv15tadg8acb";
+        }else if (role == RoleCred.admin && TestScenario.env.equals("prime")){
+            cred = "uajoh6bgs9qtcmfv790m4kbtdg";
         }
         return cred;
     }
@@ -29,6 +31,17 @@ public class Credentials {
             creeds.put("port","8319");
         }else if (TestScenario.env.equals("prime")){
             creeds.put("port","8320");
+        }
+        return creeds;
+    }
+
+    public Map<String,String> getWebCreeds(){
+        Map<String,String> creeds = new HashMap<>();
+        creeds.put("password", "p6&Rvgdl");
+        if (TestScenario.role == RoleCred.admin){
+            creeds.put("email", "admin_savchukvi12@gmail.com");
+        }else if (TestScenario.role == RoleCred.webmaster){
+            creeds.put("email", "savchukvi12@gmail.com");
         }
         return creeds;
     }

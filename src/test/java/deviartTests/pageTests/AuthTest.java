@@ -23,9 +23,8 @@ public class AuthTest extends BaseTest {
     public void positive_auth(){
         authPage.open()
                 .readyPage()
-                .makeAuth("savchukvi12@gmail.com","sdfhkhk@kjhdsf4")
-                .readyPage()
-                .header.log_out();
+                .makeAuth("savchukvi12@gmail.com","p6&Rvgdl")
+                .readyPage();
     }
 
     public void positive_check_buttons() {

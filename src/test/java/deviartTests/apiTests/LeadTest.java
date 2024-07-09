@@ -6,7 +6,6 @@ import org.deviartqa.api.LeadsAPI;
 import org.deviartqa.core.DBconnector;
 import org.deviartqa.helper.DataHelper;
 import org.testng.Assert;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,26 +15,27 @@ import java.util.List;
 
 @Test
 public class LeadTest extends BaseTest {
-    LeadsAPI leads = new LeadsAPI();
+    public LeadsAPI leads = new LeadsAPI();
     DBconnector dBconnector;
     int sleep = 10000;
+    public String offer_id = "8105";
+    public int user_Id = TestScenario.userId;
     public void create_lead_positive() throws SQLException, InterruptedException {
         String phone = String.valueOf(new Date().getTime());
         String name = "test"+ DataHelper.getUuid();
         String country = "RO";
-        String offer_id = "8105";
         makePositiveOffers(offer_id);
         leads.createLead("{\n" +
-                "\"user_id\": "+TestScenario.userId+",\n" +
+                "\"user_id\": "+user_Id+",\n" +
                 "    \"data\":{\n" +
                 "        \"offer_id\": \""+offer_id+"\",\n" +
                 "        \"name\": \""+name+"\",\n" +
                 "        \"country\": \""+country+"\",\n" +
                 "        \"phone\": \""+phone+"\"\n" +
                 "        }\n" +
-                "}\n");
+                "}\n",user_Id);
         Thread.sleep(sleep);
-        ResultSet res = getDB(leads.getLead_id());
+        ResultSet res = getDB_byId(leads.getLead_id());
         res.next();
         Assert.assertEquals(res.getString("phone"),phone);
         Assert.assertEquals(res.getString("name"),name);
@@ -100,7 +100,7 @@ public class LeadTest extends BaseTest {
                 "\"order_id\":\"order_id\"\n" +
                 "}\n" +
                 "}\n");
-        ResultSet res = getDB(leads.getLead_id());
+        ResultSet res = getDB_byId(leads.getLead_id());
         res.next();
         Assert.assertEquals(res.getInt("user_id"),TestScenario.userId);
         Assert.assertEquals(res.getString("offer_id"),offer_id);
@@ -237,7 +237,7 @@ public class LeadTest extends BaseTest {
                 "        }\n" +
                 "}\n");
         Thread.sleep(sleep);
-        ResultSet res = getDB(leads.getLead_id());
+        ResultSet res = getDB_byId(leads.getLead_id());
         res.next();
         Assert.assertEquals(res.getString("status"),"expect");
     }
@@ -267,7 +267,7 @@ public class LeadTest extends BaseTest {
 
         id.forEach(x->{
             try {
-                ResultSet res = getDB(x);
+                ResultSet res = getDB_byId(x);
                 res.next();
                 String lead_status = res.getString("status");
                 Assert.assertEquals(lead_status,"trash");
@@ -294,7 +294,7 @@ public class LeadTest extends BaseTest {
         leads.createLead(body);
         //Ожидание обработки статусов
         Thread.sleep(sleep);
-        ResultSet res = getDB(leads.getLead_id());
+        ResultSet res = getDB_byId(leads.getLead_id());
         res.next();
         Assert.assertEquals(res.getString("status"),"trash");
     }
@@ -326,7 +326,7 @@ public class LeadTest extends BaseTest {
         });
         id.forEach(x-> {
             try {
-                ResultSet res = getDB(x);
+                ResultSet res = getDB_byId(x);
                 res.next();
                 Assert.assertEquals(res.getString("status"),"fail");
             } catch (SQLException e) {
@@ -359,7 +359,7 @@ public class LeadTest extends BaseTest {
             });
         id.forEach(x-> {
             try {
-                ResultSet res = getDB(x);
+                ResultSet res = getDB_byId(x);
                 res.next();
                 Assert.assertEquals(res.getString("status"),"expect");
             } catch (SQLException e) {
@@ -389,7 +389,7 @@ public class LeadTest extends BaseTest {
         Thread.sleep(sleep);
         id.forEach(x-> {
             try {
-                ResultSet res = getDB(x);
+                ResultSet res = getDB_byId(x);
                 res.next();
                 Assert.assertEquals(res.getString("status"),"fail");
             } catch (SQLException e) {
@@ -412,7 +412,7 @@ public class LeadTest extends BaseTest {
                     "        }\n" +
                     "}\n");
         Thread.sleep(sleep);
-        ResultSet res = getDB(leads.getLead_id());
+        ResultSet res = getDB_byId(leads.getLead_id());
         res.next();
         Assert.assertEquals(res.getString("status"),"expect");
     }
@@ -447,7 +447,7 @@ public class LeadTest extends BaseTest {
                 "        }\n" +
                 "}\n");
         Thread.sleep(sleep);
-        ResultSet res = getDB(leads.getLead_id());
+        ResultSet res = getDB_byId(leads.getLead_id());
         res.next();
         Assert.assertEquals(res.getString("status"),"fail");
     }
@@ -469,7 +469,7 @@ public class LeadTest extends BaseTest {
                 "        }\n" +
                 "}\n",denied_user);
         try {
-            ResultSet res = getDB(leads.getLead_id());
+            ResultSet res = getDB_byId(leads.getLead_id());
             res.next();
             Assert.assertEquals(res.getString("status"),"fail");
         } catch (SQLException e) {
@@ -485,7 +485,7 @@ public class LeadTest extends BaseTest {
                 "        }\n" +
                 "}\n");
         try {
-            ResultSet res = getDB(leads.getLead_id());
+            ResultSet res = getDB_byId(leads.getLead_id());
             res.next();
             Assert.assertEquals(res.getString("status"),"expect");
         } catch (SQLException e) {
@@ -505,7 +505,7 @@ public class LeadTest extends BaseTest {
                     "        }\n" +
                     "}\n",denied_user);
             try {
-                ResultSet res = getDB(leads.getLead_id());
+                ResultSet res = getDB_byId(leads.getLead_id());
                 res.next();
                 Assert.assertEquals(res.getString("status"),"expect");
             } catch (SQLException e) {
@@ -521,7 +521,7 @@ public class LeadTest extends BaseTest {
                     "        }\n" +
                     "}\n");
             try {
-                ResultSet res = getDB(leads.getLead_id());
+                ResultSet res = getDB_byId(leads.getLead_id());
                 res.next();
                 Assert.assertEquals(res.getString("status"),"fail");
             } catch (SQLException e) {
@@ -531,18 +531,13 @@ public class LeadTest extends BaseTest {
 
     }
 
-    @BeforeTest
-    void openBD(){
-        dBconnector = new DBconnector();
-    }
-
-    private ResultSet getDB(String id){
-        return dBconnector.select("SELECT * FROM terraleads.lead where id="+id);
+    private ResultSet getDB_byId(String id){
+        return getDB().select("SELECT * FROM terraleads.lead where id="+id);
     }
     private void makePositiveOffers(String offer){
-        dBconnector.update("update terraleads.offer set status = 'active' where id = "+offer);
-        dBconnector.update("update terraleads.offer set private_access_user_id = null where id = "+offer);
-        dBconnector.update("update terraleads.product set status = 'active' WHERE id = (select product_id from terraleads.offer where id = "+offer+")");
-        dBconnector.update("update terraleads.offer set access_type = 'public' where id = "+offer);
+        getDB().update("update terraleads.offer set status = 'active' where id = "+offer);
+        getDB().update("update terraleads.offer set private_access_user_id = null where id = "+offer);
+        getDB().update("update terraleads.product set status = 'active' WHERE id = (select product_id from terraleads.offer where id = "+offer+")");
+        getDB().update("update terraleads.offer set access_type = 'public' where id = "+offer);
     }
 }
