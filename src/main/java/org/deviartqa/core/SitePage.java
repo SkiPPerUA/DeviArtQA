@@ -3,7 +3,7 @@ package org.deviartqa.core;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import org.deviartqa.TestScenario;
-import org.deviartqa.pages.AuthPage;
+import org.deviartqa.pages.noAuth.AuthPage;
 
 import java.util.Map;
 

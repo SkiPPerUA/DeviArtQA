@@ -4,24 +4,18 @@ import deviartTests.BaseTest;
 import org.deviartqa.TestScenario;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
+import org.deviartqa.helper.DataHelper;
 import org.deviartqa.pages.clients.behaviorFactors.AddBehaviorFactors;
 import org.deviartqa.pages.clients.behaviorFactors.BehaviorFactors;
 import org.deviartqa.pages.clients.behaviorFactors.UpdateBehaviorFactors;
 import org.testng.Assert;
 import org.testng.SkipException;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@Test
+@Test()
 public class BehaviorFactorsTest extends BaseTest {
-
-    BehaviorFactors behaviorFactors = new BehaviorFactors();
-    AddBehaviorFactors addBehaviorFactors = new AddBehaviorFactors();
-    UpdateBehaviorFactors updateBehaviorFactors = new UpdateBehaviorFactors();
-    int id = 1;
 
     public void check_list() throws SQLException {
         if (TestScenario.env.equals("prime")){
@@ -39,7 +33,7 @@ public class BehaviorFactorsTest extends BaseTest {
         }
     }
 
-    public void add_new_property(int id) throws SQLException {
+    public void add_new_property() throws SQLException {
         if (TestScenario.env.equals("prime")){
             ResultSet base_property_value = getDB().select("SELECT count(*) FROM terraleads.product_base_property_value");
             base_property_value.next();
@@ -55,14 +49,22 @@ public class BehaviorFactorsTest extends BaseTest {
         }
     }
 
-    public void update_property(int id) throws SQLException {
+    public void update_property() throws SQLException {
         if (TestScenario.env.equals("prime")){
-            add_new_property(id);
-            updateBehaviorFactors.open(id).readyPage();
+            String uuid = DataHelper.getUuid();
+            updateBehaviorFactors.open(id).readyPage()
+                    .fillValue(1,"updateEN"+uuid,"updateRU"+uuid)
+                    .clickSaveButton().readyPage();
+            ResultSet product_base_property_value_lang = getDB().select("SELECT count(*) FROM terraleads.product_base_property_value_lang where name in ('updateEN"+uuid+"','updateRU"+uuid+"')");
+            product_base_property_value_lang.next();
+            Assert.assertEquals(product_base_property_value_lang.getInt(1),2);
         }else {
             throw new SkipException("Test only for prime");
         }
     }
 
-
+    BehaviorFactors behaviorFactors = new BehaviorFactors();
+    AddBehaviorFactors addBehaviorFactors = new AddBehaviorFactors();
+    UpdateBehaviorFactors updateBehaviorFactors = new UpdateBehaviorFactors();
+    int id = 1;
 }

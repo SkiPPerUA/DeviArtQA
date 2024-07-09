@@ -27,4 +27,8 @@ public abstract class TestScenario {
         }
         return url;
     }
+
+    public static boolean tt(){
+        return true;
+    }
 }

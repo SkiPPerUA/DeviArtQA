@@ -2,11 +2,10 @@ package org.deviartqa.helper;
 
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
-import org.deviartqa.pages.PermissionPage;
+import org.deviartqa.pages.system.PermissionPage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.function.Supplier;
 
 public interface TestCases {
     PermissionPage permissionPage = new PermissionPage();

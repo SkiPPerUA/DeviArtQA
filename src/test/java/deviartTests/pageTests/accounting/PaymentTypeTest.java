@@ -5,7 +5,7 @@ import org.deviartqa.core.DBconnector;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
-import org.deviartqa.pages.paymentType.PaymentTypePage;
+import org.deviartqa.pages.accounting.paymentType.PaymentTypePage;
 import org.opentest4j.AssertionFailedError;
 import org.testng.Assert;
 import org.testng.annotations.Test;

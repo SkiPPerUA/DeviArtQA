@@ -7,13 +7,14 @@ import org.deviartqa.core.DBconnector;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
-import org.deviartqa.pages.payment.CreatePaymentPage;
-import org.deviartqa.pages.payment.PaymentPage;
+import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
+import org.deviartqa.pages.accounting.payment.PaymentPage;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Test
 public class PaymentsTest extends BaseTest {
@@ -121,10 +122,86 @@ public class PaymentsTest extends BaseTest {
                 .setSystem_company("Test1f09a023-8656-4a98-b9da-a02146769a2c")
                 .choseSystem_requisites_account("testPaymentName0")
                 .setPayment_type("Commission")
+                .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
-                .setUnit_amount("3")
-                .setQuantity("2")
+                .setAmount("12")
+                .setPeriod_from("2024-07-05")
                 .clickSaveBatton().readyPage();
+    }
+
+    public void create_payment_OUT_testAmount(){
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("out")
+                .setSystem_company("Test1f09a023-8656-4a98-b9da-a02146769a2c")
+                .choseSystem_requisites_account("testPaymentName0")
+                .setPayment_type("Commission")
+                .setPurpose_of_payment("testVlad")
+                .setCurrency("USD")
+                .setPeriod_from("2024-07-05");
+        List.of("","0","-1","dsad","12.12","12,13").forEach(x -> {
+            createPaymentPage.setAmount(x).clickSaveBatton();
+            createPaymentPage.readyPage();
+        });
+    }
+
+    public void create_payment_OUT_testFields(){
+        //Without System_company
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("out")
+                .setPayment_type("Commission")
+                .setPurpose_of_payment("testVlad")
+                .setCurrency("USD")
+                .setAmount("12")
+                .setPeriod_from("2024-07-05")
+                .clickSaveBatton();
+        createPaymentPage.readyPage();
+
+        //Without Payment_type
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("out")
+                .setSystem_company("Test1f09a023-8656-4a98-b9da-a02146769a2c")
+                .choseSystem_requisites_account("testPaymentName0")
+                .setPurpose_of_payment("testVlad")
+                .setCurrency("USD")
+                .setAmount("12")
+                .setPeriod_from("2024-07-05")
+                .clickSaveBatton();
+        createPaymentPage.readyPage();
+
+        //Without Purpose_of_payment
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("out")
+                .setSystem_company("Test1f09a023-8656-4a98-b9da-a02146769a2c")
+                .choseSystem_requisites_account("testPaymentName0")
+                .setPayment_type("Commission")
+                .setCurrency("USD")
+                .setAmount("12")
+                .setPeriod_from("2024-07-05")
+                .clickSaveBatton().readyPage();
+
+        //Without Amount
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("out")
+                .setSystem_company("Test1f09a023-8656-4a98-b9da-a02146769a2c")
+                .choseSystem_requisites_account("testPaymentName0")
+                .setPayment_type("Commission")
+                .setCurrency("USD")
+                .setPurpose_of_payment("testVlad")
+                .setPeriod_from("2024-07-05")
+                .clickSaveBatton();
+        createPaymentPage.readyPage();
+
+        //Without Period_from
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("out")
+                .setSystem_company("Test1f09a023-8656-4a98-b9da-a02146769a2c")
+                .choseSystem_requisites_account("testPaymentName0")
+                .setPayment_type("Commission")
+                .setCurrency("USD")
+                .setPurpose_of_payment("testVlad")
+                .setAmount("12")
+                .clickSaveBatton();
+        createPaymentPage.readyPage();
     }
 
     DBconnector dBconnector;
