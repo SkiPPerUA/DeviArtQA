@@ -228,6 +228,11 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage clickCancelButton(){
+        new Widget(Locators.cancel).click();
+        return this;
+    }
+
     protected CabinetPage choseStatus(String data) {
         new Widget(Locators.page.locator("//button[@data-id='"+pageLoc+"_status']")).click();
         choseDrop(data);

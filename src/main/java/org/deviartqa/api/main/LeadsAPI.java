@@ -1,8 +1,9 @@
-package org.deviartqa.api;
+package org.deviartqa.api.main;
 
 import io.restassured.http.ContentType;
 import org.apache.log4j.Logger;
 import org.deviartqa.TestScenario;
+import org.deviartqa.core.Credentials;
 import org.deviartqa.core.Restful;
 import org.deviartqa.helper.ApiHelper;
 import static io.restassured.RestAssured.given;
@@ -28,7 +29,21 @@ public class LeadsAPI extends Restful {
         }
     }
 
+    public void updateLead(String lead_id, StatusLead status){
+        logger.info("Confirm лида");
+        request(given()
+                .header("cookie","PHPSESSID="+new Credentials().getCredentials(TestScenario.role))
+                .queryParams("id",lead_id)
+                .queryParams("status","confirm")
+                .when()
+                .get(TestScenario.getUrl()+"/acp/lead/statusChange?id="+lead_id+"&status="+status));
+    }
+
     public String getLead_id() {
         return lead_id;
+    }
+
+    public enum StatusLead{
+        confirm, trash, reject
     }
 }

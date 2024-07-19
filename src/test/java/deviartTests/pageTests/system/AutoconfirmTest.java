@@ -1,7 +1,7 @@
 package deviartTests.pageTests.system;
 
 import deviartTests.BaseTest;
-import org.deviartqa.api.LeadsAPI;
+import org.deviartqa.api.main.LeadsAPI;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.pages.system.autoConfirm.CreateAutoconfirmPage;
 import org.deviartqa.pages.system.autoConfirm.UpdateAutoconfirmPage;

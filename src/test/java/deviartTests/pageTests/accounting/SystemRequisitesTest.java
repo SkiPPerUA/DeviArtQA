@@ -71,13 +71,14 @@ public class SystemRequisitesTest extends BaseTest {
                     .setPaymentSystemId(x);
         });
         for (int i = 0; i < new Widget(Locators.page.locator("//div[@style=\"display: block;\"]")).element.count(); i++) {
+            createSystemRequisitesPage.setCurrency("EUR",i);
             new Widget(Locators.page.locator("//div[@style='display: block;']//input")).element.nth(i).fill("testPaymentField" + i);
             new Widget(Locators.page.locator("//input[contains(@name,'[name]')]")).element.nth(i).fill("testPaymentName"+i);
         }
         createSystemRequisitesPage.clickSaveButton().readyPage();
 }
 
-    public void test_create_SystemRequisites_PaymentsSystemBank(){
+    public void test_create_SystemRequisites_PaymentsSystemBank() throws InterruptedException {
         String name = "Test"+DataHelper.getUuid();
         String regNumber = String.valueOf(new Date().getTime());
         createSystemRequisitesPage.open().readyPage()
@@ -91,13 +92,11 @@ public class SystemRequisitesTest extends BaseTest {
         createSystemRequisitesPage.clickAddAccountButton()
                     .setPaymentSystemId("Bank Transfer");
         for (int i = 0; i < new Widget(Locators.page.locator("//div[@style=\"display: block;\"]")).element.count(); i++) {
-            if (i == 4){
-                createSystemRequisitesPage.setCurrency("USD");
-            }else {
-                new Widget(Locators.page.locator("//div[@style='display: block;']//input")).element.nth(i).fill("testPaymentField" + i);
-            }
+            new Widget(Locators.page.locator("//div[@style='display: block;']//input")).element.nth(i).fill("testPaymentField" + i);
         }
+        createSystemRequisitesPage.setCurrency("USD",0);
         new Widget(Locators.page.locator("//input[contains(@name,'[name]')]")).fill("testPaymentName");
+        Thread.sleep(4000);
         createSystemRequisitesPage.clickSaveButton().readyPage();
     }
 

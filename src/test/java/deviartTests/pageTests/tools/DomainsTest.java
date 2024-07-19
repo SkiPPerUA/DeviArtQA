@@ -43,7 +43,6 @@ public class DomainsTest extends BaseTest {
         try {
             Assert.assertTrue(result.next());
             domain_id = result.getInt("id");
-            System.out.println(domain_id);
         }catch (Throwable e){
             Assert.fail(e.toString());
         }

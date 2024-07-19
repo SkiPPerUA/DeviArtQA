@@ -8,7 +8,7 @@ public abstract class TestScenario {
     public static final boolean headless = false;
     public static final String browser = "chrome";
     public static String local = "en"; // en ru
-    public static final String env = "sandbox"; // prod sandbox prime
+    public static String env = "sandbox"; // prod sandbox prime
     public static final Credentials.RoleCred role = admin;
     public static final int userId = 25695;
     public static final boolean enable = false;

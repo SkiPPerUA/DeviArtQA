@@ -35,6 +35,8 @@
     <entry key="select_payment_type">Select Payment Type</entry>
     <entry key="cash">{"en":"Cash","ru":"Наличные"}</entry>
     <entry key="cards">{"en":"Cards","ru":"Карты"}</entry>
+    <entry key="cancel">{"en":"Cancel","ru":"Отменить"}</entry>
+    <entry key="list">{"en":"List","ru":"Список"}</entry>
     <entry key="currency">{"en":"Currency","ru":"Валюта"}</entry>
     <entry key="company_name">{"en":"Company name","ru":"Название компании"}</entry>
     <entry key="registration_number">{"en":"Registration number","ru":"Регистрационный номер"}</entry>

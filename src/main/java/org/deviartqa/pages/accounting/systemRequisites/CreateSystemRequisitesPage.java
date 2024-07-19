@@ -68,8 +68,12 @@ public class CreateSystemRequisitesPage extends CabinetPage {
         return this;
     }
 
-    public CreateSystemRequisitesPage setCurrency(String data){
-        new Widget(Locators.page.locator("//button[contains(@data-id,'currency_id')]")).click();
+    public CreateSystemRequisitesPage setCurrency(String data, int nth){
+        if (nth > 0) {
+            new Widget(Locators.page.locator("//button[contains(@data-id,'currency_id')]")).element.nth(nth).click();
+        } else {
+            new Widget(Locators.page.locator("//button[contains(@data-id,'currency_id')]")).click();
+        }
         choseDrop(data);
         return this;
     }
@@ -80,7 +84,7 @@ public class CreateSystemRequisitesPage extends CabinetPage {
     }
 
     public SystemRequisitesPage clickCancelButton(){
-        new Widget(Locators.page.locator("//a[contains(@href,'/acp/"+pagePoint+"/list')]")).click();
+        super.clickCancelButton();
         return new SystemRequisitesPage();
     }
 

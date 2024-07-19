@@ -3,6 +3,7 @@ package org.deviartqa.pages.accounting.systemRequisites;
 import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
+import org.deviartqa.helper.TextLocalization;
 
 public class ViewSystemRequisitesPage extends CabinetPage {
 
@@ -35,7 +36,7 @@ public class ViewSystemRequisitesPage extends CabinetPage {
     }
 
     public SystemRequisitesPage clickListButton(){
-        new Widget(Locators.page.locator("//a[contains(@href,'/"+pagePoint+"/list')]")).click();
+        new Widget(Locators.page.locator("//a[text()='"+ TextLocalization.get("list") +"']")).click();
         return new SystemRequisitesPage();
     }
 

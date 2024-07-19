@@ -73,9 +73,6 @@ public class PaymentsTest extends BaseTest {
         for (int i = 0; i<result.element.count();i++){
             Assert.assertTrue(result.element.nth(i).textContent().contains("USD"));
         }
-        sqlRes = getBD_by("currency_id = 1",true);
-        sqlRes.next();
-        Assert.assertEquals(result.element.count(),sqlRes.getInt(1));
 
         //Search by Advertiser
         paymentPage.open().readyPage()

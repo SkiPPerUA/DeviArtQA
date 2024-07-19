@@ -2,7 +2,7 @@ package deviartTests.apiTests;
 
 import deviartTests.BaseTest;
 import org.deviartqa.TestScenario;
-import org.deviartqa.api.LeadsAPI;
+import org.deviartqa.api.main.LeadsAPI;
 import org.deviartqa.core.DBconnector;
 import org.deviartqa.helper.DataHelper;
 import org.testng.Assert;
@@ -25,15 +25,7 @@ public class LeadTest extends BaseTest {
         String name = "test"+ DataHelper.getUuid();
         String country = "RO";
         makePositiveOffers(offer_id);
-        leads.createLead("{\n" +
-                "\"user_id\": "+user_Id+",\n" +
-                "    \"data\":{\n" +
-                "        \"offer_id\": \""+offer_id+"\",\n" +
-                "        \"name\": \""+name+"\",\n" +
-                "        \"country\": \""+country+"\",\n" +
-                "        \"phone\": \""+phone+"\"\n" +
-                "        }\n" +
-                "}\n",user_Id);
+        makeLead();
         Thread.sleep(sleep);
         ResultSet res = getDB_byId(leads.getLead_id());
         res.next();
@@ -529,6 +521,102 @@ public class LeadTest extends BaseTest {
             }
         });
 
+    }
+
+    public void confirm_lead_integration(){
+        offer_id = "8121";
+        user_Id = 2816;
+        makeLead();
+        String primeId = findPrimeLeadIdByTerraId(leads.getLead_id());
+        try {
+            TestScenario.env = "prime";
+            leads.updateLead(primeId, LeadsAPI.StatusLead.confirm);
+        }finally {
+            TestScenario.env = "sandbox";
+        }
+
+    }
+
+    public void reject_lead_integration(){
+        offer_id = "8121";
+        user_Id = 2816;
+        makeLead();
+        String primeId = findPrimeLeadIdByTerraId(leads.getLead_id());
+        try {
+            TestScenario.env = "prime";
+            leads.updateLead(primeId, LeadsAPI.StatusLead.reject);
+        }finally {
+            TestScenario.env = "sandbox";
+        }
+    }
+
+    public void trash_lead_integration(){
+        offer_id = "8121";
+        user_Id = 2816;
+        makeLead();
+        String primeId = findPrimeLeadIdByTerraId(leads.getLead_id());
+        try {
+            TestScenario.env = "prime";
+            leads.updateLead(primeId, LeadsAPI.StatusLead.trash);
+        }finally {
+            TestScenario.env = "sandbox";
+        }
+    }
+
+    public void confirm_lead() {
+        offer_id = "8121";
+        user_Id = 2816;
+        makeLead();
+        leads.updateLead(leads.getLead_id(), LeadsAPI.StatusLead.confirm);
+    }
+
+    public void reject_lead() {
+        offer_id = "8121";
+        user_Id = 2816;
+        makeLead();
+        leads.updateLead(leads.getLead_id(), LeadsAPI.StatusLead.reject);
+    }
+
+    public void trash_lead() {
+        offer_id = "8121";
+        user_Id = 2816;
+        makeLead();
+        leads.updateLead(leads.getLead_id(), LeadsAPI.StatusLead.trash);
+    }
+
+    public void create_Lead(){
+        offer_id = "8119";
+        user_Id = 2816;
+        TestScenario.env = "prime";
+        makeLead();
+    }
+
+    private String findPrimeLeadIdByTerraId(String terraID){
+        String id = "";
+        try{
+            Thread.sleep(2000);
+            TestScenario.env = "prime";
+            ResultSet res = new DBconnector().select("SELECT lead_id FROM terraleads.integrated_crm_lead where external_lead_id="+terraID);
+            res.next();
+            id = String.valueOf(res.getInt(1));
+        }catch (Throwable e){
+            throw new RuntimeException(e);
+        }finally {
+            TestScenario.env = "sandbox";
+        }
+        return id;
+    }
+
+    private void makeLead() {
+        leads.createLead("{\n" +
+                "\"user_id\": "+user_Id+",\n" +
+                "    \"data\":{\n" +
+                "        \"offer_id\": \""+offer_id+"\",\n" +
+                "        \"name\": \""+ DataHelper.getUuid()+"\",\n" +
+                "        \"country\": \"RO\",\n" +
+                "        \"phone\": \""+new Date().getTime()+"\"\n" +
+                "        }\n" +
+                "}\n",user_Id);
     }
 
     private ResultSet getDB_byId(String id){
