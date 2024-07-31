@@ -30,11 +30,8 @@ public interface TestCases {
         permission.forEach(x-> permissionPage.changePermission(x,true));
     }
 
-    static List<String> negative_domain_cases(){
-        return List.of("ffsfds","","всыаыв","сывавыю.выа");
+    static List<String> negative_emails(){
+        return List.of("ffsfds","всыаыв@das.da", "fdfds@dwd", "das das@das.ad", "dasd@.da", "dasd@dassd.");
     }
 
-    static List<String> positive_domain_cases(){
-        return List.of("fsfsd.fsd.ss","fsdf.fsdf/fds/fsd","https://dfsdf.fsd");
-    }
 }

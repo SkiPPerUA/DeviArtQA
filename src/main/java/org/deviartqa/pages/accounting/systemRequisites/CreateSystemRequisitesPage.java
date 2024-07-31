@@ -69,11 +69,13 @@ public class CreateSystemRequisitesPage extends CabinetPage {
     }
 
     public CreateSystemRequisitesPage setCurrency(String data, int nth){
-        if (nth > 0) {
-            new Widget(Locators.page.locator("//button[contains(@data-id,'currency_id')]")).element.nth(nth).click();
-        } else {
-            new Widget(Locators.page.locator("//button[contains(@data-id,'currency_id')]")).click();
-        }
+        new Widget(Locators.page.locator("//button[contains(@data-id,'currency_id')]")).element.nth(nth).click();
+        choseDrop(data);
+        return this;
+    }
+
+    public CreateSystemRequisitesPage setCurrency(String data){
+        new Widget(Locators.page.locator("//button[contains(@data-id,'currency_id')]")).click();
         choseDrop(data);
         return this;
     }

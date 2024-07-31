@@ -14,4 +14,8 @@ public class ViewPaymentPage extends CabinetPage {
         return this;
     }
 
+    public String getParametersValue(String name){
+        return super.getParametersValue(name);
+    }
+
 }

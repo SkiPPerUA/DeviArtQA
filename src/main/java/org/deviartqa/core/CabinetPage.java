@@ -1,11 +1,31 @@
 package org.deviartqa.core;
 
+import org.deviartqa.TestScenario;
 import org.deviartqa.blocks.Header;
+import org.deviartqa.pages.noAuth.AuthPage;
+import java.util.Map;
 
 public abstract class CabinetPage extends SitePage{
     public Header header = new Header();
     protected String pageLoc = "";
     protected String pagePoint = "";
+
+    @Override
+    protected void openPage(String url) {
+        page.navigate(TestScenario.getUrl()+url);
+        if (!page.url().equals(TestScenario.getUrl()+url)){
+            Map<String, String> creeds = new Credentials().getWebCreeds();
+            new AuthPage().open().readyPage()
+                    .makeAuth(creeds.get("email"),creeds.get("password")).readyPage();
+            Session.getContext().cookies().forEach(x -> {
+                if (x.name.equals("PHPSESSID")){
+                    System.out.println("Добавь куку -> "+ x.value);
+                    System.out.println();
+                }
+            });
+            openPage(url);
+        }
+    }
 
     protected void choseDrop(String data){
         new Widget(Locators.page.locator(String.format("//ul[@role='listbox'][@aria-expanded='true']//*[contains(text(),'%s')]",data))).click();
@@ -19,7 +39,7 @@ public abstract class CabinetPage extends SitePage{
     }
 
     protected String getParametersValue(String name){
-        return new Widget(Locators.page.locator("//strong[text()='"+name+"']/../..")).textContent();
+        return new Widget(Locators.page.locator("//strong[contains(text(),'"+name+"')]/../..")).textContent();
     }
 
     protected CabinetPage clickCreate(){
@@ -147,6 +167,16 @@ public abstract class CabinetPage extends SitePage{
 
     protected CabinetPage setUnit_amount(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[unit_amount]")).fill(data);
+        return this;
+    }
+
+    protected CabinetPage setOriginal_amount(String data) {
+        new Widget(Locators.page.getByTestId("original_amount")).fill(data);
+        return this;
+    }
+
+    protected CabinetPage setCommission(String data) {
+        new Widget(Locators.page.getByTestId("commission")).fill(data);
         return this;
     }
 

@@ -27,9 +27,9 @@ public class AuthPage extends SitePage {
         return new WelcomePage();
     }
 
-    public RegistrationPage clickRegistrationButton(){
+    public RegistrationPage1 clickRegistrationButton(){
         new Widget(Locators.page.locator("//a[@href=\"/registration\"]")).click();
-        return new RegistrationPage();
+        return new RegistrationPage1();
     }
 
     public ForgotPasswordPage clickForgotPasswordButton(){

@@ -72,7 +72,7 @@ public class SystemRequisitesTest extends BaseTest {
         });
         for (int i = 0; i < new Widget(Locators.page.locator("//div[@style=\"display: block;\"]")).element.count(); i++) {
             createSystemRequisitesPage.setCurrency("EUR",i);
-            new Widget(Locators.page.locator("//div[@style='display: block;']//input")).element.nth(i).fill("testPaymentField" + i);
+            new Widget(Locators.page.locator("//div[@style='display: block;']//input")).element.nth(i).fill("testPaymentField" + i+"@sda.ads");
             new Widget(Locators.page.locator("//input[contains(@name,'[name]')]")).element.nth(i).fill("testPaymentName"+i);
         }
         createSystemRequisitesPage.clickSaveButton().readyPage();
@@ -94,7 +94,7 @@ public class SystemRequisitesTest extends BaseTest {
         for (int i = 0; i < new Widget(Locators.page.locator("//div[@style=\"display: block;\"]")).element.count(); i++) {
             new Widget(Locators.page.locator("//div[@style='display: block;']//input")).element.nth(i).fill("testPaymentField" + i);
         }
-        createSystemRequisitesPage.setCurrency("USD",0);
+        createSystemRequisitesPage.setCurrency("USD");
         new Widget(Locators.page.locator("//input[contains(@name,'[name]')]")).fill("testPaymentName");
         Thread.sleep(4000);
         createSystemRequisitesPage.clickSaveButton().readyPage();
@@ -198,7 +198,7 @@ public class SystemRequisitesTest extends BaseTest {
         ResultSet res = getBD_by("id="+id,false);
         res.next();
         Assert.assertTrue(viewSystemRequisitesPage.getParametersValue("ID").contains(String.valueOf(id)));
-//        Assert.assertTrue(viewSystemRequisitesPage.getParametersValue(TextLocalization.get("addition_time")).contains(res.getString("t_created")));
+        Assert.assertTrue(viewSystemRequisitesPage.getParametersValue(TextLocalization.get("time_added")).contains(res.getString("t_created")));
         Assert.assertTrue(viewSystemRequisitesPage.getParametersValue(TextLocalization.get("company_name")).contains(res.getString("company_name")));
         Assert.assertTrue(viewSystemRequisitesPage.getParametersValue(TextLocalization.get("registration_number")).contains(res.getString("registration_number")));
         Assert.assertTrue(viewSystemRequisitesPage.getParametersValue(TextLocalization.get("legal_address")).contains(res.getString("legal_address")));

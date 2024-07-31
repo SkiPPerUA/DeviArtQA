@@ -3,6 +3,7 @@ package org.deviartqa.pages.accounting.payment;
 import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
+import org.deviartqa.helper.TextLocalization;
 
 public class CreatePaymentPage extends CabinetPage {
 
@@ -27,7 +28,13 @@ public class CreatePaymentPage extends CabinetPage {
     }
 
     public CreatePaymentPage setRoutePayment(String type){
-        new Widget(Locators.page.locator("//a[contains(@href,'/create?type="+type+"')]")).click();
+        if (type.equals("out")){
+            new Widget(Locators.page.locator("//*[contains(text(),'"+TextLocalization.get("outgoing")+"')]")).click();
+        }else if (type.equals("in")){
+            new Widget(Locators.page.locator("//*[contains(text(),'"+ TextLocalization.get("incoming") +"')]")).click();
+        }else {
+            throw new RuntimeException("Нет такого типа");
+        }
         return this;
     }
 
