@@ -10,7 +10,7 @@ public class ViewPaymentPage extends CabinetPage {
     }
 
     public ViewPaymentPage open(int id) {
-        openPage("/acp/"+pagePoint+"view?id="+id);
+        openPage("/acp/accounting/payment/view?id="+id);
         return this;
     }
 

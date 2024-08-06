@@ -25,9 +25,15 @@ public interface TestCases {
         all_permissionON(permission);
         return failPermission;
     }
+
     static void all_permissionON(HashSet<String> permission){
         permissionPage.open().readyPage();
         permission.forEach(x-> permissionPage.changePermission(x,true));
+    }
+
+    static void all_permissionOFF(HashSet<String> permission){
+        permissionPage.open().readyPage();
+        permission.forEach(x-> permissionPage.changePermission(x,false));
     }
 
     static List<String> negative_emails(){

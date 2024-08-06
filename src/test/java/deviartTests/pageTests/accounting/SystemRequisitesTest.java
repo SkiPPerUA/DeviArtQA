@@ -117,8 +117,9 @@ public class SystemRequisitesTest extends BaseTest {
                     .setPaymentSystemId("PayPal");
         }
         for (int i = 0; i < new Widget(Locators.page.locator("//div[@style=\"display: block;\"]")).element.count(); i++) {
-            new Widget(Locators.page.locator("//div[@style='display: block;']//input")).element.nth(i).fill("testPaymentField");
+            new Widget(Locators.page.locator("//div[@style='display: block;']//input")).element.nth(i).fill("testPaymentField@das.da");
             new Widget(Locators.page.locator("//input[contains(@name,'[name]')]")).element.nth(i).fill("testPaymentName");
+            createSystemRequisitesPage.setCurrency("EUR",i);
         }
         try {
             createSystemRequisitesPage.clickSaveButton().readyPage();

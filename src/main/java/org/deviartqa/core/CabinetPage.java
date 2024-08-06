@@ -81,6 +81,12 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setManager_id(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='manager_id']")).click();
+        choseDrop(data);
+        return this;
+    }
+
     protected CabinetPage setDomain(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[domain]")).fill(data);
         return this;
@@ -171,7 +177,17 @@ public abstract class CabinetPage extends SitePage{
     }
 
     protected CabinetPage setOriginal_amount(String data) {
-        new Widget(Locators.page.getByTestId("original_amount")).fill(data);
+        new Widget(Locators.page.getByTestId(pageLoc+"[original_amount]")).fill(data);
+        return this;
+    }
+
+    protected CabinetPage setFee_from(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[fee_from]")).fill(data);
+        return this;
+    }
+
+    protected CabinetPage setFee_to(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[fee_to]")).fill(data);
         return this;
     }
 

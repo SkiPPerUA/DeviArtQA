@@ -13,6 +13,7 @@ public class GeneralBalancesPage extends CabinetPage {
 
     public GeneralBalancesPage(){
         pagePoint = "accounting/balances/balances";
+        pageLoc = "AccountingFormTransactionCreate";
     }
 
     public GeneralBalancesPage readyPage() {
@@ -45,6 +46,11 @@ public class GeneralBalancesPage extends CabinetPage {
         return Double.parseDouble(total);
     }
 
+    public Double getTotalToPayment(){
+        String total = new Widget(totalInfo).element.nth(4).textContent();
+        return Double.parseDouble(total);
+    }
+
     public GeneralBalancesPage changeRate(String rate){
         new Widget(Locators.page.locator("//input[@id='exchange_rate_input']")).fill(rate);
         new Widget(Locators.page.locator("//button[@id='exchange_rate']")).click();
@@ -62,25 +68,37 @@ public class GeneralBalancesPage extends CabinetPage {
     }
 
     public GeneralBalancesPage setCompanyFrom(String data){
-        new Widget(Locators.page.locator("//select[@name='system_requisite_1']")).click();
+        new Widget(Locators.page.locator("//button[@data-id='accounting_system_requisites_id_from']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    public GeneralBalancesPage setPaymentSystemFrom(String data){
+        new Widget(Locators.page.locator("//button[@data-id='payment_system_from']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    public GeneralBalancesPage setPaymentSystemTo(String data){
+        new Widget(Locators.page.locator("//button[@data-id='payment_system_to']")).click();
         choseDrop(data);
         return this;
     }
 
     public GeneralBalancesPage setAccountFrom(String data){
-        new Widget(Locators.page.locator("//select[@name='system_requisites_account_from_id']")).click();
+        new Widget(Locators.page.locator("//select[@name='accounting_system_requisites_account_id_from']")).click();
         choseDrop(data);
         return this;
     }
 
     public GeneralBalancesPage setCompanyTo(String data){
-        new Widget(Locators.page.locator("//select[@name='system_requisite_2']")).click();
+        new Widget(Locators.page.locator("//button[@data-id='accounting_system_requisites_id_to']")).click();
         choseDrop(data);
         return this;
     }
 
     public GeneralBalancesPage setAccountTo(String data){
-        new Widget(Locators.page.locator("//select[@name='system_requisites_account_to_id']")).click();
+        new Widget(Locators.page.locator("//select[@name='accounting_system_requisites_account_id_to']")).click();
         choseDrop(data);
         return this;
     }
@@ -90,14 +108,27 @@ public class GeneralBalancesPage extends CabinetPage {
         return this;
     }
 
-    public GeneralBalancesPage setCommission(String data){
-        super.setCommission(data);
+    public GeneralBalancesPage setCommissionFrom(String type, String data){
+        new Widget(page.locator("//input[@name='"+pageLoc+"[fee_from_variant]']/..//button")).click();
+        new Widget(page.locator("//input[@name='"+pageLoc+"[fee_from_variant]']/..//a[@data-type='"+type+"']")).click();
+        if (!type.equals("disabled")) {
+            super.setFee_from(data);
+        }
         return this;
     }
 
-    public Transaction clickSaveTransferButton(){
+    public GeneralBalancesPage setCommissionTo(String type, String data){
+        new Widget(page.locator("//input[@name='"+pageLoc+"[fee_to_variant]']/..//button")).click();
+        new Widget(page.locator("//input[@name='"+pageLoc+"[fee_to_variant]']/..//a[@data-type='"+type+"']")).click();
+        if (!type.equals("disabled")) {
+            super.setFee_from(data);
+        }
+        return this;
+    }
+
+    public TransactionPage clickSaveTransferButton(){
         new Widget(Locators.page.locator("//button[text()='"+ TextLocalization.get("save_changes") +"']")).click();
-        return new Transaction();
+        return new TransactionPage();
     }
 
 }

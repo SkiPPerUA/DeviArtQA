@@ -3,13 +3,14 @@ package deviartTests.pageTests.accounting;
 import deviartTests.BaseTest;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
-import org.deviartqa.helper.DataHelper;
 import org.deviartqa.pages.accounting.GeneralBalancesPage;
+import org.deviartqa.pages.accounting.TransactionPage;
 import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
-import org.deviartqa.pages.accounting.payment.PaymentPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,28 +40,88 @@ public class GeneralBalancesTest extends BaseTest {
         Assert.assertEquals(beforeChangeRateUSD,afterChangeRateUSD);
     }
 
-    public void test_transfers(){
+    public void test_transfers_positive() throws InterruptedException, SQLException {
+        ResultSet res;
+        //between - all fields
         generalBalancesPage.open().readyPage()
                 .clickMakeTransferButton()
                 .setCompanyFrom("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setCompanyTo("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setAmount("12")
-                .setCommission("2")
+                .setPaymentSystemFrom("payoneer")
+                .setCompanyTo("Testb527b237-ae38-460e-9e49-9d1d7f015f8e")
+                .setPaymentSystemTo("brocard")
+                .setAmount("15")
+                .setCommissionFrom("currency","2")
+                .setCommissionTo("percent","25")
+                .clickSaveTransferButton().readyPage();
+        res = getDB().select("SELECT * FROM terraleads.accounting_payment where seller_company_name='Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de' order by id desc limit 1");
+        res.next();
+        Assert.assertEquals(res.getInt("status"),555);
+        Assert.assertEquals(res.getInt("amount"),15);
+        Assert.assertEquals(res.getString("payment_allocation"),"between");
+
+        //between - without commission
+        generalBalancesPage.open().readyPage()
+                .clickMakeTransferButton()
+                .setCompanyFrom("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .setPaymentSystemFrom("payoneer")
+                .setCompanyTo("Testb527b237-ae38-460e-9e49-9d1d7f015f8e")
+                .setPaymentSystemTo("brocard")
+                .setAmount("15")
+                .setCommissionFrom("disabled","2")
+                .setCommissionTo("disabled","25")
                 .clickSaveTransferButton().readyPage();
 
+        //between - commission float
+        generalBalancesPage.open().readyPage()
+                .clickMakeTransferButton()
+                .setCompanyFrom("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .setPaymentSystemFrom("payoneer")
+                .setCompanyTo("Testb527b237-ae38-460e-9e49-9d1d7f015f8e")
+                .setPaymentSystemTo("brocard")
+                .setAmount("15")
+                .setCommissionFrom("currency","2.34")
+                .setCommissionTo("percent","25.54")
+                .clickSaveTransferButton().readyPage();
 
+        //in
+        generalBalancesPage.open().readyPage().clickMakeTransferButton();
+        new CreatePaymentPage()
+                .setRoutePayment("in")
+                .setPurpose_of_payment("testVlad")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .choseSystem_requisites_account("testPaymentName0")
+                .setCurrency("USD")
+                .setAmount("10")
+                .clickSaveBatton().readyPage();
+
+        //out
         generalBalancesPage.open().readyPage().clickMakeTransferButton();
         new CreatePaymentPage()
                 .setRoutePayment("out")
-                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de");
+        Thread.sleep(2000);
+        new CreatePaymentPage()
                 .setPayment_system("paxum")
                 .setPayment_type("Commission")
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
                 .setAmount("12")
-                .setPeriod_from("2024-07-05")
                 .clickSaveBatton();
+        new TransactionPage().readyPage();
+    }
 
+    public void test_transfers_same_account_negative() {
+        generalBalancesPage.open().readyPage()
+                .clickMakeTransferButton()
+                .setCompanyFrom("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .setPaymentSystemFrom("payoneer")
+                .setCompanyTo("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .setPaymentSystemTo("payoneer")
+                .setAmount("15")
+                .setCommissionFrom("currency","2")
+                .setCommissionTo("percent","25")
+                .clickSaveTransferButton();
+        generalBalancesPage.readyPage();
     }
 
     private List<Double> findAllAmount(String currency){

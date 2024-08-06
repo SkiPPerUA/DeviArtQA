@@ -4,6 +4,8 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import org.deviartqa.TestScenario;
 import org.deviartqa.blocks.Header;
+import org.opentest4j.AssertionFailedError;
+
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public abstract class SitePage {
