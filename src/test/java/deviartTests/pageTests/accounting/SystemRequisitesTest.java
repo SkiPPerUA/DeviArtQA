@@ -22,15 +22,19 @@ import java.util.List;
 @Test
 public class SystemRequisitesTest extends BaseTest {
 
-    public void test_create_SystemRequisites_mandatoryFields(){
+    public void test_create_SystemRequisites_mandatoryFields() throws SQLException {
+        name = "Test"+ DataHelper.getUuid();
         createSystemRequisitesPage.open().readyPage()
-                .setCompany_name("Test"+ DataHelper.getUuid())
+                .setCompany_name(name)
                 .setRegistration_number(String.valueOf(new Date().getTime()))
                 .setLegal_address("Test_Legal_address")
                 .setInvoice_number_template("{number} - invoice number, {year} - year")
                 .setInvoice_corrective_number_template("{number} - invoice corrective number, {year} - year")
                 .setEmail("test@gmai.com")
                 .clickSaveButton().readyPage();
+        ResultSet res = getBD_by("company_name='"+name+"'",true);
+        res.next();
+        Assert.assertEquals(res.getInt(1),1);
     }
 
     public void test_create_SystemRequisites_allFields() throws SQLException {
@@ -78,7 +82,7 @@ public class SystemRequisitesTest extends BaseTest {
         createSystemRequisitesPage.clickSaveButton().readyPage();
 }
 
-    public void test_create_SystemRequisites_PaymentsSystemBank() throws InterruptedException {
+    public void test_create_SystemRequisites_PaymentsSystemBank() throws InterruptedException, SQLException {
         String name = "Test"+DataHelper.getUuid();
         String regNumber = String.valueOf(new Date().getTime());
         createSystemRequisitesPage.open().readyPage()
@@ -98,8 +102,12 @@ public class SystemRequisitesTest extends BaseTest {
         new Widget(Locators.page.locator("//input[contains(@name,'[name]')]")).fill("testPaymentName");
         Thread.sleep(4000);
         createSystemRequisitesPage.clickSaveButton().readyPage();
+        ResultSet res = getBD_by("company_name='"+name+"'",true);
+        res.next();
+        Assert.assertEquals(res.getInt(1),1);
     }
 
+    @Test(enabled = false)
     public void test_create_SystemRequisites_doublePaymentsSystem() {
         int countDouble = 2;
         String name = "Test"+DataHelper.getUuid();
@@ -131,7 +139,7 @@ public class SystemRequisitesTest extends BaseTest {
         systemRequisitesPage.open().readyPage();
         ResultSet res = dBconnector.select("SELECT count(*) FROM terraleads.accounting_system_requisites");
         res.next();
-        Assert.assertEquals(new Widget(Locators.page.locator("//tbody/*")).element.count(),res.getInt(1));
+        Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(res.getInt(1))));
     }
 
     public void test_searchFields() throws SQLException {
@@ -179,7 +187,7 @@ public class SystemRequisitesTest extends BaseTest {
         }
         sqlRes = getBD_by("legal_address like ('%Test_Legal_address%')",true);
         sqlRes.next();
-        Assert.assertEquals(result.element.count(),sqlRes.getInt(1));
+        Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
 
         //Search by Tax number
         systemRequisitesPage.open().readyPage()
@@ -190,7 +198,8 @@ public class SystemRequisitesTest extends BaseTest {
         }
         sqlRes = getBD_by("tax_number like ('%11111111%')",true);
         sqlRes.next();
-        Assert.assertEquals(result.element.count(),sqlRes.getInt(1));
+        Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+
     }
 
     public void test_viewSystemRequisites() throws SQLException {

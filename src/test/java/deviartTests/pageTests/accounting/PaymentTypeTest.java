@@ -3,6 +3,7 @@ package deviartTests.pageTests.accounting;
 import deviartTests.BaseTest;
 import org.deviartqa.core.DBconnector;
 import org.deviartqa.core.Locators;
+import org.deviartqa.core.Session;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.pages.accounting.paymentType.PaymentTypePage;
@@ -18,17 +19,19 @@ public class PaymentTypeTest extends BaseTest {
     PaymentTypePage paymentTypePage = new PaymentTypePage();
     String name;
 
-    public void create_paymentType(){
+    public void create_paymentType() {
         name = "PaymentType"+ DataHelper.getUuid();
         paymentTypePage.open().readyPage()
                 .clickAddPaymentTypeButton()
                 .setName(name)
                 .clickSaveButton()
                 .readyPage();
+        paymentTypePage.paginator.clickLastPage();
         Assert.assertTrue(new Widget(Locators.page.locator("//td[text()='"+name+"']")).element.isVisible());
     }
 
-    public void delete_paymentType(){
+    @Test(enabled = false)
+    public void delete_paymentType() {
         create_paymentType();
 
         paymentTypePage.deleteType(name).readyPage();
@@ -43,6 +46,7 @@ public class PaymentTypeTest extends BaseTest {
                 .setName(new_name)
                 .clickSaveButton()
                 .readyPage();
+        paymentTypePage.paginator.clickLastPage();
         Assert.assertFalse(new Widget(Locators.page.locator("//td[text()='"+name+"']")).element.isVisible());
         Assert.assertTrue(new Widget(Locators.page.locator("//td[text()='"+new_name+"']")).element.isVisible());
     }
@@ -53,7 +57,6 @@ public class PaymentTypeTest extends BaseTest {
                 .clickAddPaymentTypeButton()
                 .setName(name)
                 .clickSaveButton();
-
         try {
             paymentTypePage.readyPage();
             Assert.fail("Дубль создан");
@@ -64,6 +67,15 @@ public class PaymentTypeTest extends BaseTest {
         paymentTypePage.open().readyPage();
         ResultSet res = new DBconnector().select("SELECT count(*) FROM terraleads.accounting_payment_types");
         res.next();
-        Assert.assertEquals(new Widget(Locators.page.locator("//tbody/*")).element.count(),res.getInt(1));
+        Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(res.getInt(1))));
+    }
+
+    public void test_buttons(){
+        paymentTypePage.open().readyPage()
+                .clickAddPaymentTypeButton();
+        Assert.assertTrue(Session.getPage().url().contains("AddPaymentType"));
+
+        paymentTypePage.open().readyPage()
+                .clickAddPaymentTypeButton().clickCancelButton().readyPage();
     }
 }

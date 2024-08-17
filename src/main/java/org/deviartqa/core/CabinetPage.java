@@ -13,7 +13,7 @@ public abstract class CabinetPage extends SitePage{
     @Override
     protected void openPage(String url) {
         page.navigate(TestScenario.getUrl()+url);
-        if (!page.url().equals(TestScenario.getUrl()+url)){
+        if (page.url().equals(TestScenario.getUrl()+"/")){
             Map<String, String> creeds = new Credentials().getWebCreeds();
             new AuthPage().open().readyPage()
                     .makeAuth(creeds.get("email"),creeds.get("password")).readyPage();
@@ -212,13 +212,13 @@ public abstract class CabinetPage extends SitePage{
     }
 
     protected CabinetPage choseUser_id(String data) {
-        new Widget(Locators.page.locator("//button[@data-id=\"user_id\"]")).click();
+        new Widget(Locators.page.locator("//button[@data-id='user_id']")).click();
         choseDrop(data);
         return this;
     }
 
     protected CabinetPage choseBalance_settings(String data) {
-        new Widget(Locators.page.locator("//button[@data-id=\"balance_settings\"]")).click();
+        new Widget(Locators.page.locator("//button[@data-id='balance_settings']")).click();
         choseDrop(data);
         return this;
     }

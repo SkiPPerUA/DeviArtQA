@@ -1,7 +1,7 @@
 package deviartTests.pageTests.shipping;
 
 import deviartTests.BaseTest;
-import org.deviartqa.pages.shipping.UpdateСallCenterPage;
+import org.deviartqa.pages.shipping.callCenter.UpdateСallCenterPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

@@ -1,11 +1,13 @@
 package org.deviartqa.pages.accounting.paymentType;
 
+import org.deviartqa.blocks.Paginator;
 import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 
 public class PaymentTypePage extends CabinetPage {
 
+    public final Paginator paginator = new Paginator();
     private final Widget addPaymentTypeButton = new Widget(Locators.page.locator("//a[@href='/acp/accounting/paymentType/AddPaymentType']"));
 
     public PaymentTypePage(){
@@ -29,6 +31,11 @@ public class PaymentTypePage extends CabinetPage {
 
     public PaymentTypePage clickSaveButton(){
         new Widget(Locators.save).click();
+        return this;
+    }
+
+    public PaymentTypePage clickCancelButton(){
+        new Widget(Locators.cancel).click();
         return this;
     }
 

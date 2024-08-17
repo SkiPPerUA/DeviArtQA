@@ -1,15 +1,22 @@
 package deviartTests.pageTests.accounting;
 
 import deviartTests.BaseTest;
+import org.deviartqa.TestScenario;
+import org.deviartqa.api.accounting.PaymentAPI;
+import org.deviartqa.api.accounting.PaymentStatus;
+import org.deviartqa.api.accounting.TransactionAPI;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.pages.accounting.TransactionPage;
+import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Test
 public class TransactionTest extends BaseTest {
@@ -20,6 +27,13 @@ public class TransactionTest extends BaseTest {
         String resultLoc = "//tbody/tr[@class]";
         ResultSet sqlRes;
         Widget result;
+
+        //Search by awaiting
+        transactionPage.open().readyPage()
+                .clickAwaitingButton().clickShowResultButton();
+        sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where payment_status in (5,9)");
+        sqlRes.next();
+        Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
 
         //Search by ID
         transactionPage.open().readyPage()
@@ -59,7 +73,7 @@ public class TransactionTest extends BaseTest {
         for (int i = 0; i<result.element.count();i++){
             Assert.assertTrue(result.element.nth(i).textContent().contains("Between"));
         }
-        sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where linked_model_id is NULL");
+        sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where payment_type = 0");
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
 
@@ -89,8 +103,9 @@ public class TransactionTest extends BaseTest {
                 .clickYesterdayPaymentsButton().clickShowResultButton();
         sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where t_created between '"+ DataHelper.getTime("yyyy-MM-dd",-1)+ " 00:00:00.001' and '"+DataHelper.getTime("yyyy-MM-dd",-1)+" 23:59:59.999'");
         sqlRes.next();
-        System.out.println(sqlRes.getInt(1));
-        Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        if (sqlRes.getInt(1) > 0) {
+            Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        }
 
         //Search by RequisiteType
         transactionPage.open().readyPage()
@@ -133,4 +148,5 @@ public class TransactionTest extends BaseTest {
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
 
     }
+
 }

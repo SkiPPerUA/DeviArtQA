@@ -1,4 +1,4 @@
-package org.deviartqa.pages.shipping;
+package org.deviartqa.pages.shipping.callCenter;
 
 import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Locators;

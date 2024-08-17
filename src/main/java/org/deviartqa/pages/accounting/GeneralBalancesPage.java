@@ -27,27 +27,27 @@ public class GeneralBalancesPage extends CabinetPage {
     }
 
     public Double getTotalBalance(){
-        String total = new Widget(totalInfo).element.nth(0).textContent();
+        String total = new Widget(totalInfo).element.nth(0).textContent().replace(" ","");
         return Double.parseDouble(total);
     }
 
     public Double getTotalRequirement(){
-        String total = new Widget(totalInfo).element.nth(1).textContent();
+        String total = new Widget(totalInfo).element.nth(1).textContent().replace(" ","");
         return Double.parseDouble(total);
     }
 
     public Double getTotalExpected(){
-        String total = new Widget(totalInfo).element.nth(2).textContent();
+        String total = new Widget(totalInfo).element.nth(2).textContent().replace(" ","");
         return Double.parseDouble(total);
     }
 
     public Double getTotalImbalance(){
-        String total = new Widget(totalInfo).element.nth(3).textContent();
+        String total = new Widget(totalInfo).element.nth(3).textContent().replace(" ","");
         return Double.parseDouble(total);
     }
 
     public Double getTotalToPayment(){
-        String total = new Widget(totalInfo).element.nth(4).textContent();
+        String total = new Widget(totalInfo).element.nth(4).textContent().replace(" ","");
         return Double.parseDouble(total);
     }
 
@@ -121,13 +121,18 @@ public class GeneralBalancesPage extends CabinetPage {
         new Widget(page.locator("//input[@name='"+pageLoc+"[fee_to_variant]']/..//button")).click();
         new Widget(page.locator("//input[@name='"+pageLoc+"[fee_to_variant]']/..//a[@data-type='"+type+"']")).click();
         if (!type.equals("disabled")) {
-            super.setFee_from(data);
+            super.setFee_to(data);
         }
         return this;
     }
 
     public TransactionPage clickSaveTransferButton(){
         new Widget(Locators.page.locator("//button[text()='"+ TextLocalization.get("save_changes") +"']")).click();
+        return new TransactionPage();
+    }
+
+    public TransactionPage clickTransferButton(){
+        new Widget(Locators.page.locator("//a[contains(@href,'/acp/accounting/transaction')]")).click();
         return new TransactionPage();
     }
 

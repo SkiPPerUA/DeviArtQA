@@ -40,8 +40,6 @@ public class CreatePaymentPage extends CabinetPage {
 
     public CreatePaymentPage setPayment_type(String data){
         super.setPayment_type(data);
-//        new Widget(Locators.page.locator("//select[@name='"+pageLoc+"[payment_type]']")).click();
-//        choseDrop(data);
         return this;
     }
 
@@ -108,5 +106,10 @@ public class CreatePaymentPage extends CabinetPage {
     public PaymentPage clickCancelBatton(){
         new Widget(Locators.page.locator("//a[contains(@href,\"/acp/accounting/payment\")][@class=\"btn btn-primary btn-block\"]")).click();
         return new PaymentPage();
+    }
+
+    public CreatePaymentPage clickAddAdvertiser(){
+        new Widget(page.locator("//button[@data-ref=\"#advid\"]")).click();
+        return this;
     }
 }

@@ -1,1 +1,14 @@
-2024-08-06 15:46:16 INFO  BaseTest:29 - ---------------------   positive_delivery_test   ---------------------
+2024-08-17 12:15:05 INFO  BaseTest:25 - ---------------------   changeStatus_payment   ---------------------
+2024-08-17 12:15:10 INFO  BaseTest:25 - ---------------------   correct_payment_IN_EUR   ---------------------
+2024-08-17 12:15:15 INFO  BaseTest:25 - ---------------------   correct_payment_IN_USD   ---------------------
+2024-08-17 12:15:20 INFO  BaseTest:25 - ---------------------   correct_payment_OUT_EUR   ---------------------
+2024-08-17 12:15:26 INFO  BaseTest:25 - ---------------------   correct_payment_OUT_USD   ---------------------
+2024-08-17 12:15:34 INFO  BaseTest:25 - ---------------------   create_payment_IN   ---------------------
+2024-08-17 12:15:39 INFO  BaseTest:25 - ---------------------   create_payment_IN_EUR   ---------------------
+2024-08-17 12:15:43 INFO  BaseTest:25 - ---------------------   create_payment_IN_allFields   ---------------------
+2024-08-17 12:15:49 INFO  BaseTest:25 - ---------------------   create_payment_OUT   ---------------------
+2024-08-17 12:15:55 INFO  BaseTest:25 - ---------------------   create_payment_OUT_EUR   ---------------------
+2024-08-17 12:16:02 INFO  BaseTest:25 - ---------------------   create_payment_OUT_testAmount   ---------------------
+2024-08-17 12:16:10 INFO  BaseTest:25 - ---------------------   create_payment_OUT_testFields   ---------------------
+2024-08-17 12:16:32 INFO  BaseTest:25 - ---------------------   test_searchFields   ---------------------
+2024-08-17 12:16:49 INFO  BaseTest:25 - ---------------------   viewPayment_test   ---------------------

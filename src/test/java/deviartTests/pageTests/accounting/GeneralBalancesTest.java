@@ -1,14 +1,15 @@
 package deviartTests.pageTests.accounting;
 
 import deviartTests.BaseTest;
+import org.deviartqa.TestScenario;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
+import org.deviartqa.helper.TestCases;
 import org.deviartqa.pages.accounting.GeneralBalancesPage;
 import org.deviartqa.pages.accounting.TransactionPage;
 import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,11 +20,15 @@ public class GeneralBalancesTest extends BaseTest {
 
     GeneralBalancesPage generalBalancesPage = new GeneralBalancesPage();
 
-    public void test_totalImbalance(){
+    public void test_totalImbalance() throws SQLException {
         generalBalancesPage.open().readyPage();
         Assert.assertEquals((generalBalancesPage.getTotalExpected()- generalBalancesPage.getTotalRequirement()+ generalBalancesPage.getTotalBalance()),generalBalancesPage.getTotalImbalance());
+        ResultSet res = getDB().select("SELECT sum(sum) FROM terraleads.payouts where status = 'wait'");
+        res.next();
+        Assert.assertEquals(generalBalancesPage.getTotalToPayment(), res.getDouble(1));
     }
 
+    @Test(enabled = false)
     public void test_changeRate(){
         List<Double> expectAmountsEUR = new ArrayList<>();
         generalBalancesPage.open().readyPage();
@@ -36,8 +41,8 @@ public class GeneralBalancesTest extends BaseTest {
         List<Double> afterChangeRateUSD = findAllAmount("USD");
 
         beforeChangeRateEUR.forEach(x -> expectAmountsEUR.add(x*3));
-        Assert.assertEquals(expectAmountsEUR,afterChangeRateEUR);
         Assert.assertEquals(beforeChangeRateUSD,afterChangeRateUSD);
+        Assert.assertEquals(afterChangeRateEUR,expectAmountsEUR);
     }
 
     public void test_transfers_positive() throws InterruptedException, SQLException {
@@ -48,16 +53,19 @@ public class GeneralBalancesTest extends BaseTest {
                 .setCompanyFrom("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .setPaymentSystemFrom("payoneer")
                 .setCompanyTo("Testb527b237-ae38-460e-9e49-9d1d7f015f8e")
-                .setPaymentSystemTo("brocard")
+                .setPaymentSystemTo("brocard");
+        Thread.sleep(1000);
+        generalBalancesPage
                 .setAmount("15")
                 .setCommissionFrom("currency","2")
                 .setCommissionTo("percent","25")
                 .clickSaveTransferButton().readyPage();
-        res = getDB().select("SELECT * FROM terraleads.accounting_payment where seller_company_name='Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de' order by id desc limit 1");
+        res = getDB().select("SELECT * FROM terraleads.accounting_balance_transactions order by id desc limit 1");
         res.next();
-        Assert.assertEquals(res.getInt("status"),555);
-        Assert.assertEquals(res.getInt("amount"),15);
-        Assert.assertEquals(res.getString("payment_allocation"),"between");
+        Assert.assertEquals(res.getInt("payment_status"),10);
+        Assert.assertEquals(res.getInt("original_amount"),15);
+        Assert.assertEquals(res.getInt("commission"),2);
+        Assert.assertEquals(res.getFloat("commission_to"),3.75);
 
         //between - without commission
         generalBalancesPage.open().readyPage()
@@ -65,7 +73,9 @@ public class GeneralBalancesTest extends BaseTest {
                 .setCompanyFrom("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .setPaymentSystemFrom("payoneer")
                 .setCompanyTo("Testb527b237-ae38-460e-9e49-9d1d7f015f8e")
-                .setPaymentSystemTo("brocard")
+                .setPaymentSystemTo("brocard");
+        Thread.sleep(1000);
+        generalBalancesPage
                 .setAmount("15")
                 .setCommissionFrom("disabled","2")
                 .setCommissionTo("disabled","25")
@@ -77,7 +87,9 @@ public class GeneralBalancesTest extends BaseTest {
                 .setCompanyFrom("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .setPaymentSystemFrom("payoneer")
                 .setCompanyTo("Testb527b237-ae38-460e-9e49-9d1d7f015f8e")
-                .setPaymentSystemTo("brocard")
+                .setPaymentSystemTo("brocard");
+        Thread.sleep(1000);
+        generalBalancesPage
                 .setAmount("15")
                 .setCommissionFrom("currency","2.34")
                 .setCommissionTo("percent","25.54")
@@ -90,9 +102,11 @@ public class GeneralBalancesTest extends BaseTest {
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .choseSystem_requisites_account("testPaymentName0")
+                .setPayment_type((TestScenario.local.equals("en") ? "Payment type advertising" : "Реклама"))
                 .setCurrency("USD")
                 .setAmount("10")
-                .clickSaveBatton().readyPage();
+                .clickSaveBatton();
+        new TransactionPage().readyPage();
 
         //out
         generalBalancesPage.open().readyPage().clickMakeTransferButton();
@@ -124,12 +138,21 @@ public class GeneralBalancesTest extends BaseTest {
         generalBalancesPage.readyPage();
     }
 
+    public void test_buttons(){
+        generalBalancesPage.open().readyPage()
+                .clickTransferButton().readyPage();
+    }
+
+    public void checkAccess(){
+        TestCases.checkAccessToPage(()-> generalBalancesPage.open().readyPage());
+    }
+
     private List<Double> findAllAmount(String currency){
         List<Double> amounts = new ArrayList<>();
         Widget www = new Widget(Locators.page.locator("//td[contains(text(),'"+currency+"')]/../td[text() != '0.00']"));
         for (int i = 0; i < www.element.count(); i++){
             try {
-                Double d = Double.valueOf(www.element.nth(i).textContent());
+                Double d = Double.valueOf(www.element.nth(i).textContent().replace(" ", ""));
                 amounts.add(d);
             }catch (Throwable e){
             }

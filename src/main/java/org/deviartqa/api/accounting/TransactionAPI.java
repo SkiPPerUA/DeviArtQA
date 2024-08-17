@@ -7,10 +7,10 @@ import org.deviartqa.core.Restful;
 
 import static io.restassured.RestAssured.given;
 
-public class PaymentAPI extends Restful {
+public class TransactionAPI extends Restful {
 
-    String url = "/acp/accounting/payment";
-    private static final Logger logger = Logger.getLogger(PaymentAPI.class);
+    String url = "/acp/accounting/transaction";
+    private static final Logger logger = Logger.getLogger(TransactionAPI.class);
     public void changeStatus(int id, PaymentStatus status){
         logger.info("Change status");
         request(given()
@@ -18,5 +18,4 @@ public class PaymentAPI extends Restful {
                 .when()
                 .get(TestScenario.getUrl()+url+"/changeStatus?id="+id+"&status="+status));
     }
-
 }

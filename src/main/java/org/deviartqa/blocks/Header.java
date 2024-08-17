@@ -1,6 +1,5 @@
 package org.deviartqa.blocks;
 
-import org.deviartqa.TestScenario;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.SiteBlock;
 import org.deviartqa.core.Widget;

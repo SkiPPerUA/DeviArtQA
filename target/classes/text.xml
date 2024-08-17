@@ -36,6 +36,7 @@
     <entry key="cash">{"en":"Cash","ru":"Наличные"}</entry>
     <entry key="payment_type">{"en":"Payment type","ru":"Тип платежа"}</entry>
     <entry key="cards">{"en":"Cards","ru":"Карты"}</entry>
+    <entry key="create">{"en":"Create","ru":"Добавить"}</entry>
     <entry key="amount">{"en":"Amount","ru":"Сумма"}</entry>
     <entry key="save_changes">Save changes</entry>
     <entry key="cancel">{"en":"Cancel","ru":"Отменить"}</entry>

@@ -5,6 +5,7 @@ import org.deviartqa.TestScenario;
 import org.deviartqa.api.main.LeadsAPI;
 import org.deviartqa.core.DBconnector;
 import org.deviartqa.helper.DataHelper;
+import org.deviartqa.helper.TestCases;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
@@ -298,7 +299,7 @@ public class LeadTest extends BaseTest {
         List<String> id = new ArrayList<>();
         negative_status.forEach(status->{
             dBconnector.update("update terraleads.users set status = "+status+" where id ="+user_id);
-            roles.forEach(role -> {
+            TestCases.roles().forEach(role -> {
                 dBconnector.update("update terraleads.users set role = '"+role+"' where id ="+user_id);
                 leads.createLead("{\n" +
                         "\"user_id\": "+user_id+",\n" +
@@ -332,7 +333,7 @@ public class LeadTest extends BaseTest {
         dBconnector.update("update terraleads.users set status = 1 where id ="+user_id);
         makePositiveOffers("8105");
         List<String> id = new ArrayList<>();
-            roles.forEach(role -> {
+            TestCases.roles().forEach(role -> {
                 dBconnector.update("update terraleads.users set role = '"+role+"' where id ="+user_id);
                 leads.createLead("{\n" +
                         "\"user_id\": "+user_id+",\n" +
