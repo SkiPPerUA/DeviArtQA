@@ -3,14 +3,12 @@ package deviartTests.pageTests.accounting;
 import deviartTests.BaseTest;
 import org.deviartqa.TestScenario;
 import org.deviartqa.api.accounting.PaymentAPI;
-import org.deviartqa.api.accounting.PaymentStatus;
 import org.deviartqa.core.DBconnector;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Session;
 import org.deviartqa.core.Widget;
-import org.deviartqa.helper.DataHelper;
+import org.deviartqa.helper.TestCases;
 import org.deviartqa.helper.TextLocalization;
-import org.deviartqa.pages.accounting.GeneralBalancesPage;
 import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
 import org.deviartqa.pages.accounting.payment.PaymentPage;
 import org.deviartqa.pages.accounting.payment.UpdatePaymentPage;
@@ -100,7 +98,8 @@ public class PaymentsTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName0")
+                .setPayment_system("brocard")
+                .choseSystem_requisites_account("testPaymentName6")
                 .setPayment_type((TestScenario.local.equals("en") ? "Payment type advertising" : "Реклама"))
                 .setCurrency("USD")
                 .setAmount("10")
@@ -118,7 +117,8 @@ public class PaymentsTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName0")
+                .setPayment_system("brocard")
+                .choseSystem_requisites_account("testPaymentName6")
                 .setPayment_type((TestScenario.local.equals("en") ? "Payment type advertising" : "Реклама"))
                 .setCurrency("EUR")
                 .setAmount("20")
@@ -136,7 +136,8 @@ public class PaymentsTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName0")
+                .setPayment_system("brocard")
+                .choseSystem_requisites_account("testPaymentName6")
                 .clickAddAdvertiser()
                 .setAdvertiser("25554")
                 .setAdvertiser_requisite("testAdver")
@@ -158,9 +159,9 @@ public class PaymentsTest extends BaseTest {
         create_payment_IN();
         ResultSet sqlRes = getBD_by("id > 0 order by id desc",false);
         sqlRes.next();
-        PaymentAPI api = new PaymentAPI();
+        PaymentAPI api = new PaymentAPI("/acp/accounting/payment");
         int payment_id = sqlRes.getInt("id");
-        api.changeStatus(payment_id, PaymentStatus.Paid);
+        api.changeStatus(payment_id, PaymentAPI.PaymentStatus.Paid);
         paymentPage.open().readyPage();
         String payment_status = new Widget(Locators.page.locator("//td[text()='"+payment_id+"']/..//span")).textContent();
         Assert.assertEquals(payment_status, (TestScenario.local.equals("en") ? "Payment status paid" : "Оплачен"));
@@ -169,7 +170,7 @@ public class PaymentsTest extends BaseTest {
         sqlRes = getBD_by("id > 0 order by id desc",false);
         sqlRes.next();
         payment_id = sqlRes.getInt("id");
-        api.changeStatus(payment_id, PaymentStatus.Paid);
+        api.changeStatus(payment_id, PaymentAPI.PaymentStatus.Paid);
         paymentPage.open().readyPage();
         payment_status = new Widget(Locators.page.locator("//td[text()='"+payment_id+"']/..//span")).textContent();
         Assert.assertEquals(payment_status, (TestScenario.local.equals("en") ? "Payment status paid" : "Оплачен"));
@@ -399,11 +400,15 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getInt("status"),4);
     }
 
+    public void checkAccess(){
+        TestCases.checkAccessToPage(()-> paymentPage.open().readyPage());
+    }
+
     DBconnector dBconnector;
     @BeforeTest
     public void openBD(){
         dBconnector = new DBconnector();
-        new GeneralBalancesPage().open().readyPage().changeRate("3");
+        //new GeneralBalancesPage().open().readyPage().changeRate("3");
     }
 
     private ResultSet getBD_by(String condition,boolean count){

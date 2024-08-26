@@ -36,6 +36,16 @@
     <entry key="cash">{"en":"Cash","ru":"Наличные"}</entry>
     <entry key="payment_type">{"en":"Payment type","ru":"Тип платежа"}</entry>
     <entry key="cards">{"en":"Cards","ru":"Карты"}</entry>
+    <entry key="selling">{"en":"Selling","ru":"Продажа"}</entry>
+    <entry key="remainder">{"en":"Remainder","ru":"Напоминание о выкупе"}</entry>
+    <entry key="reason_for_non_payment_of_the_order_rehabilitation_of_the_order">{"en":"Reason for non-payment of the order, rehabilitation of the order","ru":"Определение причины не выкупа, реабилитация заказа"}</entry>
+    <entry key="extra_control_from_trash_calls_(Selling)">{"en":"Extra control from trash calls (Selling)","ru":"Доп. контроль трэша (Продажа)"}</entry>
+    <entry key="extra_control_from_reject_calls_(Selling)">{"en":"Extra control from reject calls (Selling)","ru":"Доп. контроль отказов (Продажа)"}</entry>
+    <entry key="straight_sale_on_a_landing">{"en":"Straight sale on a landing","ru":"Прямая продажа на лендинге без обработки оператором"}</entry>
+    <entry key="straight_sale_on_a_landing_with_handling_(paid_order)">{"en":"Straight sale on a landing with handling (paid order)","ru":"Прямая продажа на лендинге c обработкой оператором (оплаченный заказ)"}</entry>
+    <entry key="straight_sale_on_a_landing_with_handling_(not_paid_order)">{"en":"Straight sale on a landing with handling (not paid order)","ru":"Прямая продажа на лендинге c обработкой оператором (неоплаченный заказ)"}</entry>
+    <entry key="manual">{"en":"Manual","ru":"Ручное добавление"}</entry>
+    <entry key="order_type_MLM">{"en":"Order type MLM","ru":"Order type MLM"}</entry>
     <entry key="create">{"en":"Create","ru":"Добавить"}</entry>
     <entry key="amount">{"en":"Amount","ru":"Сумма"}</entry>
     <entry key="save_changes">Save changes</entry>

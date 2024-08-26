@@ -63,6 +63,19 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setCity_id(String data) {
+        new Widget(page.locator("//button[@data-id='city_id']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setZipCode(String data){
+        new Widget(page.locator("//span[@id = 'select2-zipcode_id-container']")).click();
+        new Widget(page.locator("//input[@class='select2-search__field']")).fill(data);
+        new Widget(page.locator("//li[contains(text(),'"+data+"')]")).click();
+        return this;
+    }
+
     protected CabinetPage setPayment_type(String data) {
         new Widget(Locators.page.locator("//button[@data-id='payment_type']")).click();
         choseDrop(data);
@@ -101,8 +114,19 @@ public abstract class CabinetPage extends SitePage{
         new Widget(Locators.page.getByTestId(pageLoc+"[advertiser_requisite]")).fill(data);
         return this;
     }
+
     protected CabinetPage setID(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[id]")).fill(data);
+        return this;
+    }
+
+    protected CabinetPage setStreet(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[street]")).fill(data);
+        return this;
+    }
+
+    protected CabinetPage setHouse(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[house]")).fill(data);
         return this;
     }
 

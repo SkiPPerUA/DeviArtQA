@@ -1,4 +1,4 @@
-package org.deviartqa.pages.shipping;
+package org.deviartqa.pages.shipping.order;
 
 import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Locators;
@@ -29,8 +29,8 @@ public class UpdateOrderPage extends CabinetPage {
         return this;
     }
 
-    public UpdateOrderPage clickSaveButton(){
+    public OrderPage clickSaveButton(){
         super.clickSaveButton();
-        return this;
+        return new OrderPage();
     }
 }

@@ -18,14 +18,14 @@ public class CallCenterTest extends BaseTest {
         updateСallCenterPage.open(2).readyPage()
                 .setDelivery("20")
                 .clickSaveButton().readyPage();
-        res = getDB("terraleads_shipping").select("SELECT send_date FROM terraleads_shipping.call_center WHERE id = 2");
+        res = getDB().select("SELECT send_date FROM terraleads_shipping.call_center WHERE id = 2");
         res.next();
         Assert.assertEquals(res.getInt(1),20);
 
         updateСallCenterPage.open(2).readyPage()
                 .setDelivery("25")
                 .clickSaveButton().readyPage();
-        res = getDB("terraleads_shipping").select("SELECT send_date FROM terraleads_shipping.call_center WHERE id = 2");
+        res = getDB().select("SELECT send_date FROM terraleads_shipping.call_center WHERE id = 2");
         res.next();
         Assert.assertEquals(res.getInt(1),25);
     }

@@ -3,11 +3,10 @@ package deviartTests.pageTests.accounting;
 import deviartTests.BaseTest;
 import org.deviartqa.TestScenario;
 import org.deviartqa.api.accounting.PaymentAPI;
-import org.deviartqa.api.accounting.PaymentStatus;
-import org.deviartqa.api.accounting.TransactionAPI;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
+import org.deviartqa.pages.accounting.GeneralBalancesPage;
 import org.deviartqa.pages.accounting.TransactionPage;
 import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
 import org.testng.Assert;
@@ -15,8 +14,6 @@ import org.testng.annotations.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Test
 public class TransactionTest extends BaseTest {
@@ -147,6 +144,54 @@ public class TransactionTest extends BaseTest {
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
 
+    }
+
+    public void change_status() throws InterruptedException, SQLException {
+        GeneralBalancesPage generalBalancesPage = new GeneralBalancesPage();
+
+        //in
+        generalBalancesPage.open().readyPage().clickMakeTransferButton();
+        new CreatePaymentPage()
+                .setRoutePayment("in")
+                .setPurpose_of_payment("testVlad")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .choseSystem_requisites_account("testPaymentName6")
+                .setPayment_type((TestScenario.local.equals("en") ? "Payment type advertising" : "Реклама"))
+                .setCurrency("USD")
+                .setAmount("10")
+                .clickSaveBatton();
+        transactionPage.readyPage();
+        checkStatus_Paid_and_Confirmed();
+
+        //out
+        generalBalancesPage.open().readyPage().clickMakeTransferButton();
+        new CreatePaymentPage()
+                .setRoutePayment("out")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de");
+        Thread.sleep(2000);
+        new CreatePaymentPage()
+                .setPayment_system("paxum")
+                .setPayment_type("Commission")
+                .setPurpose_of_payment("testVlad")
+                .setCurrency("USD")
+                .setAmount("12")
+                .clickSaveBatton();
+        transactionPage.readyPage();
+        checkStatus_Paid_and_Confirmed();
+    }
+
+    private void checkStatus_Paid_and_Confirmed() throws SQLException {
+        ResultSet sqlRes = getDB().select("SELECT * FROM terraleads.accounting_balance_transactions ORDER BY id DESC");
+        sqlRes.next();
+        PaymentAPI api = new PaymentAPI("/acp/accounting/transaction");
+        int payment_id = sqlRes.getInt("id");
+        api.changeStatus(payment_id, PaymentAPI.PaymentStatus.Paid);
+        transactionPage.open().readyPage();
+        String payment_status = new Widget(Locators.page.locator("//td[text()='"+payment_id+"']/..")).textContent();
+        Assert.assertEquals(payment_status, (TestScenario.local.equals("en") ? "Paid" : "Оплачен"));
+        api.changeStatus(payment_id, PaymentAPI.PaymentStatus.Confirm);
+        payment_status = new Widget(Locators.page.locator("//td[text()='"+payment_id+"']/..")).textContent();
+        Assert.assertEquals(payment_status, (TestScenario.local.equals("en") ? "Confirmed" : "Оплачен"));
     }
 
 }

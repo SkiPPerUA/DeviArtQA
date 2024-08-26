@@ -31,16 +31,4 @@ public abstract class BaseTest {
         }
         return dBconnector;
     }
-
-    protected DBconnector getDB(String schema){
-        if (dBconnector == null){
-            dBconnector = new DBconnector(schema);
-        }else {
-            if (!dBconnector.getSchema().equals(schema)){
-                DBconnector.closeConn();
-                getDB(schema);
-            }
-        }
-        return dBconnector;
-    }
 }
