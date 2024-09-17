@@ -43,8 +43,23 @@ public class CreatePaymentPage extends CabinetPage {
         return this;
     }
 
+    public CreatePaymentPage setPayment_typeId(String data){
+        super.setPayment_typeId(data);
+        return this;
+    }
+
     public CreatePaymentPage setAdvertiser(String data){
         super.choseUser_id(data);
+        return this;
+    }
+
+    public CreatePaymentPage setAccounting_user_requisites_id(String data){
+        super.setAccounting_user_requisites_id(data);
+        return this;
+    }
+
+    public CreatePaymentPage setAccounting_user_requisites_account_id(String data){
+        super.setAccounting_user_requisites_account_id(data);
         return this;
     }
 

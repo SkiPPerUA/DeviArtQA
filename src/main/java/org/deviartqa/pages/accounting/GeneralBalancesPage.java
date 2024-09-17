@@ -51,15 +51,8 @@ public class GeneralBalancesPage extends CabinetPage {
         return Double.parseDouble(total);
     }
 
-    public GeneralBalancesPage changeRate(String rate){
-        new Widget(Locators.page.locator("//input[@id='exchange_rate_input']")).fill(rate);
-        new Widget(Locators.page.locator("//button[@id='exchange_rate']")).click();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return this;
+    public Float getRate(){
+        return Float.parseFloat(new Widget(page.locator("//input[@id='exchange_rate_input']")).element.getAttribute("value"));
     }
 
     public GeneralBalancesPage clickMakeTransferButton(){

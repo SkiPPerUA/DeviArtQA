@@ -29,6 +29,11 @@ public class PaymentPage extends CabinetPage {
         return this;
     }
 
+    public PaymentPage setPayment_type(String data){
+        super.setPayment_type(data);
+        return this;
+    }
+
     public PaymentPage setSystem_requisites(String data){
         super.choseAccounting_system_requisites_id(data);
         return this;

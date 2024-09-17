@@ -28,32 +28,15 @@ public class GeneralBalancesTest extends BaseTest {
         Assert.assertEquals(generalBalancesPage.getTotalToPayment(), res.getDouble(1));
     }
 
-    @Test(enabled = false)
-    public void test_changeRate(){
-        List<Double> expectAmountsEUR = new ArrayList<>();
-        generalBalancesPage.open().readyPage();
-        generalBalancesPage.changeRate("1");
-        List<Double> beforeChangeRateEUR = findAllAmount("EUR");
-        List<Double> beforeChangeRateUSD = findAllAmount("USD");
-
-        generalBalancesPage.changeRate("3");
-        List<Double> afterChangeRateEUR = findAllAmount("EUR");
-        List<Double> afterChangeRateUSD = findAllAmount("USD");
-
-        beforeChangeRateEUR.forEach(x -> expectAmountsEUR.add(x*3));
-        Assert.assertEquals(beforeChangeRateUSD,afterChangeRateUSD);
-        Assert.assertEquals(afterChangeRateEUR,expectAmountsEUR);
-    }
-
     public void test_transfers_positive() throws InterruptedException, SQLException {
         ResultSet res;
         //between - all fields
         generalBalancesPage.open().readyPage()
                 .clickMakeTransferButton()
                 .setCompanyFrom("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPaymentSystemFrom("payoneer")
+                .setPaymentSystemFrom("Payoneer")
                 .setCompanyTo("Testb527b237-ae38-460e-9e49-9d1d7f015f8e")
-                .setPaymentSystemTo("brocard");
+                .setPaymentSystemTo("Brocard");
         Thread.sleep(1000);
         generalBalancesPage
                 .setAmount("15")
@@ -71,9 +54,9 @@ public class GeneralBalancesTest extends BaseTest {
         generalBalancesPage.open().readyPage()
                 .clickMakeTransferButton()
                 .setCompanyFrom("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPaymentSystemFrom("payoneer")
+                .setPaymentSystemFrom("Payoneer")
                 .setCompanyTo("Testb527b237-ae38-460e-9e49-9d1d7f015f8e")
-                .setPaymentSystemTo("brocard");
+                .setPaymentSystemTo("Brocard");
         Thread.sleep(1000);
         generalBalancesPage
                 .setAmount("15")
@@ -85,9 +68,9 @@ public class GeneralBalancesTest extends BaseTest {
         generalBalancesPage.open().readyPage()
                 .clickMakeTransferButton()
                 .setCompanyFrom("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPaymentSystemFrom("payoneer")
+                .setPaymentSystemFrom("Payoneer")
                 .setCompanyTo("Testb527b237-ae38-460e-9e49-9d1d7f015f8e")
-                .setPaymentSystemTo("brocard");
+                .setPaymentSystemTo("Brocard");
         Thread.sleep(1000);
         generalBalancesPage
                 .setAmount("15")
@@ -101,8 +84,8 @@ public class GeneralBalancesTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName0")
-                .setPayment_type((TestScenario.local.equals("en") ? "Payment type advertising" : "Реклама"))
+                .choseSystem_requisites_account("testPaymentName6")
+                .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("10")
                 .clickSaveBatton();
@@ -115,7 +98,7 @@ public class GeneralBalancesTest extends BaseTest {
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de");
         Thread.sleep(2000);
         new CreatePaymentPage()
-                .setPayment_system("paxum")
+                .setPayment_system("Paxum")
                 .setPayment_type("Commission")
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
@@ -128,9 +111,9 @@ public class GeneralBalancesTest extends BaseTest {
         generalBalancesPage.open().readyPage()
                 .clickMakeTransferButton()
                 .setCompanyFrom("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPaymentSystemFrom("payoneer")
+                .setPaymentSystemFrom("Payoneer")
                 .setCompanyTo("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPaymentSystemTo("payoneer")
+                .setPaymentSystemTo("Payoneer")
                 .setAmount("15")
                 .setCommissionFrom("currency","2")
                 .setCommissionTo("percent","25")
@@ -143,6 +126,7 @@ public class GeneralBalancesTest extends BaseTest {
                 .clickTransferButton().readyPage();
     }
 
+    @Test(enabled = TestScenario.enable)
     public void checkAccess(){
         TestCases.checkAccessToPage(()-> generalBalancesPage.open().readyPage());
     }

@@ -82,6 +82,24 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setPayment_typeId(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='payment_type_id']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setAccounting_user_requisites_id(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='accounting_user_requisites_id']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setAccounting_user_requisites_account_id(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='accounting_user_requisites_account_id']")).click();
+        choseDrop(data);
+        return this;
+    }
+
     protected CabinetPage setPayment_system(String data) {
         new Widget(Locators.page.locator("//button[@data-id='payment_system']")).click();
         choseDrop(data);

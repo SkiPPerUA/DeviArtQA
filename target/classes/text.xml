@@ -54,6 +54,8 @@
     <entry key="currency">{"en":"Currency","ru":"Валюта"}</entry>
     <entry key="outgoing">{"en":"Outgoing","ru":"Исходящие"}</entry>
     <entry key="incoming">{"en":"Incoming","ru":"Входящие"}</entry>
+    <entry key="yes">{"en":"Yes","ru":"Да"}</entry>
+    <entry key="no">{"en":"No","ru":"Нет"}</entry>
     <entry key="company_name">{"en":"Company name","ru":"Название компании"}</entry>
     <entry key="registration_number">{"en":"Registration number","ru":"Регистрационный номер"}</entry>
     <entry key="legal_address">{"en":"Legal address","ru":"Юридический адрес"}</entry>

@@ -24,10 +24,32 @@ public class PaymentTypeTest extends BaseTest {
         paymentTypePage.open().readyPage()
                 .clickAddPaymentTypeButton()
                 .setName(name)
+                .clickSendToPayments()
                 .clickSaveButton()
                 .readyPage();
         paymentTypePage.paginator.clickLastPage();
         Assert.assertTrue(new Widget(Locators.page.locator("//td[text()='"+name+"']")).element.isVisible());
+        ResultSet res = getDB().select("SELECT * FROM terraleads.accounting_payment_types where name = '"+name+"'");
+        try {
+            res.next();
+            Assert.assertEquals(res.getInt("send_to_payments"), 1);
+        }catch (Throwable e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void create_paymentType_notSendToPayments() throws SQLException {
+        name = "PaymentType"+ DataHelper.getUuid();
+        paymentTypePage.open().readyPage()
+                .clickAddPaymentTypeButton()
+                .setName(name)
+                .clickSaveButton()
+                .readyPage();
+        paymentTypePage.paginator.clickLastPage();
+        Assert.assertTrue(new Widget(Locators.page.locator("//td[text()='"+name+"']")).element.isVisible());
+        ResultSet res = getDB().select("SELECT * FROM terraleads.accounting_payment_types where name = '"+name+"'");
+        res.next();
+        Assert.assertEquals(res.getInt("send_to_payments"), 0);
     }
 
     @Test(enabled = false)

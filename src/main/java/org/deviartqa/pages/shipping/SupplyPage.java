@@ -1,6 +1,5 @@
 package org.deviartqa.pages.shipping;
 
-import com.microsoft.playwright.Locator;
 import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.TextLocalization;

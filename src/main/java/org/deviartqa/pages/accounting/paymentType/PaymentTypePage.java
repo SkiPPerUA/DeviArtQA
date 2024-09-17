@@ -44,6 +44,11 @@ public class PaymentTypePage extends CabinetPage {
         return this;
     }
 
+    public PaymentTypePage clickSendToPayments(){
+        new Widget(page.locator("//div[@class='icheckbox_minimal-grey']")).click();
+        return this;
+    }
+
     public PaymentTypePage deleteType(String nameType){
         new Widget(Locators.page.locator("//td[text()='"+nameType+"']/..//i[contains(@class,'glyphicon-remove')]")).click();
         return this;

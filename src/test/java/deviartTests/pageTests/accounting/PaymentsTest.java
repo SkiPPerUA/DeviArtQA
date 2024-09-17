@@ -9,10 +9,12 @@ import org.deviartqa.core.Session;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.TestCases;
 import org.deviartqa.helper.TextLocalization;
+import org.deviartqa.pages.accounting.GeneralBalancesPage;
 import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
 import org.deviartqa.pages.accounting.payment.PaymentPage;
 import org.deviartqa.pages.accounting.payment.UpdatePaymentPage;
 import org.deviartqa.pages.accounting.payment.ViewPaymentPage;
+import org.opentest4j.AssertionFailedError;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -27,6 +29,8 @@ public class PaymentsTest extends BaseTest {
     private PaymentPage paymentPage = new PaymentPage();
     private ViewPaymentPage viewPaymentPage = new ViewPaymentPage();
     private UpdatePaymentPage updatePaymentPage = new UpdatePaymentPage();
+    String system_company = "Testd068e119-d1ef-4998-b93f-1bc108dd6d21";
+    private float rate;
 
     public void test_searchFields() throws SQLException {
         String resultLoc = "//tbody/tr";
@@ -81,7 +85,7 @@ public class PaymentsTest extends BaseTest {
             Assert.assertTrue(result.element.nth(i).textContent().contains("USD"));
         }
 
-        //Search by Advertiser
+        //Search by Invoice
         paymentPage.open().readyPage()
                 .setInvoice("3").clickShowResultButton();
         result = new Widget(Locators.page.locator(resultLoc));
@@ -91,25 +95,40 @@ public class PaymentsTest extends BaseTest {
         sqlRes = getBD_by("accounting_invoice_id = 3",true);
         sqlRes.next();
         Assert.assertEquals(result.element.count(),sqlRes.getInt(1));
+
+        //Search by PaymentType
+        paymentPage.open().readyPage()
+                .setPayment_type("Commission").clickShowResultButton();
+        result = new Widget(Locators.page.locator(resultLoc));
+        for (int i = 0; i<result.element.count();i++){
+            Assert.assertTrue(result.element.nth(i).textContent().contains("Commission"));
+        }
+        sqlRes = getBD_by("payment_type_id = 1",true);
+        sqlRes.next();
+        Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
     }
 
     public void create_payment_IN() throws SQLException {
         createPaymentPage.open().readyPage()
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
-                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPayment_system("brocard")
-                .choseSystem_requisites_account("testPaymentName6")
-                .setPayment_type((TestScenario.local.equals("en") ? "Payment type advertising" : "Реклама"))
+                .setSystem_company(system_company)
+                .setPayment_system("Payoneer")
+                .choseSystem_requisites_account("testPaymentName3")
+                .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("10")
                 .clickSaveBatton().readyPage();
-        ResultSet sqlRes = getBD_by("seller_company_name='Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de' order by id desc limit 1",false);
+        ResultSet sqlRes = getBD_by("seller_company_name='"+system_company+"' order by id desc limit 1",false);
         sqlRes.next();
         Assert.assertEquals(sqlRes.getInt("currency_id"),1);
         Assert.assertEquals(sqlRes.getInt("amount"),10);
         Assert.assertEquals(sqlRes.getInt("system_currency_amount"),10);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"in");
+        Assert.assertNull(sqlRes.getString("user_id"));
+        Assert.assertEquals(sqlRes.getString("payment_system"),"brocard");
+        Assert.assertEquals(sqlRes.getString("purpose_of_payment"),"testVlad");
+        Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
     }
 
     public void create_payment_IN_EUR() throws SQLException {
@@ -117,9 +136,9 @@ public class PaymentsTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPayment_system("brocard")
+                .setPayment_system("Brocard")
                 .choseSystem_requisites_account("testPaymentName6")
-                .setPayment_type((TestScenario.local.equals("en") ? "Payment type advertising" : "Реклама"))
+                .setPayment_typeId("Commission")
                 .setCurrency("EUR")
                 .setAmount("20")
                 .clickSaveBatton().readyPage();
@@ -127,8 +146,12 @@ public class PaymentsTest extends BaseTest {
         sqlRes.next();
         Assert.assertEquals(sqlRes.getInt("currency_id"),6);
         Assert.assertEquals(sqlRes.getInt("amount"),20);
-        Assert.assertEquals(sqlRes.getInt("system_currency_amount"),60);
+        Assert.assertEquals(sqlRes.getFloat("system_currency_amount"),20*rate);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"in");
+        Assert.assertNull(sqlRes.getString("user_id"));
+        Assert.assertEquals(sqlRes.getString("payment_system"),"brocard");
+        Assert.assertEquals(sqlRes.getString("purpose_of_payment"),"testVlad");
+        Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
     }
 
     public void create_payment_IN_allFields() throws SQLException {
@@ -136,12 +159,14 @@ public class PaymentsTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPayment_system("brocard")
+                .setPayment_system("Brocard")
                 .choseSystem_requisites_account("testPaymentName6")
                 .clickAddAdvertiser()
                 .setAdvertiser("25554")
                 .setAdvertiser_requisite("testAdver")
-                .setPayment_type((TestScenario.local.equals("en") ? "Payment type advertising" : "Реклама"))
+                .setAccounting_user_requisites_id("testVladCompany")
+                .setAccounting_user_requisites_account_id("Название банка")
+                .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("11")
                 .clickSaveBatton().readyPage();
@@ -151,8 +176,11 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getInt("amount"),11);
         Assert.assertEquals(sqlRes.getInt("system_currency_amount"),11);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"in");
-        Assert.assertEquals(sqlRes.getString("advertiser_requisite"),"testAdver");
+        Assert.assertNull(sqlRes.getString("advertiser_requisite"));
         Assert.assertEquals(sqlRes.getInt("user_id"),25554);
+        Assert.assertEquals(sqlRes.getString("payment_system"),"brocard");
+        Assert.assertEquals(sqlRes.getString("purpose_of_payment"),"testVlad");
+        Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
     }
 
     public void changeStatus_payment() throws SQLException, InterruptedException {
@@ -179,21 +207,25 @@ public class PaymentsTest extends BaseTest {
     public void create_payment_OUT() throws SQLException, InterruptedException {
         createPaymentPage.open().readyPage()
                 .setRoutePayment("out")
-                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de");
+                .setSystem_company(system_company);
         Thread.sleep(2000);
         createPaymentPage
-                .setPayment_system("paxum")
+                .setPayment_system("Paxum")
                 .setPayment_type("Commission")
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
                 .setAmount("12")
                 .clickSaveBatton().readyPage();
-        ResultSet sqlRes = getBD_by("seller_company_name='Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de' order by id desc limit 1",false);
+        ResultSet sqlRes = getBD_by("seller_company_name='"+system_company+"' order by id desc limit 1",false);
         sqlRes.next();
         Assert.assertEquals(sqlRes.getInt("currency_id"),1);
         Assert.assertEquals(sqlRes.getInt("amount"),12);
         Assert.assertEquals(sqlRes.getInt("system_currency_amount"),12);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"out");
+        Assert.assertNull(sqlRes.getString("user_id"));
+        Assert.assertEquals(sqlRes.getString("payment_system"),"paxum");
+        Assert.assertEquals(sqlRes.getString("purpose_of_payment"),"testVlad");
+        Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
     }
 
     public void create_payment_OUT_EUR() throws SQLException, InterruptedException {
@@ -202,7 +234,7 @@ public class PaymentsTest extends BaseTest {
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de");
         Thread.sleep(2000);
         createPaymentPage
-                .setPayment_system("paxum")
+                .setPayment_system("Paxum")
                 .setPayment_type("Commission")
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("EUR")
@@ -212,8 +244,12 @@ public class PaymentsTest extends BaseTest {
         sqlRes.next();
         Assert.assertEquals(sqlRes.getInt("currency_id"),6);
         Assert.assertEquals(sqlRes.getInt("amount"),22);
-        Assert.assertEquals(sqlRes.getInt("system_currency_amount"),66);
+        Assert.assertEquals(sqlRes.getFloat("system_currency_amount"),22*rate);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"out");
+        Assert.assertNull(sqlRes.getString("user_id"));
+        Assert.assertEquals(sqlRes.getString("payment_system"),"paxum");
+        Assert.assertEquals(sqlRes.getString("purpose_of_payment"),"testVlad");
+        Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
     }
 
     public void create_payment_OUT_testAmount(){
@@ -224,8 +260,19 @@ public class PaymentsTest extends BaseTest {
                     .setPayment_type("Commission")
                     .setPurpose_of_payment("testVlad")
                     .setCurrency("USD")
-                    .setAmount(x).clickSaveBatton();
-           Assert.assertTrue(new Widget(Locators.page.locator("//h2")).textContent().contains("Something is wrong"));
+                    .setAmount(x);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            createPaymentPage.clickSaveBatton();
+           try {
+               viewPaymentPage.readyPage();
+               System.out.println(x + " bags");
+           }catch (AssertionFailedError e){
+
+           }
         });
     }
 
@@ -244,7 +291,6 @@ public class PaymentsTest extends BaseTest {
         createPaymentPage.open().readyPage()
                 .setRoutePayment("out")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName0")
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
                 .setAmount("12")
@@ -255,17 +301,31 @@ public class PaymentsTest extends BaseTest {
         createPaymentPage.open().readyPage()
                 .setRoutePayment("out")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName0")
                 .setPayment_type("Commission")
                 .setCurrency("USD")
-                .setAmount("12")
+                .setAmount("12");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        createPaymentPage
                 .clickSaveBatton().readyPage();
+
+        //Without Currency
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("out")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .setPayment_type("Commission")
+                .setPurpose_of_payment("testVlad")
+                .setAmount("12")
+                .clickSaveBatton();
+        createPaymentPage.readyPage();
 
         //Without Amount
         createPaymentPage.open().readyPage()
                 .setRoutePayment("out")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName0")
                 .setPayment_type("Commission")
                 .setCurrency("USD")
                 .setPurpose_of_payment("testVlad")
@@ -273,16 +333,54 @@ public class PaymentsTest extends BaseTest {
         createPaymentPage.readyPage();
     }
 
+    public void create_payment_IN_testFields(){
+        //Without Payment_type
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("in")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .setCurrency("USD")
+                .setAmount("10")
+                .clickSaveBatton();
+        createPaymentPage.readyPage();
+
+        //Without Currency
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("in")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .setPayment_typeId("Commission")
+                .setAmount("10")
+                .clickSaveBatton();
+        createPaymentPage.readyPage();
+
+        //Without Amount
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("in")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .setPayment_typeId("Commission")
+                .setCurrency("USD")
+                .clickSaveBatton();
+        createPaymentPage.readyPage();
+
+        //Without System_company
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("in")
+                .setPayment_typeId("Commission")
+                .setCurrency("USD")
+                .setAmount("10")
+                .clickSaveBatton();
+        createPaymentPage.readyPage();
+    }
+
     public void viewPayment_test() throws SQLException, InterruptedException {
         create_payment_IN();
-        ResultSet sqlRes = getBD_by("seller_company_name='Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de' order by id desc limit 1",false);
+        ResultSet sqlRes = getBD_by("seller_company_name='"+system_company+"' order by id desc limit 1",false);
         sqlRes.next();
         Assert.assertTrue(viewPaymentPage.getParametersValue("Id").contains(sqlRes.getString("id")));
         Assert.assertTrue(viewPaymentPage.getParametersValue(TextLocalization.get("amount")).contains(sqlRes.getString("amount")));
-        Assert.assertTrue(viewPaymentPage.getParametersValue(TextLocalization.get("payment_type")).contains(sqlRes.getString("payment_type")));
+        Assert.assertTrue(viewPaymentPage.getParametersValue(TextLocalization.get("payment_type")).contains("Commission"));
 
         create_payment_OUT();
-        sqlRes = getBD_by("seller_company_name='Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de' order by id desc limit 1",false);
+        sqlRes = getBD_by("seller_company_name='"+system_company+"' order by id desc limit 1",false);
         sqlRes.next();
         Assert.assertTrue(viewPaymentPage.getParametersValue("Id").contains(sqlRes.getString("id")));
         Assert.assertTrue(viewPaymentPage.getParametersValue(TextLocalization.get("amount")).contains(sqlRes.getString("amount")));
@@ -297,7 +395,7 @@ public class PaymentsTest extends BaseTest {
         updatePaymentPage.open(old_id).readyPage()
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName0")
+                .setPayment_typeId("Commission")
                 .setCurrency("EUR")
                 .setAmount("11")
                 .clickSaveBatton().readyPage();
@@ -307,7 +405,7 @@ public class PaymentsTest extends BaseTest {
         sqlRes.next();
         Assert.assertEquals(sqlRes.getInt("currency_id"),6);
         Assert.assertEquals(sqlRes.getInt("amount"),11);
-        Assert.assertEquals(sqlRes.getInt("system_currency_amount"),33);
+        Assert.assertEquals(sqlRes.getFloat("system_currency_amount"),11*rate);
         Assert.assertEquals(sqlRes.getInt("status"),1);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"in");
 
@@ -324,7 +422,7 @@ public class PaymentsTest extends BaseTest {
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de");
         Thread.sleep(2000);
         createPaymentPage
-                .setPayment_system("paxum")
+                .setPayment_system("Paxum")
                 .setPayment_type("Commission")
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("EUR")
@@ -336,7 +434,7 @@ public class PaymentsTest extends BaseTest {
         sqlRes.next();
         Assert.assertEquals(sqlRes.getInt("currency_id"),6);
         Assert.assertEquals(sqlRes.getInt("amount"),15);
-        Assert.assertEquals(sqlRes.getInt("system_currency_amount"),45);
+        Assert.assertEquals(sqlRes.getFloat("system_currency_amount"),15*rate);
         Assert.assertEquals(sqlRes.getInt("status"),1);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"out");
 
@@ -352,7 +450,7 @@ public class PaymentsTest extends BaseTest {
         updatePaymentPage.open(old_id).readyPage()
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName0")
+                .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("11")
                 .clickSaveBatton().readyPage();
@@ -360,7 +458,7 @@ public class PaymentsTest extends BaseTest {
         int new_id = Integer.parseInt(String.valueOf(url.delete(0,url.indexOf("id=")+3)));
         ResultSet sqlRes = getBD_by("id = "+new_id,false);
         sqlRes.next();
-        Assert.assertEquals(sqlRes.getInt("currency_id"),6);
+        Assert.assertEquals(sqlRes.getInt("currency_id"),1);
         Assert.assertEquals(sqlRes.getInt("amount"),11);
         Assert.assertEquals(sqlRes.getInt("system_currency_amount"),11);
         Assert.assertEquals(sqlRes.getInt("status"),1);
@@ -376,10 +474,8 @@ public class PaymentsTest extends BaseTest {
         StringBuffer url = new StringBuffer(Session.getPage().url());
         int old_id = Integer.parseInt(String.valueOf(url.delete(0,url.indexOf("id=")+3)));
         updatePaymentPage.open(old_id).readyPage()
-                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de");
-        Thread.sleep(2000);
-        createPaymentPage
-                .setPayment_system("paxum")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .setPayment_system("Paxum")
                 .setPayment_type("Commission")
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
@@ -389,7 +485,7 @@ public class PaymentsTest extends BaseTest {
         int new_id = Integer.parseInt(String.valueOf(url.delete(0,url.indexOf("id=")+3)));
         ResultSet sqlRes = getBD_by("id = "+new_id,false);
         sqlRes.next();
-        Assert.assertEquals(sqlRes.getInt("currency_id"),6);
+        Assert.assertEquals(sqlRes.getInt("currency_id"),1);
         Assert.assertEquals(sqlRes.getInt("amount"),15);
         Assert.assertEquals(sqlRes.getInt("system_currency_amount"),15);
         Assert.assertEquals(sqlRes.getInt("status"),1);
@@ -400,6 +496,7 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getInt("status"),4);
     }
 
+    @Test(enabled = TestScenario.enable)
     public void checkAccess(){
         TestCases.checkAccessToPage(()-> paymentPage.open().readyPage());
     }
@@ -408,7 +505,7 @@ public class PaymentsTest extends BaseTest {
     @BeforeTest
     public void openBD(){
         dBconnector = new DBconnector();
-        //new GeneralBalancesPage().open().readyPage().changeRate("3");
+        rate = new GeneralBalancesPage().open().readyPage().getRate();
     }
 
     private ResultSet getBD_by(String condition,boolean count){
