@@ -3,6 +3,7 @@ package deviartTests.pageTests.accounting;
 import deviartTests.BaseTest;
 import org.deviartqa.core.DBconnector;
 import org.deviartqa.core.Locators;
+import org.deviartqa.core.Session;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.helper.TextLocalization;
@@ -24,9 +25,10 @@ public class SystemRequisitesTest extends BaseTest {
 
     public void test_create_SystemRequisites_mandatoryFields() throws SQLException {
         name = "Test"+ DataHelper.getUuid();
+        regNumber = String.valueOf(new Date().getTime());
         createSystemRequisitesPage.open().readyPage()
                 .setCompany_name(name)
-                .setRegistration_number(String.valueOf(new Date().getTime()))
+                .setRegistration_number(regNumber)
                 .setLegal_address("Test_Legal_address")
                 .setInvoice_number_template("{number} - invoice number, {year} - year")
                 .setInvoice_corrective_number_template("{number} - invoice corrective number, {year} - year")
@@ -35,6 +37,14 @@ public class SystemRequisitesTest extends BaseTest {
         ResultSet res = getBD_by("company_name='"+name+"'",true);
         res.next();
         Assert.assertEquals(res.getInt(1),1);
+        res = getBD_by("company_name='"+name+"'",false);
+        res.next();
+        Assert.assertEquals(res.getString("registration_number"),regNumber);
+        Assert.assertEquals(res.getString("legal_address"),"Test_Legal_address");
+        Assert.assertEquals(res.getString("tax_number"),"");
+        Assert.assertEquals(res.getString("email"),"test@gmai.com");
+        Assert.assertEquals(res.getString("invoice_number_template"),"{number} - invoice number, {year} - year");
+        Assert.assertEquals(res.getString("invoice_corrective_number_template"),"{number} - invoice corrective number, {year} - year");
     }
 
     public void test_create_SystemRequisites_allFields() throws SQLException {
@@ -59,7 +69,7 @@ public class SystemRequisitesTest extends BaseTest {
         Assert.assertEquals(res.getString("invoice_corrective_number_template"),"{number} - invoice corrective number, {year} - year");
     }
 
-    public void test_create_SystemRequisites_allPaymentsSystem(){
+    public void test_create_SystemRequisites_allPaymentsSystem() throws SQLException {
         String name = "Test"+DataHelper.getUuid();
         String regNumber = String.valueOf(new Date().getTime());
         createSystemRequisitesPage.open().readyPage()
@@ -80,6 +90,10 @@ public class SystemRequisitesTest extends BaseTest {
             new Widget(Locators.page.locator("//input[contains(@name,'[name]')]")).element.nth(i).fill("testPaymentName"+i);
         }
         createSystemRequisitesPage.clickSaveButton().readyPage();
+        ResultSet res = getDB().select("SELECT count(*) FROM terraleads.accounting_system_requisites_account where accounting_system_requisites_id = (SELECT accounting_system_requisites_id  FROM terraleads.accounting_system_requisites_account x\n" +
+                "ORDER BY id DESC limit 1)");
+        res.next();
+        Assert.assertEquals(res.getInt(1),9);
 }
 
     public void test_create_SystemRequisites_PaymentsSystemBank() throws InterruptedException, SQLException {
@@ -218,7 +232,7 @@ public class SystemRequisitesTest extends BaseTest {
         Assert.assertTrue(viewSystemRequisitesPage.getParametersValue(TextLocalization.get("invoice_corrective_number_template")).contains(res.getString("invoice_corrective_number_template")));
     }
 
-    public void test_SystemRequisites_buttons(){
+    public void test_SystemRequisites_buttons() throws SQLException {
         int id = 16;
         viewSystemRequisitesPage.open(id).readyPage()
                 .clickCreateButton().readyPage();
@@ -237,6 +251,16 @@ public class SystemRequisitesTest extends BaseTest {
 
         updateSystemRequisitesPage.open(id).readyPage()
                 .clickCancelButton().readyPage();
+
+        ResultSet res = getDB().select("SELECT id FROM terraleads.accounting_system_requisites ORDER BY id DESC");
+        res.next();
+        id = res.getInt(1);
+        systemRequisitesPage.open().readyPage().actionButtons.viewAction(id);
+        viewSystemRequisitesPage.readyPage();
+        systemRequisitesPage.open().readyPage().actionButtons.modifyAction(id);
+        updateSystemRequisitesPage.readyPage();
+        systemRequisitesPage.open().readyPage().actionButtons.historyAction(id);
+        Assert.assertTrue(Session.getPage().url().contains("history?id="+id));
     }
 
     public void test_updateSystemRequisites() throws SQLException {

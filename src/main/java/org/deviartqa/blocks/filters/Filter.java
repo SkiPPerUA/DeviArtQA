@@ -115,6 +115,10 @@ public abstract class Filter extends SiteBlock {
         }
     }
 
+    protected void choseDrop(String data){
+        new Widget(Locators.page.locator(String.format("//ul[@role='listbox'][@aria-expanded='true']//*[contains(text(),'%s')]",data))).click();
+    }
+
     public enum Sort{
         ASC,DESC
     }

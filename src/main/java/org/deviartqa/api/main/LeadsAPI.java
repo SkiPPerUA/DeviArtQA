@@ -34,7 +34,7 @@ public class LeadsAPI extends Restful {
         request(given()
                 .header("cookie","PHPSESSID="+new Credentials().getCredentials(TestScenario.role))
                 .queryParams("id",lead_id)
-                .queryParams("status","confirm")
+                .queryParams("status","confirmAction")
                 .when()
                 .get(TestScenario.getUrl()+"/acp/lead/statusChange?id="+lead_id+"&status="+status));
     }

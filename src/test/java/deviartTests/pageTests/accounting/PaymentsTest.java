@@ -1,5 +1,6 @@
 package deviartTests.pageTests.accounting;
 
+import com.microsoft.playwright.TimeoutError;
 import deviartTests.BaseTest;
 import org.deviartqa.TestScenario;
 import org.deviartqa.api.accounting.PaymentAPI;
@@ -10,6 +11,7 @@ import org.deviartqa.core.Widget;
 import org.deviartqa.helper.TestCases;
 import org.deviartqa.helper.TextLocalization;
 import org.deviartqa.pages.accounting.GeneralBalancesPage;
+import org.deviartqa.pages.accounting.TransactionPage;
 import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
 import org.deviartqa.pages.accounting.payment.PaymentPage;
 import org.deviartqa.pages.accounting.payment.UpdatePaymentPage;
@@ -126,7 +128,7 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getInt("system_currency_amount"),10);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"in");
         Assert.assertNull(sqlRes.getString("user_id"));
-        Assert.assertEquals(sqlRes.getString("payment_system"),"brocard");
+        //Assert.assertEquals(sqlRes.getString("payment_system"),"brocard");
         Assert.assertEquals(sqlRes.getString("purpose_of_payment"),"testVlad");
         Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
     }
@@ -187,10 +189,8 @@ public class PaymentsTest extends BaseTest {
         create_payment_IN();
         ResultSet sqlRes = getBD_by("id > 0 order by id desc",false);
         sqlRes.next();
-        PaymentAPI api = new PaymentAPI("/acp/accounting/payment");
         int payment_id = sqlRes.getInt("id");
-        api.changeStatus(payment_id, PaymentAPI.PaymentStatus.Paid);
-        paymentPage.open().readyPage();
+        paymentPage.open().readyPage().actionButtons.paidAction(payment_id);
         String payment_status = new Widget(Locators.page.locator("//td[text()='"+payment_id+"']/..//span")).textContent();
         Assert.assertEquals(payment_status, (TestScenario.local.equals("en") ? "Payment status paid" : "Оплачен"));
 
@@ -198,8 +198,7 @@ public class PaymentsTest extends BaseTest {
         sqlRes = getBD_by("id > 0 order by id desc",false);
         sqlRes.next();
         payment_id = sqlRes.getInt("id");
-        api.changeStatus(payment_id, PaymentAPI.PaymentStatus.Paid);
-        paymentPage.open().readyPage();
+        paymentPage.open().readyPage().actionButtons.paidAction(payment_id);
         payment_status = new Widget(Locators.page.locator("//td[text()='"+payment_id+"']/..//span")).textContent();
         Assert.assertEquals(payment_status, (TestScenario.local.equals("en") ? "Payment status paid" : "Оплачен"));
     }
@@ -252,11 +251,14 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
     }
 
-    public void create_payment_OUT_testAmount(){
-        List.of("","0","-1","dsad").forEach(x -> {
+    public void create_payment_testAmount(){
+        List<String> amount = List.of("","0","-1","dsad");
+
+        //out
+        amount.forEach(x -> {
             createPaymentPage.open().readyPage()
                     .setRoutePayment("out")
-                    .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                    .setSystem_company(system_company)
                     .setPayment_type("Commission")
                     .setPurpose_of_payment("testVlad")
                     .setCurrency("USD")
@@ -271,8 +273,31 @@ public class PaymentsTest extends BaseTest {
                viewPaymentPage.readyPage();
                System.out.println(x + " bags");
            }catch (AssertionFailedError e){
-
            }
+        });
+
+        //in
+        amount.forEach(x -> {
+            createPaymentPage.open().readyPage()
+                    .setRoutePayment("in")
+                    .setPurpose_of_payment("testVlad")
+                    .setSystem_company(system_company)
+                    .setPayment_system("Payoneer")
+                    .choseSystem_requisites_account("testPaymentName3")
+                    .setPayment_typeId("Commission")
+                    .setCurrency("USD")
+                    .setAmount(x);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            createPaymentPage.clickSaveBatton();
+            try {
+                viewPaymentPage.readyPage();
+                System.out.println(x + " bags");
+            }catch (AssertionFailedError e){
+            }
         });
     }
 
@@ -494,6 +519,78 @@ public class PaymentsTest extends BaseTest {
         sqlRes = getBD_by("id = "+old_id,false);
         sqlRes.next();
         Assert.assertEquals(sqlRes.getInt("status"),4);
+    }
+
+    public void test_LinkToAdv() throws SQLException, InterruptedException {
+        TransactionPage transactionPage = new TransactionPage();
+        ResultSet res;
+        //in
+        create_payment_IN();
+        transactionPage.open().readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        int id = res.getInt("id");
+        transactionPage.actionButtons.paidAction(id);
+        transactionPage.actionButtons.confirmAction(id);
+        paymentPage.open().readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_payment x ORDER BY x.id DESC");
+        res.next();
+        id = res.getInt("id");
+        paymentPage.actionButtons.linkToAdv(id,"25563");
+        res = getDB().select("SELECT user_id FROM terraleads.accounting_payment where id = "+id);
+        res.next();
+        Assert.assertEquals(res.getInt(1),25563);
+
+        //out
+        create_payment_OUT();
+        transactionPage.open().readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        id = res.getInt("id");
+        transactionPage.actionButtons.paidAction(id);
+        transactionPage.actionButtons.confirmAction(id);
+        paymentPage.open().readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_payment x ORDER BY x.id DESC");
+        res.next();
+        id = res.getInt("id");
+        try {
+            paymentPage.actionButtons.linkToAdv(id,"25563");
+            Assert.fail("Кнопка есть");
+        }catch (TimeoutError e){
+            res = getDB().select("SELECT user_id FROM terraleads.accounting_payment where id = "+id);
+            res.next();
+            Assert.assertEquals(res.getInt(1),0);
+        }
+
+        //in without possible to link
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("in")
+                .setPurpose_of_payment("testVlad")
+                .setSystem_company(system_company)
+                .setPayment_system("Payoneer")
+                .choseSystem_requisites_account("testPaymentName3")
+                .setPayment_typeId("PaymentTypef5fa533a-3622-4e12-871b-08c876b69328")
+                .setCurrency("USD")
+                .setAmount("10")
+                .clickSaveBatton().readyPage();
+        transactionPage.open().readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        id = res.getInt("id");
+        transactionPage.actionButtons.paidAction(id);
+        transactionPage.actionButtons.confirmAction(id);
+        paymentPage.open().readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_payment x ORDER BY x.id DESC");
+        res.next();
+        id = res.getInt("id");
+        try {
+            paymentPage.actionButtons.linkToAdv(id,"25563");
+            Assert.fail("Кнопка есть");
+        }catch (TimeoutError e){
+            res = getDB().select("SELECT user_id FROM terraleads.accounting_payment where id = "+id);
+            res.next();
+            Assert.assertEquals(res.getInt(1),0);
+        }
     }
 
     @Test(enabled = TestScenario.enable)

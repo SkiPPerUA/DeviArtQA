@@ -60,17 +60,29 @@ public class PaymentTypeTest extends BaseTest {
         Assert.assertFalse(new Widget(Locators.page.locator("//td[text()='"+name+"']")).element.isVisible());
     }
 
-    public void update_paymentType(){
+    public void update_paymentType() throws SQLException {
         create_paymentType();
 
         String new_name = "UpdateType"+DataHelper.getUuid();
         paymentTypePage.updateType(name)
                 .setName(new_name)
+                .clickSendToPayments()
                 .clickSaveButton()
                 .readyPage();
         paymentTypePage.paginator.clickLastPage();
         Assert.assertFalse(new Widget(Locators.page.locator("//td[text()='"+name+"']")).element.isVisible());
         Assert.assertTrue(new Widget(Locators.page.locator("//td[text()='"+new_name+"']")).element.isVisible());
+        ResultSet res = getDB().select("SELECT * FROM terraleads.accounting_payment_types where name = '"+name+"'");
+        res.next();
+        Assert.assertEquals(res.getInt("send_to_payments"), 0);
+
+        paymentTypePage.updateType(name)
+                .clickSendToPayments()
+                .clickSaveButton()
+                .readyPage();
+        res = getDB().select("SELECT * FROM terraleads.accounting_payment_types where name = '"+name+"'");
+        res.next();
+        Assert.assertEquals(res.getInt("send_to_payments"), 0);
     }
 
     public void create_doubleTest(){

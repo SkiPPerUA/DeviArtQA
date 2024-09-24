@@ -6,9 +6,10 @@ import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 
-public class TransactionPage extends CabinetPage implements ActionButtons {
+public class TransactionPage extends CabinetPage {
 
     public final Paginator paginator = new Paginator();
+    public ActionButtons actionButtons = new ActionButtons();
 
     public TransactionPage() {
         pagePoint = "accounting/transaction";

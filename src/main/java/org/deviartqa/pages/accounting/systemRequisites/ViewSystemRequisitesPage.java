@@ -12,7 +12,7 @@ public class ViewSystemRequisitesPage extends CabinetPage {
     }
 
     public ViewSystemRequisitesPage readyPage() {
-        checkPage(Locators.page.locator("//table[@class='table items table-hover table-condensed']"));
+        checkPage(Locators.page.locator("//a[contains(@href,'/"+pagePoint+"/modify')]"));
         return this;
     }
 

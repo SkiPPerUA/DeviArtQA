@@ -130,17 +130,4 @@ public class GeneralBalancesTest extends BaseTest {
     public void checkAccess(){
         TestCases.checkAccessToPage(()-> generalBalancesPage.open().readyPage());
     }
-
-    private List<Double> findAllAmount(String currency){
-        List<Double> amounts = new ArrayList<>();
-        Widget www = new Widget(Locators.page.locator("//td[contains(text(),'"+currency+"')]/../td[text() != '0.00']"));
-        for (int i = 0; i < www.element.count(); i++){
-            try {
-                Double d = Double.valueOf(www.element.nth(i).textContent().replace(" ", ""));
-                amounts.add(d);
-            }catch (Throwable e){
-            }
-        }
-        return amounts;
-    }
 }

@@ -1,8 +1,7 @@
 package deviartTests.pageTests.accounting;
 
+import com.microsoft.playwright.TimeoutError;
 import deviartTests.BaseTest;
-import org.deviartqa.TestScenario;
-import org.deviartqa.api.accounting.PaymentAPI;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
@@ -20,6 +19,8 @@ import java.sql.SQLException;
 public class TransactionTest extends BaseTest {
 
     TransactionPage transactionPage = new TransactionPage();
+    GeneralBalancesPage generalBalancesPage = new GeneralBalancesPage();
+    ResultSet res;
 
     public void test_searchFields() throws SQLException {
         String resultLoc = "//tbody/tr[@class]";
@@ -145,61 +146,159 @@ public class TransactionTest extends BaseTest {
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
 
+//        //Search by Payment Type
+//        transactionPage.open().readyPage()
+//                .setUserID("#31 - admin@terraleads.com").clickShowResultButton();
+//        sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where user_id = 31");
+//        sqlRes.next();
+//        Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+
     }
 
-    public void change_status() throws InterruptedException, SQLException {
-        GeneralBalancesPage generalBalancesPage = new GeneralBalancesPage();
-        ResultSet res;
-
+    public void change_status_paidAndConfirm() throws SQLException {
         //in
+        createIn();
+        transactionPage.readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        int id = res.getInt("id");
+        transactionPage.actionButtons.paidAction(id);
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        Assert.assertEquals(res.getInt("payment_status"),9);
+        transactionPage.actionButtons.confirmAction(id);
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        Assert.assertEquals(res.getInt("payment_status"),10);
+
+        //out
+        createOut();
+        transactionPage.readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        id = res.getInt("id");
+        transactionPage.actionButtons.paidAction(id);
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        Assert.assertEquals(res.getInt("payment_status"),9);
+        transactionPage.actionButtons.confirmAction(id);
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        Assert.assertEquals(res.getInt("payment_status"),10);
+    }
+
+    public void test_LinkToAdv() throws SQLException {
+        //in
+        createIn();
+        transactionPage.readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        int id = res.getInt("id");
+        transactionPage.actionButtons.paidAction(id);
+        transactionPage.actionButtons.confirmAction(id);
+        transactionPage.actionButtons.linkToAdv(id,"25563");
+        res = getDB().select("SELECT user_id FROM terraleads.accounting_payment where id = (SELECT linked_model_id FROM terraleads.accounting_balance_transactions where id = "+id+")");
+        res.next();
+        Assert.assertEquals(res.getInt(1),25563);
+
+        //out
+        createOut();
+        transactionPage.readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        id = res.getInt("id");
+        transactionPage.actionButtons.paidAction(id);
+        transactionPage.actionButtons.confirmAction(id);
+        try {
+            transactionPage.actionButtons.linkToAdv(id,"25563");
+            Assert.fail("Кнопка есть");
+        }catch (TimeoutError e){
+            res = getDB().select("SELECT user_id FROM terraleads.accounting_payment where id = (SELECT linked_model_id FROM terraleads.accounting_balance_transactions where id = "+id+")");
+            res.next();
+            Assert.assertEquals(res.getInt(1),0);
+        }
+
+        //in without possible to link
         generalBalancesPage.open().readyPage().clickMakeTransferButton();
         new CreatePaymentPage()
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .choseSystem_requisites_account("testPaymentName6")
-                .setPayment_typeId("Commission")
+                .setPayment_typeId("PaymentTypef5fa533a-3622-4e12-871b-08c876b69328")
                 .setCurrency("USD")
                 .setAmount("10")
                 .clickSaveBatton();
         transactionPage.readyPage();
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
+        id = res.getInt("id");
+        transactionPage.actionButtons.paidAction(id);
+        transactionPage.actionButtons.confirmAction(id);
+        try {
+            transactionPage.actionButtons.linkToAdv(id,"25563");
+            Assert.fail("Кнопка есть");
+        }catch (TimeoutError e){
+            res = getDB().select("SELECT user_id FROM terraleads.accounting_payment where id = (SELECT linked_model_id FROM terraleads.accounting_balance_transactions where id = "+id+")");
+            res.next();
+            Assert.assertEquals(res.getInt(1),0);
+        }
+    }
+
+    public void change_status_paidAndManualApprove() throws SQLException, InterruptedException {
+        //in
+        createIn();
+        transactionPage.readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
         int id = res.getInt("id");
-        transactionPage.paid(id);
+        transactionPage.actionButtons.paidAction(id);
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         Assert.assertEquals(res.getInt("payment_status"),9);
-        transactionPage.confirm(id);
+        transactionPage.actionButtons.manualApprove(id,2.2f);
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         Assert.assertEquals(res.getInt("payment_status"),10);
 
         //out
-        generalBalancesPage.open().readyPage().clickMakeTransferButton();
-        new CreatePaymentPage()
-                .setRoutePayment("out")
-                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de");
-        Thread.sleep(2000);
-        new CreatePaymentPage()
-                .setPayment_system("Paxum")
-                .setPayment_type("Commission")
-                .setPurpose_of_payment("testVlad")
-                .setCurrency("USD")
-                .setAmount("12")
-                .clickSaveBatton();
+        createOut();
         transactionPage.readyPage();
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         id = res.getInt("id");
-        transactionPage.paid(id);
+        transactionPage.actionButtons.paidAction(id);
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         Assert.assertEquals(res.getInt("payment_status"),9);
-        transactionPage.confirm(id);
+        transactionPage.actionButtons.manualApprove(id,2.2f);
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         Assert.assertEquals(res.getInt("payment_status"),10);
+    }
+
+    public void change_status_cancel() throws SQLException {
+        //in
+        createIn();
+        transactionPage.readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        int id = res.getInt("id");
+        transactionPage.actionButtons.cancelAction(id);
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        Assert.assertEquals(res.getInt("payment_status"),0);
+
+        //out
+        createOut();
+        transactionPage.readyPage();
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        id = res.getInt("id");
+        transactionPage.actionButtons.cancelAction(id);
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        Assert.assertEquals(res.getInt("payment_status"),0);
     }
 
     public void changeBalance_USD_true() throws SQLException {
@@ -225,8 +324,8 @@ public class TransactionTest extends BaseTest {
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         int id = res.getInt("id");
-        transactionPage.open().readyPage().paid(id);
-        transactionPage.open().readyPage().confirm(id);
+        transactionPage.open().readyPage().actionButtons.paidAction(id);
+        transactionPage.open().readyPage().actionButtons.confirmAction(id);
         res = getDB().select("SELECT * FROM terraleads.users WHERE id = 25554");
         res.next();
         int new_balance = res.getInt("balance_usd");
@@ -256,8 +355,8 @@ public class TransactionTest extends BaseTest {
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         int id = res.getInt("id");
-        transactionPage.open().readyPage().paid(id);
-        transactionPage.open().readyPage().confirm(id);
+        transactionPage.open().readyPage().actionButtons.paidAction(id);
+        transactionPage.open().readyPage().actionButtons.confirmAction(id);
         res = getDB().select("SELECT * FROM terraleads.users WHERE id = 25554");
         res.next();
         int new_balance = res.getInt("balance_usd");
@@ -287,8 +386,8 @@ public class TransactionTest extends BaseTest {
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         int id = res.getInt("id");
-        transactionPage.open().readyPage().paid(id);
-        transactionPage.open().readyPage().confirm(id);
+        transactionPage.open().readyPage().actionButtons.paidAction(id);
+        transactionPage.open().readyPage().actionButtons.confirmAction(id);
         res = getDB().select("SELECT * FROM terraleads.users WHERE id = 25554");
         res.next();
         int new_balance = res.getInt("balance_usd");
@@ -318,12 +417,44 @@ public class TransactionTest extends BaseTest {
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         int id = res.getInt("id");
-        transactionPage.open().readyPage().paid(id);
-        transactionPage.open().readyPage().confirm(id);
+        transactionPage.open().readyPage().actionButtons.paidAction(id);
+        transactionPage.open().readyPage().actionButtons.confirmAction(id);
         res = getDB().select("SELECT * FROM terraleads.users WHERE id = 25554");
         res.next();
         int new_balance = res.getInt("balance_usd");
         Assert.assertEquals(new_balance, old_balance);
+    }
+
+    private void createIn(){
+        generalBalancesPage.open().readyPage().clickMakeTransferButton();
+        new CreatePaymentPage()
+                .setRoutePayment("in")
+                .setPurpose_of_payment("testVlad")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .choseSystem_requisites_account("testPaymentName6")
+                .setPayment_typeId("Commission")
+                .setCurrency("USD")
+                .setAmount("10")
+                .clickSaveBatton();
+    }
+
+    private void createOut(){
+        generalBalancesPage.open().readyPage().clickMakeTransferButton();
+        new CreatePaymentPage()
+                .setRoutePayment("out")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        new CreatePaymentPage()
+                .setPayment_system("Paxum")
+                .setPayment_type("Commission")
+                .setPurpose_of_payment("testVlad")
+                .setCurrency("USD")
+                .setAmount("12")
+                .clickSaveBatton();
     }
 
 }
