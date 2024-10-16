@@ -102,7 +102,7 @@ public class GeneralBalancesTest extends BaseTest {
                 .setPayment_type("Commission")
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
-                .setAmount("12")
+                .setAmount("-12")
                 .clickSaveBatton();
         new TransactionPage().readyPage();
     }

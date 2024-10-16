@@ -96,6 +96,69 @@ public class SystemRequisitesTest extends BaseTest {
         Assert.assertEquals(res.getInt(1),9);
 }
 
+    public void test_create_SystemRequisites_PaymentsSystemIsCredit() throws SQLException {
+        String name = "Test"+DataHelper.getUuid();
+        String regNumber = String.valueOf(new Date().getTime());
+        createSystemRequisitesPage.open().readyPage()
+                .setCompany_name(name)
+                .setRegistration_number(regNumber)
+                .setLegal_address("Test_Legal_address")
+                .setTax_number("11111111")
+                .setInvoice_number_template("{number} - invoice number, {year} - year")
+                .setInvoice_corrective_number_template("{number} - invoice corrective number, {year} - year")
+                .setEmail("test@gmail.com");
+        pay_systems.forEach(x->{
+            createSystemRequisitesPage.clickAddAccountButton()
+                    .setPaymentSystemId(x);
+        });
+        for (int i = 0; i < new Widget(Locators.page.locator("//div[@style=\"display: block;\"]")).element.count(); i++) {
+            createSystemRequisitesPage.setCurrency("EUR",i);
+            new Widget(Locators.page.locator("//div[@style='display: block;']//input")).element.nth(i).fill("testPaymentField" + i+"@sda.ads");
+            new Widget(Locators.page.locator("//input[contains(@name,'[name]')]")).element.nth(i).fill("testPaymentName"+i);
+            new Widget(Locators.page.locator("//button[contains(@data-id,'type')]")).element.nth(i).click();
+            new Widget(Locators.page.locator("//span[text()='Services']/../../a[@aria-selected='false']")).element.nth(0).click();
+            new Widget(Locators.page.locator("//input[contains(@name,'[credit]')]")).element.nth(i).click();
+        }
+
+        createSystemRequisitesPage.clickSaveButton().readyPage();
+        ResultSet res = getDB().select("SELECT * FROM terraleads.accounting_system_requisites_account where accounting_system_requisites_id = (SELECT accounting_system_requisites_id  FROM terraleads.accounting_system_requisites_account x\n" +
+                "ORDER BY id DESC limit 1)");
+        while (res.next()) {
+            Assert.assertEquals(res.getInt("credit"), 1);
+        }
+    }
+
+    public void test_create_SystemRequisites_PaymentsSystemIsNotCredit() throws SQLException {
+        String name = "Test"+DataHelper.getUuid();
+        String regNumber = String.valueOf(new Date().getTime());
+        createSystemRequisitesPage.open().readyPage()
+                .setCompany_name(name)
+                .setRegistration_number(regNumber)
+                .setLegal_address("Test_Legal_address")
+                .setTax_number("11111111")
+                .setInvoice_number_template("{number} - invoice number, {year} - year")
+                .setInvoice_corrective_number_template("{number} - invoice corrective number, {year} - year")
+                .setEmail("test@gmail.com");
+        pay_systems.forEach(x->{
+            createSystemRequisitesPage.clickAddAccountButton()
+                    .setPaymentSystemId(x);
+        });
+        for (int i = 0; i < new Widget(Locators.page.locator("//div[@style=\"display: block;\"]")).element.count(); i++) {
+            createSystemRequisitesPage.setCurrency("EUR",i);
+            new Widget(Locators.page.locator("//div[@style='display: block;']//input")).element.nth(i).fill("testPaymentField" + i+"@sda.ads");
+            new Widget(Locators.page.locator("//input[contains(@name,'[name]')]")).element.nth(i).fill("testPaymentName"+i);
+            new Widget(Locators.page.locator("//button[contains(@data-id,'type')]")).element.nth(i).click();
+            new Widget(Locators.page.locator("//span[text()='Services']/../../a[@aria-selected='false']")).element.nth(0).click();
+        }
+
+        createSystemRequisitesPage.clickSaveButton().readyPage();
+        ResultSet res = getDB().select("SELECT * FROM terraleads.accounting_system_requisites_account where accounting_system_requisites_id = (SELECT accounting_system_requisites_id  FROM terraleads.accounting_system_requisites_account x\n" +
+                "ORDER BY id DESC limit 1)");
+        while (res.next()) {
+            Assert.assertEquals(res.getInt("credit"), 0);
+        }
+    }
+
     public void test_create_SystemRequisites_PaymentsSystemBank() throws InterruptedException, SQLException {
         String name = "Test"+DataHelper.getUuid();
         String regNumber = String.valueOf(new Date().getTime());

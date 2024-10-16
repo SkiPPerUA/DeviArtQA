@@ -1,6 +1,7 @@
 package org.deviartqa.pages.analytics;
 
 import org.deviartqa.core.CabinetPage;
+import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 
 public class OpexPage extends CabinetPage {
@@ -71,6 +72,7 @@ public class OpexPage extends CabinetPage {
 
     public OpexPage setAdvertiserOrOffer(String data){
         super.setAdvertiser_id(data);
+        new Widget(Locators.page.locator("//button[@data-id='advertiser_id']")).click();
         return this;
     }
 

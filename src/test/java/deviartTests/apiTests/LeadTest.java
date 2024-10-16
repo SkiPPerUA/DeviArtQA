@@ -21,6 +21,7 @@ public class LeadTest extends BaseTest {
     int sleep = 10000;
     public String offer_id = "8105";
     public int user_Id = TestScenario.userId;
+
     public void create_lead_positive() throws SQLException, InterruptedException {
         String phone = String.valueOf(new Date().getTime());
         String name = "test"+ DataHelper.getUuid();

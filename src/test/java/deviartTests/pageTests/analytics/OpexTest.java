@@ -34,27 +34,8 @@ public class OpexTest extends BaseTest {
 
     public void test_parametersOpex() throws SQLException {
         int id = 25554;
-        int opex = 555;
-        int capa = 33;
-        int cpApp = 10;
-
-        opexPage.open().readyPage()
-                .setOpex(String.valueOf(opex),id)
-                .setCapa(String.valueOf(capa),id)
-                .setCpApprove(String.valueOf(cpApp),id)
-                .clickSaveButton(id);
-        ResultSet res = getDB().select("SELECT * FROM terraleads.opex where advertiser_id="+id);
-        res.next();
-        Assert.assertEquals(res.getInt("opex"),opex);
-        Assert.assertEquals(res.getInt("capa"),capa);
-        Assert.assertEquals(res.getInt("cp_aprove"),cpApp);
-
-
-        float expected_cpo = opex / ( (capa * (cpApp/100f) ) * 30 );
-        String decCpo = new DecimalFormat("#.##").format(expected_cpo).replace(",",".");
-
-        Assert.assertEquals(res.getFloat("cpo"),Float.parseFloat(decCpo));
-        Assert.assertEquals(opexPage.getCpo_value(id),decCpo);
+        checkOpex(id, 555, 33, 10);
+        checkOpex(id, 421, 31, 63);
     }
 
     public void test_parametersBought() throws SQLException {
@@ -64,7 +45,7 @@ public class OpexTest extends BaseTest {
                 .clickBoughtRateTab()
                 .setBought_rate("1",id)
                 .clickSaveButton(id);
-        ResultSet res = getDB().select("SELECT * FROM terraleads.offer_bought_rate where offer_id="+id);
+        ResultSet res = getDB().select("SELECT * FROM terraleads.offer_bought_rate where offer_id="+id+" order by id desc");
         res.next();
         Assert.assertEquals(res.getInt("bought_rate"),1);
 
@@ -72,19 +53,20 @@ public class OpexTest extends BaseTest {
                 .clickBoughtRateTab()
                 .setBought_rate("14",id)
                 .clickSaveButton(id);
-        res = getDB().select("SELECT * FROM terraleads.offer_bought_rate where offer_id="+id);
+        res = getDB().select("SELECT * FROM terraleads.offer_bought_rate where offer_id="+id+" order by id desc");
         res.next();
         Assert.assertEquals(res.getInt("bought_rate"),14);
     }
 
     public void test_searchFields() {
         String resultLoc = "//tbody/tr";
+        Widget res;
 
         //Search by Country - OPEX
         opexPage.open().readyPage()
                 .setCountry("IT - Italy")
                 .clickShowResultButton();
-        Widget res = new Widget(Locators.page.locator(resultLoc));
+        res = new Widget(Locators.page.locator(resultLoc));
         for (int i = 0; i < res.element.count(); i++){
             Assert.assertTrue(res.element.nth(i).textContent().contains("Italy"));
         }
@@ -118,7 +100,25 @@ public class OpexTest extends BaseTest {
             Assert.assertTrue(res.element.nth(i).textContent().contains("#8122 - Fleece Blanket - RO (Romania) - 10 RON"));
         }
 
-        //Search by data
-        Assert.fail();
+    }
+
+    private void checkOpex(int id, int opex, int capa, int cpApp) throws SQLException {
+        opexPage.open().readyPage()
+                .setOpex(String.valueOf(opex),id)
+                .setCapa(String.valueOf(capa),id)
+                .setCpApprove(String.valueOf(cpApp),id)
+                .clickSaveButton(id);
+        ResultSet res = getDB().select("SELECT * FROM terraleads.opex where advertiser_id="+id+" order by id desc");
+        res.next();
+        Assert.assertEquals(res.getInt("opex"),opex);
+        Assert.assertEquals(res.getInt("capa"),capa);
+        Assert.assertEquals(res.getInt("cp_aprove"),cpApp);
+
+
+        float expected_cpo = opex / ( (capa * (cpApp/100f) ) * 30 );
+        String decCpo = new DecimalFormat("#.##").format(expected_cpo).replace(",",".");
+
+        Assert.assertEquals(res.getFloat("cpo"),Float.parseFloat(decCpo));
+        Assert.assertEquals(opexPage.getCpo_value(id),decCpo);
     }
 }
