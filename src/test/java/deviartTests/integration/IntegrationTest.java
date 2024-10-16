@@ -14,7 +14,7 @@ public class IntegrationTest extends BaseTest {
         courierSku.getSkus("{\"user_id\":\"20239\",\"courier\":\"skladproeshop\",\"data\":{\"courier\":{\"systemName\":\"skladproeshop\"},\"company\":{\"apiName\":\"swift_goods\",\"countryIsoCode\":\"CZ\"}}}");
 
         JSONArray jsonObject = new JSONObject(courierSku.getResponse()).getJSONArray("data");
-        jsonObject.forEach(x-> System.out.println(new JSONObject(x.toString()).getJSONObject("product").getInt("quantity")));
+        jsonObject.forEach(x-> new JSONObject(x.toString()).getJSONObject("product").getInt("quantity"));
     }
 
 }
