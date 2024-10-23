@@ -1,8 +1,12 @@
 package org.deviartqa.pages.shipping.order;
 
+import com.microsoft.playwright.FileChooser;
 import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Locators;
+import org.deviartqa.core.Session;
 import org.deviartqa.core.Widget;
+
+import java.nio.file.Paths;
 
 public class CreateOrderPage extends CabinetPage {
 

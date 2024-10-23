@@ -3,11 +3,11 @@ package org.deviartqa.api.accounting;
 import org.apache.log4j.Logger;
 import org.deviartqa.TestScenario;
 import org.deviartqa.core.Credentials;
-import org.deviartqa.core.Restful;
+import org.deviartqa.core.Restfull;
 
 import static io.restassured.RestAssured.given;
 
-public class PaymentAPI extends Restful {
+public class PaymentAPI extends Restfull {
 
     String url;
 

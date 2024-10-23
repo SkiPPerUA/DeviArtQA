@@ -4,20 +4,18 @@ import io.restassured.response.*;
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 
-public abstract class Restful {
+public abstract class Restfull {
 
-    private static final Logger logger = Logger.getLogger(Restful.class);
+    private static final Logger logger = Logger.getLogger(Restfull.class);
     protected Response response;
-    protected int responseCode;
     protected int expectedCode = 200;
     private boolean need_to_check = true;
 
     protected void request(Response request){
        this.response = request;
        logger.info(getResponse());
-       responseCode = response.getStatusCode();
        if (need_to_check){
-           Assert.assertEquals(responseCode,expectedCode);
+           Assert.assertEquals(response.getStatusCode(),expectedCode);
        }
     }
 

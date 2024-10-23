@@ -11,13 +11,17 @@ public interface ApiHelper {
 
     static String getCheckSum(String body, int userId){
         ResultSet res = new DBconnector().select("SELECT api_key FROM terraleads.users WHERE id = "+userId);
-        String api_key = "";
+        String apiKey = "";
         try {
             res.next();
-            api_key = res.getString(1);
+            apiKey = res.getString(1);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return DigestUtils.sha1Hex(body+api_key);
+        return getCheckSum(body,apiKey);
+    }
+
+    static String getCheckSum(String body, String apiKey){
+        return DigestUtils.sha1Hex(body+apiKey);
     }
 }

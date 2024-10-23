@@ -1,8 +1,10 @@
 package org.deviartqa.core;
 
+import com.microsoft.playwright.FileChooser;
 import org.deviartqa.TestScenario;
 import org.deviartqa.blocks.Header;
 import org.deviartqa.pages.noAuth.AuthPage;
+import java.nio.file.Paths;
 import java.util.Map;
 
 public abstract class CabinetPage extends SitePage{
@@ -44,6 +46,12 @@ public abstract class CabinetPage extends SitePage{
 
     protected CabinetPage clickCreate(){
         new Widget(Locators.page.locator("//a[contains(@href,'/acp/"+pagePoint+"/new')]")).click();
+        return this;
+    }
+
+    protected CabinetPage setFile(String pathFile){
+        FileChooser fileChooser = Session.getPage().waitForFileChooser(() ->  Session.getPage().locator("//input[@id='upload-file']").click());
+        fileChooser.setFiles(Paths.get(pathFile));
         return this;
     }
 
@@ -193,6 +201,11 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setInvoice(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[invoice]")).fill(data);
+        return this;
+    }
+
     protected CabinetPage setInvoice_number_template(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[invoice_number_template]")).fill(data);
         return this;
@@ -283,7 +296,7 @@ public abstract class CabinetPage extends SitePage{
     }
 
     protected CabinetPage choseAccounting_system_requisites_account_id(String data) {
-        new Widget(Locators.page.locator("//button[@data-id=\"accounting_system_requisites_account_id\"]")).click();
+        new Widget(Locators.page.locator("//button[@data-id='accounting_system_requisites_account_id']")).click();
         choseDrop(data);
         return this;
     }
@@ -344,6 +357,11 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setCost(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[cost]")).fill(data);
+        return this;
+    }
+
     protected CabinetPage setValid_approve_percent(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[valid_approve_percent]")).fill(data);
         return this;
@@ -379,6 +397,18 @@ public abstract class CabinetPage extends SitePage{
 
     protected CabinetPage setDelivery_service_id(String data) {
         new Widget(Locators.page.locator("//button[@data-id='delivery_service_id']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setOrder_status_type(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='order_status_type']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setOrder_status(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='order_status']")).click();
         choseDrop(data);
         return this;
     }
