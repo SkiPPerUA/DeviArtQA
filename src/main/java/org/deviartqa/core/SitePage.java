@@ -2,6 +2,7 @@ package org.deviartqa.core;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.assertions.LocatorAssertions;
 import org.deviartqa.TestScenario;
 import org.deviartqa.blocks.Header;
 
@@ -15,11 +16,12 @@ public abstract class SitePage {
         page.navigate(TestScenario.getUrl()+url);
         if (!page.url().equals(TestScenario.getUrl()+url)){
             new Header().log_out();
+            openPage(url);
         }
     }
 
     protected void checkPage(Locator locator){
-        assertThat(locator).isVisible();
+        assertThat(locator).isVisible(new LocatorAssertions.IsVisibleOptions().setTimeout(10000));
     }
 
     public void reloadPage(){

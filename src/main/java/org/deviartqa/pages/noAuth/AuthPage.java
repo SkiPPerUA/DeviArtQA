@@ -5,6 +5,7 @@ import org.deviartqa.core.Locators;
 import org.deviartqa.core.SitePage;
 import org.deviartqa.core.Widget;
 import org.deviartqa.pages.main.WelcomePage;
+import org.deviartqa.pages.noAuth.registrationPage.RegistrationPage1;
 
 public class AuthPage extends SitePage {
 

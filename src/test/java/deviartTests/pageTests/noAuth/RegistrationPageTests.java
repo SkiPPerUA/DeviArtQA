@@ -3,7 +3,10 @@ package deviartTests.pageTests.noAuth;
 import deviartTests.BaseTest;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.helper.TestCases;
-import org.deviartqa.pages.noAuth.RegistrationPage1;
+import org.deviartqa.pages.noAuth.AuthPage;
+import org.deviartqa.pages.noAuth.registrationPage.RegistrationPage1;
+import org.deviartqa.pages.noAuth.registrationPage.RegistrationPage2;
+import org.deviartqa.pages.noAuth.registrationPage.RegistrationPage3;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
@@ -13,8 +16,12 @@ import java.sql.SQLException;
 public class RegistrationPageTests extends BaseTest {
 
     RegistrationPage1 registrationPage = new RegistrationPage1();
+    RegistrationPage2 registrationPage2 = new RegistrationPage2();
+    RegistrationPage3 registrationPage3 = new RegistrationPage3();
+    AuthPage authPage = new AuthPage();
 
     public void positive_registration() throws SQLException {
+        ResultSet res;
         String login = DataHelper.getUuid()+"@test.ua";
         registrationPage.open().readyPage()
                 .setEmail(login)
@@ -23,9 +30,41 @@ public class RegistrationPageTests extends BaseTest {
                 .setPassword_repeat("123456")
                 .clickAgreementCheckBox()
                 .clickSendButton().readyPage();
-        ResultSet res = getDB().select("SELECT count(*) FROM terraleads.users where email='"+login+"'");
+        res = getDB().select("SELECT * FROM terraleads.users where email='"+login+"'");
         res.next();
-        Assert.assertEquals(res.getInt(1),1);
+        Assert.assertEquals(res.getInt("register_step"),2);
+        Assert.assertEquals(res.getInt("status"),3);
+
+        registrationPage2.choiceParameter("SEO")
+                .choiceParameter("1 to 3 years")
+                .choiceParameter("solo")
+                .clickNextButton().readyPage();
+        res = getDB().select("SELECT * FROM terraleads.users where email='"+login+"'");
+        res.next();
+        Assert.assertEquals(res.getInt("register_step"),3);
+        Assert.assertEquals(res.getInt("status"),3);
+
+        registrationPage3.choiceParameter("between $1000 and $3000")
+                .choiceParameter("media")
+                .clickSendButton();
+        res = getDB().select("SELECT * FROM terraleads.users where email='"+login+"'");
+        res.next();
+        Assert.assertEquals(res.getInt("register_step"),3);
+        Assert.assertEquals(res.getInt("status"),1);
+    }
+
+    public void test_stepsOnLogin(){
+        String login = "dasdas@gmail.com";
+
+        getDB().update("UPDATE terraleads.users set register_step = 2 where email = '"+login+"'");
+        authPage.open().readyPage()
+                        .makeAuth(login,"123456");
+        registrationPage2.readyPage();
+
+        getDB().update("UPDATE terraleads.users set register_step = 3 where email = '"+login+"'");
+        authPage.open().readyPage()
+                .makeAuth(login,"123456");
+        registrationPage3.readyPage();
     }
 
     public void negative_registration() {

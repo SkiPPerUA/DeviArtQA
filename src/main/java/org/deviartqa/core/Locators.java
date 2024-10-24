@@ -11,5 +11,5 @@ public class Locators{
     public static final Locator submit = page.getByTestId("submit");
     public static final Locator save = page.locator("//button[@id=\"yw0\"]");
     public static final Locator cancel = page.locator("//a[contains(text(),'"+ TextLocalization.get("cancel")+"')]");
-    public static final Locator log_out = page.getByTestId("//div[@class='navbar-collapse collapse']//a[@data-modal='logout-modal']");
+    public static final Locator log_out = page.locator("//div[@class='navbar-collapse collapse']//a[@data-modal='logout-modal']");
 }

@@ -53,7 +53,7 @@ public class OrderStatusImportTest extends BaseTest {
         Assert.assertEquals(trans_out.getString("payment_description"), "invoice");
     }
 
-    public void test_mandatory_parameters(){
+    public void test_mandatoryParameters(){
         //without account_id
         createOrderStatusImportPage.open().readyPage()
                 .setName("VladTest")

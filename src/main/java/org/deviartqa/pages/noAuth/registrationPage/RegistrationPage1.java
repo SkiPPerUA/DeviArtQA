@@ -1,4 +1,4 @@
-package org.deviartqa.pages.noAuth;
+package org.deviartqa.pages.noAuth.registrationPage;
 
 import com.microsoft.playwright.Locator;
 import org.deviartqa.core.Locators;
