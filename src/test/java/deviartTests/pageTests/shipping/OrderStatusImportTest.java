@@ -1,8 +1,10 @@
 package deviartTests.pageTests.shipping;
 
+import com.microsoft.playwright.TimeoutError;
 import deviartTests.BaseTest;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.pages.shipping.orderStatusImport.CreateOrderStatusImportPage;
+import org.deviartqa.pages.shipping.orderStatusImport.UpdateOrderStatusImportPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
@@ -13,35 +15,27 @@ import java.util.Arrays;
 public class OrderStatusImportTest extends BaseTest {
 
     CreateOrderStatusImportPage createOrderStatusImportPage = new CreateOrderStatusImportPage();
+    UpdateOrderStatusImportPage updateOrderStatusImportPage = new UpdateOrderStatusImportPage();
     String orders = "307,209";
 
-    public void positive_allParameters() throws SQLException {
-        setOrderStatus(orders);
+    public void positive_createTrans() throws SQLException {
+        setOrderStatus(orders,5);
+
         createOrderStatusImportPage.open().readyPage()
-                .setName("VladTest")
+                .setName("VladTest "+DataHelper.getTime("yyyy-MM-dd k:m:ss"))
                 .setDelivery_service_id("40")
                 .setOrder_status_type("Confirmed")
                 .setOrder_status("Bought")
                 .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
-                .setCost("44")
-                .setInvoice("invoice")
+                .setCod_sum("44")
                 .setFile("/Users/user/Documents/Deviart/test_orders.csv")
                 .clickSaveButton().readyPage()
-                .confirm("Found orders with status \"Bought\"");
+                .createTransaction()
+                .warning_comment("vlad comment")
+                .close_warning(true);
 
         ResultSet trans_out = getDB().select("SELECT * FROM terraleads.accounting_balance_transactions where payment_type = 2 ORDER BY id DESC limit 1");
         trans_out.next();
-        ResultSet trans_in = getDB().select("SELECT * FROM terraleads.accounting_balance_transactions where payment_type = 1 ORDER BY id DESC limit 1");
-        trans_in.next();
-
-        Assert.assertEquals(trans_in.getInt("user_id"), 25695);
-        Assert.assertEquals(trans_in.getInt("system_requisites_account_to_id"), 510);
-        Assert.assertTrue(trans_in.getString("t_created").contains(DataHelper.getTime("yyyy-MM-dd k:mm:")));
-        Assert.assertEquals(trans_in.getInt("payment_status"), 5);
-        Assert.assertEquals(trans_in.getInt("payment_type_id"), 24);
-        Assert.assertEquals(trans_in.getInt("commission_to"), 0);
-        Assert.assertEquals(trans_in.getFloat("amount_system_currency"), 207.07);
-        Assert.assertEquals(trans_in.getString("payment_description"), "invoice");
 
         Assert.assertEquals(trans_out.getInt("user_id"), 25695);
         Assert.assertEquals(trans_out.getInt("system_requisites_account_from_id"), 510);
@@ -53,93 +47,122 @@ public class OrderStatusImportTest extends BaseTest {
         Assert.assertEquals(trans_out.getString("payment_description"), "invoice");
     }
 
+    public void negative_createTrans() {
+        setOrderStatus(orders,10);
+        createOrderStatusImportPage.open().readyPage()
+                .setName("VladTest "+DataHelper.getTime("yyyy-MM-dd k:m:ss"))
+                .setDelivery_service_id("40")
+                .setOrder_status_type("Confirmed")
+                .setOrder_status("Bought")
+                .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
+                .setCod_sum("44")
+                .setFile("/Users/user/Documents/Deviart/test_orders.csv")
+                .clickSaveButton().readyPage();
+        try {
+            updateOrderStatusImportPage.createTransaction();
+            Assert.fail("Кнопка создание транки есть");
+        }catch (TimeoutError e){
+        }
+    }
+
+    public void test_modalWindow() throws SQLException {
+        setOrderStatus(orders,5);
+        ResultSet trans_out;
+
+        //create without modal
+        createOrderStatusImportPage.open().readyPage()
+                .setName("VladTest "+DataHelper.getTime("yyyy-MM-dd k:m:ss"))
+                .setDelivery_service_id("40")
+                .setOrder_status_type("Confirmed")
+                .setOrder_status("Bought")
+                .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
+                .setCod_sum("470.50")
+                .setFile("/Users/user/Documents/Deviart/test_orders.csv")
+                .clickSaveButton().readyPage()
+                .createTransaction();
+
+        trans_out = getDB().select("SELECT * FROM terraleads.accounting_balance_transactions where payment_type = 2 ORDER BY id DESC limit 1");
+        trans_out.next();
+
+        Assert.assertEquals(trans_out.getInt("user_id"), 25695);
+        Assert.assertEquals(trans_out.getInt("system_requisites_account_from_id"), 510);
+        Assert.assertTrue(trans_out.getString("t_created").contains(DataHelper.getTime("yyyy-MM-dd k:m:")));
+        Assert.assertEquals(trans_out.getInt("payment_status"), 5);
+        Assert.assertEquals(trans_out.getInt("payment_type_id"), 24);
+        Assert.assertEquals(trans_out.getInt("commission_to"), 0);
+        Assert.assertEquals(trans_out.getFloat("amount_system_currency"), 44);
+        Assert.assertEquals(trans_out.getString("payment_description"), "invoice");
+
+        //cancel modal
+        createOrderStatusImportPage.open().readyPage()
+                .setName("VladTest "+DataHelper.getTime("yyyy-MM-dd k:m:ss"))
+                .setDelivery_service_id("40")
+                .setOrder_status_type("Confirmed")
+                .setOrder_status("Bought")
+                .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
+                .setCod_sum("44")
+                .setFile("/Users/user/Documents/Deviart/test_orders.csv")
+                .clickSaveButton().readyPage()
+                .createTransaction()
+                .close_warning(false);
+        updateOrderStatusImportPage.readyPage();
+    }
+
     public void test_mandatoryParameters(){
         //without account_id
         createOrderStatusImportPage.open().readyPage()
-                .setName("VladTest")
+                .setName("VladTest "+DataHelper.getTime("yyyy-MM-dd k:m:ss"))
                 .setDelivery_service_id("40")
                 .setOrder_status_type("Confirmed")
                 .setOrder_status("Bought")
+                .setCod_sum("44")
                 .setFile("/Users/user/Documents/Deviart/test_orders.csv")
                 .clickSaveButton();
         createOrderStatusImportPage.readyPage();
 
-        //with cost and without invoice
+        //with cod_sum and without invoice
         createOrderStatusImportPage.open().readyPage()
-                .setName("VladTest")
+                .setName("VladTest "+DataHelper.getTime("yyyy-MM-dd k:m:ss"))
                 .setDelivery_service_id("40")
                 .setOrder_status_type("Confirmed")
                 .setOrder_status("Bought")
                 .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
-                .setCost("44")
-                .setFile("/Users/user/Documents/Deviart/test_orders.csv")
-                .clickSaveButton();
-        createOrderStatusImportPage.readyPage();
-
-        //with invoice and without cost
-        createOrderStatusImportPage.open().readyPage()
-                .setName("VladTest")
-                .setDelivery_service_id("40")
-                .setOrder_status_type("Confirmed")
-                .setOrder_status("Bought")
-                .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
-                .setInvoice("invoice")
                 .setFile("/Users/user/Documents/Deviart/test_orders.csv")
                 .clickSaveButton();
         createOrderStatusImportPage.readyPage();
     }
 
-    public void test_statusesWithoutTrans() {
+    public void test_mandatoryParametersNotConfirmedAndBought() {
         String [] statuses = {"Not bought","Transportation to customer","Dispose","Lost","Canceled"};
 
         //with Confirmed
         Arrays.stream(statuses).forEach(x -> {
-            setOrderStatus(orders);
-            ResultSet countBefore = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions");
             createOrderStatusImportPage.open().readyPage()
-                    .setName("VladTest")
+                    .setName("VladTest "+DataHelper.getTime("yyyy-MM-dd k:m:ss"))
                     .setDelivery_service_id("40")
                     .setOrder_status_type("Confirmed")
                     .setOrder_status(x)
-                    .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
-                    .setCost("44")
-                    .setInvoice("invoice")
                     .setFile("/Users/user/Documents/Deviart/test_orders.csv")
-                    .clickSaveButton().readyPage()
-                    .confirm(1);
-            ResultSet countAfter = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions");
-            try {
-                countBefore.next();
-                countAfter.next();
-                Assert.assertEquals(countAfter.getInt(1), countBefore.getInt(1));
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+                    .clickSaveButton().readyPage();
         });
 
         //with Temporary
         Arrays.stream(statuses).forEach(x -> {
-            setOrderStatus(orders);
-            ResultSet countBefore = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions");
             createOrderStatusImportPage.open().readyPage()
-                    .setName("VladTest")
+                    .setName("VladTest "+DataHelper.getTime("yyyy-MM-dd k:m:ss"))
+                    .setDelivery_service_id("40")
+                    .setOrder_status_type("Temporary")
+                    .setOrder_status("Bought")
+                    .setFile("/Users/user/Documents/Deviart/test_orders.csv")
+                    .clickSaveButton().readyPage();
+
+            createOrderStatusImportPage.open().readyPage()
+                    .setName("VladTest "+DataHelper.getTime("yyyy-MM-dd k:m:ss"))
                     .setDelivery_service_id("40")
                     .setOrder_status_type("Temporary")
                     .setOrder_status(x)
-                    .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
-                    .setCost("44")
-                    .setInvoice("invoice")
                     .setFile("/Users/user/Documents/Deviart/test_orders.csv")
-                    .clickSaveButton().readyPage()
-                    .confirm(1);
-            ResultSet countAfter = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions");
-            try {
-                countBefore.next();
-                countAfter.next();
-                Assert.assertEquals(countAfter.getInt(1), countBefore.getInt(1));
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+                    .clickSaveButton().readyPage();
         });
 
     }
@@ -152,7 +175,7 @@ public class OrderStatusImportTest extends BaseTest {
         }
     }
 
-    private void setOrderStatus(String orders){
-        getDB().update("UPDATE terraleads_shipping.`order` set status = 10 where id in ("+orders+")");
+    private void setOrderStatus(String orders, int status){
+        getDB().update("UPDATE terraleads_shipping.`order` set status = "+status+" where id in ("+orders+")");
     }
 }

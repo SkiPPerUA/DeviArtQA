@@ -362,6 +362,11 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setCod_sum(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[cod_sum]")).fill(data);
+        return this;
+    }
+
     protected CabinetPage setValid_approve_percent(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[valid_approve_percent]")).fill(data);
         return this;

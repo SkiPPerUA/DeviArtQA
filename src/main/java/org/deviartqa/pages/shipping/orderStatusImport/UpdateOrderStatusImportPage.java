@@ -25,4 +25,22 @@ public class UpdateOrderStatusImportPage extends CabinetPage {
         new Widget(page.locator("//a[text()='Confirm']")).element.nth(nth).click();
         return this;
     }
+
+    public UpdateOrderStatusImportPage createTransaction(){
+        new Widget(page.locator("//a[@id='btn-transaction']")).click();
+        return this;
+    }
+
+    public UpdateOrderStatusImportPage warning_comment(String data){
+        new Widget(page.locator("//textarea[@id='comment']")).fill(data);
+        return this;
+    }
+
+    public void close_warning(boolean create){
+        if(create){
+            new Widget(page.locator("//button[@id='confirm-action']")).click();
+        }else {
+            new Widget(page.locator("//button[@data-dismiss='modal']")).click();
+        }
+    }
 }

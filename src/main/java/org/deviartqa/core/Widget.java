@@ -21,10 +21,7 @@ public class Widget {
         return element.isVisible();
     }
 
-    public Widget check(){
-        element.check();
-        return this;
-    }
+
     public Widget fill(String text){
         element.fill(text);
         return this;

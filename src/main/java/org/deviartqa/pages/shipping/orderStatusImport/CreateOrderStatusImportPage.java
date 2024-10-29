@@ -49,13 +49,8 @@ public class CreateOrderStatusImportPage extends CabinetPage {
         return this;
     }
 
-    public CreateOrderStatusImportPage setCost(String data){
-        super.setCost(data);
-        return this;
-    }
-
-    public CreateOrderStatusImportPage setInvoice(String data){
-        super.setInvoice(data);
+    public CreateOrderStatusImportPage setCod_sum(String data){
+        super.setCod_sum(data);
         return this;
     }
 

@@ -16,7 +16,7 @@ public class Credentials {
         }else if (role == RoleCred.webmaster && TestScenario.env.equals("prime")){
             cred = "ltk1evbomcogdjl3a23btd6get";
         }else if (role == RoleCred.admin && TestScenario.env.equals("sandbox")){
-            cred = "eqji4c95m151bfs9d92nla1jnt";
+            cred = "1j2lspg5dh1obvpqbblenpb5es";
         }else if (role == RoleCred.admin && TestScenario.env.equals("prime")){
             cred = "uajoh6bgs9qtcmfv790m4kbtdg";
         }
