@@ -24,6 +24,12 @@ public class CreateOrderStatusImportPage extends CabinetPage {
         return this;
     }
 
+    public CreateOrderStatusImportPage setComment(String data){
+        super.setComment(data);
+        return this;
+    }
+
+
     public CreateOrderStatusImportPage setName(String data){
         super.setName(data);
         return this;

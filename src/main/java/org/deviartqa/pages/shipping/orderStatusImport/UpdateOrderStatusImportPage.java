@@ -27,7 +27,7 @@ public class UpdateOrderStatusImportPage extends CabinetPage {
     }
 
     public UpdateOrderStatusImportPage createTransaction(){
-        new Widget(page.locator("//a[@id='btn-transaction']")).click();
+        new Widget(page.locator("//a[@class='btn btn-warning']")).click();
         return this;
     }
 

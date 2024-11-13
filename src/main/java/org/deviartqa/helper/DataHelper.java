@@ -17,7 +17,9 @@ public interface DataHelper {
     }
 
     static String getTime(String pattern){
-        return new SimpleDateFormat(pattern).format(new Date());
+        Date dt = new Date();
+        dt = DateUtils.addHours(dt, 1);
+        return new SimpleDateFormat(pattern).format(dt);
     }
 
     static String getTime(String pattern, int day){

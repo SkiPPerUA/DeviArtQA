@@ -1,6 +1,7 @@
 package org.deviartqa.pages.accounting;
 
 import org.deviartqa.blocks.ActionButtons;
+import org.deviartqa.blocks.PageData;
 import org.deviartqa.blocks.Paginator;
 import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Locators;
@@ -9,7 +10,8 @@ import org.deviartqa.core.Widget;
 public class TransactionPage extends CabinetPage {
 
     public final Paginator paginator = new Paginator();
-    public ActionButtons actionButtons = new ActionButtons();
+    public final ActionButtons actionButtons = new ActionButtons();
+    public final PageData pageData = new PageData();
 
     public TransactionPage() {
         pagePoint = "accounting/transaction";
@@ -38,9 +40,7 @@ public class TransactionPage extends CabinetPage {
     }
 
     public TransactionPage setRequisiteType(String data){
-        Widget select = new Widget(Locators.page.locator("//button[@data-id='manager_id']")).click();
-        choseDrop(data);
-        select.click();
+        super.setRequisite_type(data);
         return this;
     }
 
@@ -50,8 +50,9 @@ public class TransactionPage extends CabinetPage {
     }
 
     public TransactionPage setCompany_id(String data) {
-        new Widget(Locators.page.locator("//button[@data-id='company_id']")).click();
+        Widget button = new Widget(Locators.page.locator("//button[@data-id='company_id']")).click();
         choseDrop(data);
+        button.click();
         return this;
     }
 
@@ -67,6 +68,11 @@ public class TransactionPage extends CabinetPage {
         return this;
     }
 
+    public TransactionPage setPayment_period(String data) {
+        super.setPayment_period(data);
+        return this;
+    }
+
     public TransactionPage clickYesterdayPaymentsButton(){
         new Widget(page.locator("//button[@id='yesterday']")).click();
         return this;
@@ -77,8 +83,29 @@ public class TransactionPage extends CabinetPage {
         return this;
     }
 
-    public TransactionPage clickAwaitingButton(){
-        new Widget(page.locator("//button[@id='await-checkbox']")).click();
+    public TransactionPage setPayment_status(String data){
+        super.setPayment_status(data);
+        return this;
+    }
+
+    public String allSumInfo(){
+        return new Widget(page.locator("//div[@class='acp-content-list']//div[contains(@class,'accounting-content-toolbar')]")).textContent();
+    }
+
+    public TransactionPage clickStatusesButton(String status){
+        String locator = "//a[@data-status='%s']";
+        if (status.toLowerCase().equals("confirm")){
+            new Widget(page.locator(String.format(locator,10))).click();
+        } else if (status.toLowerCase().equals("paid")){
+            new Widget(page.locator(String.format(locator,9))).click();
+        }else if (status.toLowerCase().equals("cancel")){
+            new Widget(page.locator(String.format(locator,0))).click();
+        }
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return this;
     }
 }

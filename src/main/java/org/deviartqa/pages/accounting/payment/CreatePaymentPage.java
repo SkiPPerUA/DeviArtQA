@@ -4,6 +4,7 @@ import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.TextLocalization;
+import org.deviartqa.pages.accounting.TransactionPage;
 
 public class CreatePaymentPage extends CabinetPage {
 
@@ -63,8 +64,8 @@ public class CreatePaymentPage extends CabinetPage {
         return this;
     }
 
-    public CreatePaymentPage setPeriod_from(String data){
-        super.setPeriod_from(data);
+    public CreatePaymentPage setPayment_period(String data){
+        super.setPayment_period(data);
         return this;
     }
 

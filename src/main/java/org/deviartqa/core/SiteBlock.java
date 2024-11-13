@@ -9,7 +9,8 @@ public abstract class SiteBlock {
 
     protected Page page = Session.getPage();
 
-    protected void checkBlock(Locator locator){
+    protected SiteBlock checkBlock(Locator locator){
         assertThat(locator).isVisible();
+        return this;
     }
 }

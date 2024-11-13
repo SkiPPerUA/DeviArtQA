@@ -11,9 +11,10 @@ import org.deviartqa.pages.accounting.TransactionPage;
 import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Test
 public class TransactionTest extends BaseTest {
@@ -24,24 +25,31 @@ public class TransactionTest extends BaseTest {
 
     public void test_searchFields() throws SQLException {
         String resultLoc = "//tbody/tr[@class]";
+        String sqlRequest = "SELECT sum(amount_system_currency) FROM terraleads.accounting_balance_transactions ";
         ResultSet sqlRes;
         Widget result;
 
-        //Search by awaiting
+        //Search by status
         transactionPage.open().readyPage()
-                .clickAwaitingButton().clickShowResultButton();
-        sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where payment_status in (5,9)");
+                .setPayment_status("pending").clickShowResultButton();
+        sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where payment_status = 5");
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        sqlRes = getDB().select(sqlRequest+"where payment_status = 5");
+        sqlRes.next();
+        Assert.assertTrue(transactionPage.allSumInfo().contains(String.valueOf(sqlRes.getInt(1))));
 
         //Search by ID
         transactionPage.open().readyPage()
-                .setID("3").clickShowResultButton();
+                .setID("904").clickShowResultButton();
         result = new Widget(Locators.page.locator(resultLoc));
-        Assert.assertTrue(result.textContent().substring(0, 2).contains("3"));
-        sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_payment where id = 3");
+        Assert.assertTrue(result.textContent().contains("904"));
+        sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where id = 904");
         sqlRes.next();
         Assert.assertEquals(result.element.count(), sqlRes.getInt(1));
+        sqlRes = getDB().select(sqlRequest+"where id = 904");
+        sqlRes.next();
+        Assert.assertTrue(transactionPage.allSumInfo().contains(String.valueOf(sqlRes.getInt(1))));
 
         //Search by PaymentType = in
         transactionPage.open().readyPage()
@@ -53,6 +61,9 @@ public class TransactionTest extends BaseTest {
         sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where linked_model_id in (SELECT id FROM terraleads.accounting_payment where payment_allocation = 'in')");
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        sqlRes = getDB().select(sqlRequest+"where payment_type = 1");
+        sqlRes.next();
+        Assert.assertTrue(transactionPage.allSumInfo().contains(String.valueOf(sqlRes.getInt(1))));
 
         //Search by PaymentType = out
         transactionPage.open().readyPage()
@@ -64,6 +75,9 @@ public class TransactionTest extends BaseTest {
         sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where linked_model_id in (SELECT id FROM terraleads.accounting_payment where payment_allocation = 'out')");
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        sqlRes = getDB().select(sqlRequest+"where payment_type = 2");
+        sqlRes.next();
+        Assert.assertTrue(transactionPage.allSumInfo().contains(String.valueOf(sqlRes.getInt(1))));
 
         //Search by PaymentType = between
         transactionPage.open().readyPage()
@@ -75,6 +89,9 @@ public class TransactionTest extends BaseTest {
         sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where payment_type = 0");
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        sqlRes = getDB().select(sqlRequest+"where payment_type = 0");
+        sqlRes.next();
+        Assert.assertTrue(transactionPage.allSumInfo().contains(String.valueOf(sqlRes.getInt(1))));
 
         //Search by Date from
         transactionPage.open().readyPage()
@@ -82,6 +99,9 @@ public class TransactionTest extends BaseTest {
         sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where t_created > '2024-07-23 00:00:00.001'");
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        sqlRes = getDB().select(sqlRequest+"where t_created > '2024-07-23 00:00:00.001'");
+        sqlRes.next();
+        Assert.assertTrue(transactionPage.allSumInfo().contains(String.valueOf(sqlRes.getInt(1))));
 
         //Search by Date to
         transactionPage.open().readyPage()
@@ -89,6 +109,9 @@ public class TransactionTest extends BaseTest {
         sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where t_created < '2024-08-01 23:59:59.999'");
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        sqlRes = getDB().select(sqlRequest+"where t_created < '2024-08-01 23:59:59.999'");
+        sqlRes.next();
+        Assert.assertTrue(transactionPage.allSumInfo().contains(String.valueOf(sqlRes.getInt(1))));
 
         //Search by between date
         transactionPage.open().readyPage()
@@ -96,6 +119,9 @@ public class TransactionTest extends BaseTest {
         sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where t_created between '2024-08-01 00:00:00.001' and '2024-08-01 23:59:59.999'");
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        sqlRes = getDB().select(sqlRequest+"where t_created between '2024-08-01 00:00:00.001' and '2024-08-01 23:59:59.999'");
+        sqlRes.next();
+        Assert.assertTrue(transactionPage.allSumInfo().contains(String.valueOf(sqlRes.getInt(1))));
 
         //Search by yesterday button
         transactionPage.open().readyPage()
@@ -114,6 +140,10 @@ public class TransactionTest extends BaseTest {
                 "or system_requisites_account_from_id in (SELECT id from terraleads.accounting_system_requisites_account where payment_system_id = 'paypal')");
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        sqlRes = getDB().select(sqlRequest+"where \n" +
+                "system_requisites_account_to_id in (SELECT id from terraleads.accounting_system_requisites_account where payment_system_id = 'paypal') \n" +
+                "or system_requisites_account_from_id in (SELECT id from terraleads.accounting_system_requisites_account where payment_system_id = 'paypal')");sqlRes.next();
+        Assert.assertTrue(transactionPage.allSumInfo().contains(String.valueOf(sqlRes.getInt(1))));
 
         //Search by Company_id - only sender
         transactionPage.open().readyPage()
@@ -145,13 +175,16 @@ public class TransactionTest extends BaseTest {
         sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where user_id = 31");
         sqlRes.next();
         Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        sqlRes = getDB().select(sqlRequest+"where user_id = 31");
+        sqlRes.next();
+        Assert.assertTrue(transactionPage.allSumInfo().contains(String.valueOf(sqlRes.getInt(1))));
 
-//        //Search by Payment Type
-//        transactionPage.open().readyPage()
-//                .setUserID("#31 - admin@terraleads.com").clickShowResultButton();
-//        sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions where user_id = 31");
-//        sqlRes.next();
-//        Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
+        //Search by Payment_period
+        transactionPage.open().readyPage()
+                .setPayment_period("2024-08-01").clickShowResultButton();
+        sqlRes = getDB().select("SELECT count(*) FROM terraleads.accounting_balance_transactions WHERE payment_period = '2024-08-01'");
+        sqlRes.next();
+        Assert.assertTrue(new Widget(Locators.page.locator("//div[@class='summary']")).textContent().contains(String.valueOf(sqlRes.getInt(1))));
 
     }
 
@@ -245,7 +278,7 @@ public class TransactionTest extends BaseTest {
         }
     }
 
-    public void change_status_paidAndManualApprove() throws SQLException, InterruptedException {
+    public void change_status_paidAndManualApprove() throws SQLException {
         //in
         createIn();
         transactionPage.readyPage();
@@ -425,6 +458,604 @@ public class TransactionTest extends BaseTest {
         Assert.assertEquals(new_balance, old_balance);
     }
 
+    public void changeStatuses_in() throws SQLException {
+        List<Integer> id;
+        //cancel from pending
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),0);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //paid from pending
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),9);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //confirm from pending (negative)
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),5);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //confirm from paid
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),10);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //cancel from paid
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),0);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //paid from paid
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),9);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //paid from confirm (negative)
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),10);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //confirm from confirm
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),10);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //cancel from confirm (negative)
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),10);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //cancel from cancel
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),0);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //paid from cancel (negative)
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),0);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //confirm from cancel (negative)
+        for (int i = 0; i < 2; i++){
+            createIn();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),0);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+    }
+
+    public void changeStatuses_out() throws SQLException {
+        List<Integer> id;
+        //cancel from pending
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),0);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //paid from pending
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),9);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //confirm from pending (negative)
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),5);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //confirm from paid
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),10);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //cancel from paid
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),0);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //paid from paid
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),9);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //paid from confirm (negative)
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),10);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //confirm from confirm
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),10);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //cancel from confirm (negative)
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),10);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //cancel from cancel
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),0);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //paid from cancel (negative)
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("paid");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),0);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+
+        //confirm from cancel (negative)
+        for (int i = 0; i < 2; i++){
+            createOut();
+            transactionPage.readyPage();
+        }
+        res = getDB().select("SELECT id FROM terraleads.accounting_balance_transactions ORDER BY id DESC limit 2");
+        id = new ArrayList<>();
+        while (res.next()){
+            id.add(res.getInt(1));
+        }
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("cancel");
+
+        id.forEach(x -> transactionPage.pageData.setCheckBox(x));
+        transactionPage.clickStatusesButton("confirm");
+        id.forEach(x -> {
+            res = getDB().select("SELECT payment_status FROM terraleads.accounting_balance_transactions where id ="+x);
+            try {
+                res.next();
+                Assert.assertEquals(res.getInt(1),0);
+            } catch (SQLException e) {
+                Assert.fail(e.getMessage());
+            }
+        });
+    }
+
     private void createIn(){
         generalBalancesPage.open().readyPage().clickMakeTransferButton();
         new CreatePaymentPage()
@@ -435,6 +1066,7 @@ public class TransactionTest extends BaseTest {
                 .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("10")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton();
     }
 
@@ -454,6 +1086,7 @@ public class TransactionTest extends BaseTest {
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
                 .setAmount("12")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton();
     }
 

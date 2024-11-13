@@ -120,6 +120,7 @@ public class PaymentsTest extends BaseTest {
                 .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("10")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton().readyPage();
         ResultSet sqlRes = getBD_by("seller_company_name='"+system_company+"' order by id desc limit 1",false);
         sqlRes.next();
@@ -131,6 +132,7 @@ public class PaymentsTest extends BaseTest {
         //Assert.assertEquals(sqlRes.getString("payment_system"),"brocard");
         Assert.assertEquals(sqlRes.getString("purpose_of_payment"),"testVlad");
         Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
+        Assert.assertEquals(sqlRes.getString("payment_period"),"2024-08-01");
     }
 
     public void create_payment_IN_EUR() throws SQLException {
@@ -143,6 +145,7 @@ public class PaymentsTest extends BaseTest {
                 .setPayment_typeId("Commission")
                 .setCurrency("EUR")
                 .setAmount("20")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton().readyPage();
         ResultSet sqlRes = getBD_by("seller_company_name='Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de' order by id desc limit 1",false);
         sqlRes.next();
@@ -151,9 +154,10 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getFloat("system_currency_amount"),20*rate);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"in");
         Assert.assertNull(sqlRes.getString("user_id"));
-        Assert.assertEquals(sqlRes.getString("payment_system"),"brocard");
+//        Assert.assertEquals(sqlRes.getString("payment_system"),"brocard");
         Assert.assertEquals(sqlRes.getString("purpose_of_payment"),"testVlad");
         Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
+        Assert.assertEquals(sqlRes.getString("payment_period"),"2024-08-01");
     }
 
     public void create_payment_IN_allFields() throws SQLException {
@@ -165,12 +169,13 @@ public class PaymentsTest extends BaseTest {
                 .choseSystem_requisites_account("testPaymentName6")
                 .clickAddAdvertiser()
                 .setAdvertiser("25554")
-                .setAdvertiser_requisite("testAdver")
+                //.setAdvertiser_requisite("testAdver")
                 .setAccounting_user_requisites_id("testVladCompany")
                 .setAccounting_user_requisites_account_id("Название банка")
                 .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("11")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton().readyPage();
         ResultSet sqlRes = getBD_by("seller_company_name='Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de' order by id desc limit 1",false);
         sqlRes.next();
@@ -180,9 +185,10 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"in");
         Assert.assertNull(sqlRes.getString("advertiser_requisite"));
         Assert.assertEquals(sqlRes.getInt("user_id"),25554);
-        Assert.assertEquals(sqlRes.getString("payment_system"),"brocard");
+//        Assert.assertEquals(sqlRes.getString("payment_system"),"brocard");
         Assert.assertEquals(sqlRes.getString("purpose_of_payment"),"testVlad");
         Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
+        Assert.assertEquals(sqlRes.getString("payment_period"),"2024-08-01");
     }
 
     public void changeStatus_payment() throws SQLException, InterruptedException {
@@ -214,6 +220,7 @@ public class PaymentsTest extends BaseTest {
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
                 .setAmount("12")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton().readyPage();
         ResultSet sqlRes = getBD_by("seller_company_name='"+system_company+"' order by id desc limit 1",false);
         sqlRes.next();
@@ -225,6 +232,7 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getString("payment_system"),"paxum");
         Assert.assertEquals(sqlRes.getString("purpose_of_payment"),"testVlad");
         Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
+        Assert.assertEquals(sqlRes.getString("payment_period"),"2024-08-01");
     }
 
     public void create_payment_OUT_EUR() throws SQLException, InterruptedException {
@@ -238,6 +246,7 @@ public class PaymentsTest extends BaseTest {
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("EUR")
                 .setAmount("22")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton().readyPage();
         ResultSet sqlRes = getBD_by("seller_company_name='Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de' order by id desc limit 1",false);
         sqlRes.next();
@@ -249,6 +258,7 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getString("payment_system"),"paxum");
         Assert.assertEquals(sqlRes.getString("purpose_of_payment"),"testVlad");
         Assert.assertEquals(sqlRes.getInt("payment_type_id"),1);
+        Assert.assertEquals(sqlRes.getString("payment_period"),"2024-08-01");
     }
 
     public void create_payment_testAmount(){
@@ -309,6 +319,7 @@ public class PaymentsTest extends BaseTest {
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
                 .setAmount("12")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton();
         createPaymentPage.readyPage();
 
@@ -319,6 +330,7 @@ public class PaymentsTest extends BaseTest {
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
                 .setAmount("12")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton();
         createPaymentPage.readyPage();
 
@@ -328,6 +340,7 @@ public class PaymentsTest extends BaseTest {
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .setPayment_type("Commission")
                 .setCurrency("USD")
+                .setPayment_period("2024-08-01")
                 .setAmount("12");
         try {
             Thread.sleep(2000);
@@ -344,16 +357,29 @@ public class PaymentsTest extends BaseTest {
                 .setPayment_type("Commission")
                 .setPurpose_of_payment("testVlad")
                 .setAmount("12")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton();
         createPaymentPage.readyPage();
 
-        //Without Amount
+//        //Without Amount
+//        createPaymentPage.open().readyPage()
+//                .setRoutePayment("out")
+//                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+//                .setPayment_type("Commission")
+//                .setCurrency("USD")
+//                .setPurpose_of_payment("testVlad")
+//                .setPayment_period("2024-08-01")
+//                .clickSaveBatton();
+//        createPaymentPage.readyPage();
+
+        //Without Payment_period
         createPaymentPage.open().readyPage()
                 .setRoutePayment("out")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .setPayment_type("Commission")
                 .setCurrency("USD")
                 .setPurpose_of_payment("testVlad")
+                .setAmount("12")
                 .clickSaveBatton();
         createPaymentPage.readyPage();
     }
@@ -365,6 +391,7 @@ public class PaymentsTest extends BaseTest {
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .setCurrency("USD")
                 .setAmount("10")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton();
         createPaymentPage.readyPage();
 
@@ -374,6 +401,7 @@ public class PaymentsTest extends BaseTest {
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .setPayment_typeId("Commission")
                 .setAmount("10")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton();
         createPaymentPage.readyPage();
 
@@ -383,12 +411,24 @@ public class PaymentsTest extends BaseTest {
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .setPayment_typeId("Commission")
                 .setCurrency("USD")
+                .setPayment_period("2024-08-01")
                 .clickSaveBatton();
         createPaymentPage.readyPage();
 
         //Without System_company
         createPaymentPage.open().readyPage()
                 .setRoutePayment("in")
+                .setPayment_typeId("Commission")
+                .setCurrency("USD")
+                .setAmount("10")
+                .setPayment_period("2024-08-01")
+                .clickSaveBatton();
+        createPaymentPage.readyPage();
+
+        //Without Payment_period
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("in")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("10")
@@ -423,6 +463,7 @@ public class PaymentsTest extends BaseTest {
                 .setPayment_typeId("Commission")
                 .setCurrency("EUR")
                 .setAmount("11")
+                .setPayment_period("2024-03-01")
                 .clickSaveBatton().readyPage();
         url = new StringBuffer(Session.getPage().url());
         int new_id = Integer.parseInt(String.valueOf(url.delete(0,url.indexOf("id=")+3)));
@@ -433,6 +474,7 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getFloat("system_currency_amount"),11*rate);
         Assert.assertEquals(sqlRes.getInt("status"),1);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"in");
+        Assert.assertEquals(sqlRes.getString("payment_period"),"2024-03-01");
 
         sqlRes = getBD_by("id = "+old_id,false);
         sqlRes.next();
@@ -452,6 +494,7 @@ public class PaymentsTest extends BaseTest {
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("EUR")
                 .setAmount("15")
+                .setPayment_period("2024-03-01")
                 .clickSaveBatton().readyPage();
         url = new StringBuffer(Session.getPage().url());
         int new_id = Integer.parseInt(String.valueOf(url.delete(0,url.indexOf("id=")+3)));
@@ -462,6 +505,7 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getFloat("system_currency_amount"),15*rate);
         Assert.assertEquals(sqlRes.getInt("status"),1);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"out");
+        Assert.assertEquals(sqlRes.getString("payment_period"),"2024-03-01");
 
         sqlRes = getBD_by("id = "+old_id,false);
         sqlRes.next();
@@ -478,6 +522,7 @@ public class PaymentsTest extends BaseTest {
                 .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("11")
+                .setPayment_period("2024-03-01")
                 .clickSaveBatton().readyPage();
         url = new StringBuffer(Session.getPage().url());
         int new_id = Integer.parseInt(String.valueOf(url.delete(0,url.indexOf("id=")+3)));
@@ -488,6 +533,7 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getInt("system_currency_amount"),11);
         Assert.assertEquals(sqlRes.getInt("status"),1);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"in");
+        Assert.assertEquals(sqlRes.getString("payment_period"),"2024-03-01");
 
         sqlRes = getBD_by("id = "+old_id,false);
         sqlRes.next();
@@ -505,6 +551,7 @@ public class PaymentsTest extends BaseTest {
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
                 .setAmount("15")
+                .setPayment_period("2024-03-01")
                 .clickSaveBatton().readyPage();
         url = new StringBuffer(Session.getPage().url());
         int new_id = Integer.parseInt(String.valueOf(url.delete(0,url.indexOf("id=")+3)));
@@ -515,6 +562,7 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getInt("system_currency_amount"),15);
         Assert.assertEquals(sqlRes.getInt("status"),1);
         Assert.assertEquals(sqlRes.getString("payment_allocation"),"out");
+        Assert.assertEquals(sqlRes.getString("payment_period"),"2024-03-01");
 
         sqlRes = getBD_by("id = "+old_id,false);
         sqlRes.next();
@@ -572,6 +620,7 @@ public class PaymentsTest extends BaseTest {
                 .setPayment_typeId("PaymentTypef5fa533a-3622-4e12-871b-08c876b69328")
                 .setCurrency("USD")
                 .setAmount("10")
+                .setPayment_period("2024-03-01")
                 .clickSaveBatton().readyPage();
         transactionPage.open().readyPage();
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");

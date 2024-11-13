@@ -20,7 +20,7 @@ public class RegistrationPageTests extends BaseTest {
     RegistrationPage3 registrationPage3 = new RegistrationPage3();
     AuthPage authPage = new AuthPage();
 
-    public void positive_registration() throws SQLException {
+    public void positive_registration() throws SQLException, InterruptedException {
         ResultSet res;
         String login = DataHelper.getUuid()+"@test.ua";
         registrationPage.open().readyPage()
@@ -47,10 +47,11 @@ public class RegistrationPageTests extends BaseTest {
         registrationPage3.choiceParameter("between $1000 and $3000")
                 .choiceParameter("media")
                 .clickSendButton();
+        Thread.sleep(2000);
         res = getDB().select("SELECT * FROM terraleads.users where email='"+login+"'");
         res.next();
-        Assert.assertEquals(res.getInt("register_step"),3);
-        Assert.assertEquals(res.getInt("status"),1);
+        Assert.assertEquals(res.getInt("register_step"),4);
+        Assert.assertEquals(res.getInt("status"),3);
     }
 
     public void test_stepsOnLogin(){

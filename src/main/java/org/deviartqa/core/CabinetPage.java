@@ -71,6 +71,13 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setRequisite_type(String data) {
+        Widget widget = new Widget(Locators.page.locator("//button[@data-id='requisite_type']")).click();
+        choseDrop(data);
+        widget.click();
+        return this;
+    }
+
     protected CabinetPage setCity_id(String data) {
         new Widget(page.locator("//button[@data-id='city_id']")).click();
         choseDrop(data);
@@ -92,6 +99,24 @@ public abstract class CabinetPage extends SitePage{
 
     protected CabinetPage setPayment_typeId(String data) {
         new Widget(Locators.page.locator("//button[@data-id='payment_type_id']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setFrom_operator(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='ShippingFormMoveCallOperator_from_operator_id']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setCall_sequence(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='ShippingFormMoveCallOperator_call_sequence_type']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setTo_operator(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='ShippingFormMoveCallOperator_to_operator_id']")).click();
         choseDrop(data);
         return this;
     }
@@ -131,6 +156,11 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setComment(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[comment]")).fill(data);
+        return this;
+    }
+
     protected CabinetPage setPurpose_of_payment(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[purpose_of_payment]")).fill(data);
         return this;
@@ -163,6 +193,11 @@ public abstract class CabinetPage extends SitePage{
 
     protected CabinetPage setCompany_name(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[company_name]")).fill(data);
+        return this;
+    }
+
+    protected CabinetPage setPayment_period(String data) {
+        new Widget(Locators.page.locator("//input[@id='payment_period']")).fill(data);
         return this;
     }
 

@@ -2,7 +2,7 @@ package org.deviartqa.pages.shipping;
 
 import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Widget;
-import org.deviartqa.helper.TextLocalization;
+import org.deviartqa.pages.shipping.call.CallPage;
 
 public class ProcessingPage extends CabinetPage {
 
