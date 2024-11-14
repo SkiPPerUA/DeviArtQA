@@ -77,7 +77,7 @@ public class MoveCalls extends BaseTest {
         callTransferPage.readyPage();
     }
 
-    public void test_parameters(){
+    public void test_parameters() {
         //without From_operator
         callTransferPage.open().readyPage()
                 .setTo_operator(String.valueOf(operator_to))
