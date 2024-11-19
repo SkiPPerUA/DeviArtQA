@@ -41,6 +41,10 @@ public class OpexPage extends CabinetPage {
         return this;
     }
 
+    public String getOpex(int id){
+        return new Widget(page.locator("//input[contains(@id,'opex_"+id+"')]")).element.getAttribute("value").trim();
+    }
+
     public OpexPage setCapa(String data, int id){
         new Widget(page.locator("//input[contains(@id,'capa_"+id+"')]")).fill(data);
         return this;
@@ -53,6 +57,10 @@ public class OpexPage extends CabinetPage {
 
     public String getCpo_value(int id){
         return new Widget(page.locator("//td[@id='opex_cpo_value_"+id+"']")).textContent();
+    }
+
+    public String getCurrentCpo_value(int id){
+        return new Widget(page.locator("//td[@id='opex_cpo_value_"+id+"']/../td[7]")).textContent().trim();
     }
 
     public OpexPage setBought_rate(String data, int id){

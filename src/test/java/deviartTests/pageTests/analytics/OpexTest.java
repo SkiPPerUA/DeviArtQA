@@ -36,6 +36,22 @@ public class OpexTest extends BaseTest {
         int id = 25554;
         checkOpex(id, 555, 33, 10);
         checkOpex(id, 421, 31, 63);
+
+        List.of(25563,id).forEach(x -> {
+            ResultSet res = getDB().select("select count(*) FROM terraleads.lead l\n" +
+                    "WHERE l.t_created >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)\n" +
+                    "and l.status_adv = \"confirm\" \n" +
+                    "and user_adv_id = "+x);
+            try {
+                res.next();
+                int count = res.getInt(1);
+                if (count > 0){
+                    Assert.assertEquals(new DecimalFormat("#.##").format(Float.parseFloat(opexPage.getCurrentCpo_value(x))).replace(",","."), new DecimalFormat("#.##").format(Float.parseFloat(opexPage.getOpex(x))/count).replace(",","."));
+                }
+            } catch (Throwable e) {
+                Assert.fail(x+" - бага");
+            }
+        });
     }
 
     public void test_parametersBought() throws SQLException {
