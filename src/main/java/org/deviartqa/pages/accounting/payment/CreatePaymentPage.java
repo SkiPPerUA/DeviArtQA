@@ -29,13 +29,7 @@ public class CreatePaymentPage extends CabinetPage {
     }
 
     public CreatePaymentPage setRoutePayment(String type){
-        if (type.equals("out")){
-            new Widget(Locators.page.locator("//*[contains(text(),'"+TextLocalization.get("outgoing")+"')]")).click();
-        }else if (type.equals("in")){
-            new Widget(Locators.page.locator("//*[contains(text(),'"+ TextLocalization.get("incoming") +"')]")).click();
-        }else {
-            throw new RuntimeException("Нет такого типа");
-        }
+        new Widget(Locators.page.locator("//*[contains(@href,'type="+type+"')]")).click();
         return this;
     }
 

@@ -93,14 +93,7 @@ public class TransactionPage extends CabinetPage {
     }
 
     public TransactionPage clickStatusesButton(String status){
-        String locator = "//a[@data-status='%s']";
-        if (status.toLowerCase().equals("confirm")){
-            new Widget(page.locator(String.format(locator,10))).click();
-        } else if (status.toLowerCase().equals("paid")){
-            new Widget(page.locator(String.format(locator,9))).click();
-        }else if (status.toLowerCase().equals("cancel")){
-            new Widget(page.locator(String.format(locator,0))).click();
-        }
+        new Widget(page.locator("//a[text()='"+status.substring(0, 1).toUpperCase() + status.substring(1)+"']")).click();
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {

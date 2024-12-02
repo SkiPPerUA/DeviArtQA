@@ -129,4 +129,17 @@ public class GeneralBalancesPage extends CabinetPage {
         return new TransactionPage();
     }
 
+    public GeneralBalancesPage choiceTypeTrans(String type){
+        String loc = "";
+        if (type.equals("between")){
+            loc = "createTransaction";
+        }else if (type.equals("in")){
+            loc = "createIn";
+        }else if (type.equals("out")){
+            loc = "createOut";
+        }
+        new Widget(page.locator("//button[contains(@data-action, '"+loc+"')]")).click();
+        return this;
+    }
+
 }

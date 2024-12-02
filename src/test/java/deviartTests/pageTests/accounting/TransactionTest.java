@@ -22,6 +22,10 @@ public class TransactionTest extends BaseTest {
     TransactionPage transactionPage = new TransactionPage();
     GeneralBalancesPage generalBalancesPage = new GeneralBalancesPage();
     ResultSet res;
+    String sysComIn = "Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de";
+    String sysComOut = "Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de";
+    String accIn = "testPaymentName6";
+    String accOut = "testPaymentName1";
 
     public void test_searchFields() throws SQLException {
         String resultLoc = "//tbody/tr[@class]";
@@ -189,7 +193,15 @@ public class TransactionTest extends BaseTest {
     }
 
     public void change_status_paidAndConfirm() throws SQLException {
+        ResultSet res;
+        String sql = "SELECT * FROM terraleads.accounting_system_requisites_account " +
+                "WHERE accounting_system_requisites_id = (SELECT id FROM terraleads.accounting_system_requisites WHERE company_name = '%s') " +
+                "AND name = '%s'";
         //in
+        res = getDB().select(String.format(sql,sysComIn,accIn));
+        res.next();
+        float old_balance = res.getFloat("amount_system_currency");
+
         createIn();
         transactionPage.readyPage();
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
@@ -199,12 +211,22 @@ public class TransactionTest extends BaseTest {
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         Assert.assertEquals(res.getInt("payment_status"),9);
+        res = getDB().select(String.format(sql,sysComIn,accIn));
+        res.next();
+        Assert.assertEquals(res.getFloat("amount_system_currency"),old_balance);
         transactionPage.actionButtons.confirmAction(id);
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         Assert.assertEquals(res.getInt("payment_status"),10);
+        res = getDB().select(String.format(sql,sysComIn,accIn));
+        res.next();
+        Assert.assertEquals(res.getFloat("amount_system_currency"),old_balance+10);
 
         //out
+        res = getDB().select(String.format(sql,sysComOut,accOut));
+        res.next();
+        old_balance = res.getFloat("amount_system_currency");
+
         createOut();
         transactionPage.readyPage();
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
@@ -214,10 +236,16 @@ public class TransactionTest extends BaseTest {
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         Assert.assertEquals(res.getInt("payment_status"),9);
+        res = getDB().select(String.format(sql,sysComOut,accOut));
+        res.next();
+        Assert.assertEquals(res.getFloat("amount_system_currency"),old_balance);
         transactionPage.actionButtons.confirmAction(id);
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         Assert.assertEquals(res.getInt("payment_status"),10);
+        res = getDB().select(String.format(sql,sysComOut,accOut));
+        res.next();
+        Assert.assertEquals(res.getFloat("amount_system_currency"),old_balance-12);
     }
 
     public void test_LinkToAdv() throws SQLException {
@@ -252,9 +280,8 @@ public class TransactionTest extends BaseTest {
         }
 
         //in without possible to link
-        generalBalancesPage.open().readyPage().clickMakeTransferButton();
+        generalBalancesPage.open().readyPage().clickMakeTransferButton().choiceTypeTrans("in");
         new CreatePaymentPage()
-                .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
                 .choseSystem_requisites_account("testPaymentName6")
@@ -346,7 +373,7 @@ public class TransactionTest extends BaseTest {
                 .choseSystem_requisites_account("testPaymentName6")
                 .clickAddAdvertiser()
                 .setAdvertiser("25554")
-                .setAdvertiser_requisite("testAdver")
+                //.setAdvertiser_requisite("testAdver")
                 .setAccounting_user_requisites_id("testVladCompany")
                 .setAccounting_user_requisites_account_id("Название банка")
                 .setPayment_typeId("Commission")
@@ -408,7 +435,7 @@ public class TransactionTest extends BaseTest {
                 .choseSystem_requisites_account("testPaymentName6")
                 .clickAddAdvertiser()
                 .setAdvertiser("25554")
-                .setAdvertiser_requisite("testAdver")
+                //.setAdvertiser_requisite("testAdver")
                 .setAccounting_user_requisites_id("testVladCompany")
                 .setAccounting_user_requisites_account_id("Название банка")
                 .setPayment_typeId("Commission")
@@ -1057,12 +1084,11 @@ public class TransactionTest extends BaseTest {
     }
 
     private void createIn(){
-        generalBalancesPage.open().readyPage().clickMakeTransferButton();
+        generalBalancesPage.open().readyPage().clickMakeTransferButton().choiceTypeTrans("in");
         new CreatePaymentPage()
-                .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
-                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName6")
+                .setSystem_company(sysComIn)
+                .choseSystem_requisites_account(accIn)
                 .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("10")
@@ -1071,17 +1097,9 @@ public class TransactionTest extends BaseTest {
     }
 
     private void createOut(){
-        generalBalancesPage.open().readyPage().clickMakeTransferButton();
+        generalBalancesPage.open().readyPage().clickMakeTransferButton().choiceTypeTrans("out");
         new CreatePaymentPage()
-                .setRoutePayment("out")
-                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        new CreatePaymentPage()
-                .setPayment_system("Paxum")
+                .setSystem_company(sysComOut).setPayment_system("Paxum")
                 .setPayment_type("Commission")
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")

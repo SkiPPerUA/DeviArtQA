@@ -34,6 +34,35 @@ public class PaymentsTest extends BaseTest {
     String system_company = "Testd068e119-d1ef-4998-b93f-1bc108dd6d21";
     private float rate;
 
+    public void ttt() throws InterruptedException {
+        List<String> acc = List.of("PayPal", "Paxum", "Cash", "Payoneer");
+        for (int i = 0; i < acc.size(); i++) {
+            createPaymentPage.open().readyPage()
+                    .setRoutePayment("in")
+                    .setPurpose_of_payment("testVlad")
+                    .setSystem_company("TestType")
+                    .setPayment_system(acc.get(i))
+                    .setPayment_typeId("Advertisement")
+                    .setCurrency("USD")
+                    .setAmount(String.valueOf(i+10))
+                    .setPayment_period("2024-08-01")
+                    .clickSaveBatton().readyPage();
+
+            createPaymentPage.open().readyPage()
+                    .setRoutePayment("out")
+                    .setSystem_company("TestType");
+            Thread.sleep(2000);
+            createPaymentPage
+                    .setPayment_system(acc.get(i))
+                    .setPayment_type("Advertisement")
+                    .setPurpose_of_payment("testVlad")
+                    .setCurrency("USD")
+                    .setAmount(String.valueOf(i+20))
+                    .setPayment_period("2024-08-01")
+                    .clickSaveBatton().readyPage();
+        }
+    }
+
     public void test_searchFields() throws SQLException {
         String resultLoc = "//tbody/tr";
         //Search by ID
@@ -209,12 +238,10 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(payment_status, (TestScenario.local.equals("en") ? "Payment status paid" : "Оплачен"));
     }
 
-    public void create_payment_OUT() throws SQLException, InterruptedException {
+    public void create_payment_OUT() throws SQLException {
         createPaymentPage.open().readyPage()
                 .setRoutePayment("out")
-                .setSystem_company(system_company);
-        Thread.sleep(2000);
-        createPaymentPage
+                .setSystem_company(system_company)
                 .setPayment_system("Paxum")
                 .setPayment_type("Commission")
                 .setPurpose_of_payment("testVlad")

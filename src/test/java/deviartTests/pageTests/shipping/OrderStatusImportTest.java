@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 
 @Test
 public class OrderStatusImportTest extends BaseTest {
@@ -17,10 +18,6 @@ public class OrderStatusImportTest extends BaseTest {
     CreateOrderStatusImportPage createOrderStatusImportPage = new CreateOrderStatusImportPage();
     UpdateOrderStatusImportPage updateOrderStatusImportPage = new UpdateOrderStatusImportPage();
     String orders = "307,309";
-
-//    public void pp(){
-//        setOrderStatus(orders,5);
-//    }
 
     public void positive_createTrans() throws SQLException {
         ResultSet trans_out;
@@ -35,6 +32,7 @@ public class OrderStatusImportTest extends BaseTest {
                 .setOrder_status("Bought")
                 .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
                 .setCod_sum("44")
+                .setCodType("COD AS+MS")
                 .setComment("commentCreate")
                 .setFile("/Users/user/Documents/Deviart/test_orders.csv")
                 .clickSaveButton().readyPage()
@@ -68,6 +66,7 @@ public class OrderStatusImportTest extends BaseTest {
                 .setOrder_status("Bought")
                 .choseAccounting_system_requisites_account_id("EUR1111")
                 .setCod_sum("44")
+                .setCodType("COD AS+MS")
                 .setComment("commentCreate")
                 .setFile("/Users/user/Documents/Deviart/test_orders.csv")
                 .clickSaveButton().readyPage()
@@ -96,6 +95,40 @@ public class OrderStatusImportTest extends BaseTest {
         Assert.assertTrue(String.valueOf(trans_out.getFloat("original_amount") * exchangeCustom.getFloat(1)).contains(String.valueOf(trans_out.getFloat("amount_system_currency"))));
     }
 
+    public void positive_payment_type_id() {
+        setOrderStatus(orders,5);
+
+        List.of("COD AS+MS", "COD MS", "COD AS").forEach(x -> {
+            createOrderStatusImportPage.open().readyPage()
+                    .setName("VladTest "+DataHelper.getTime("yyyy-MM-dd k:m:ss"))
+                    .setDelivery_service_id("40")
+                    .setOrder_status_type("Confirmed")
+                    .setOrder_status("Bought")
+                    .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
+                    .setCod_sum("44")
+                    .setCodType(x)
+                    .setComment("commentCreate")
+                    .setFile("/Users/user/Documents/Deviart/test_orders.csv")
+                    .clickSaveButton().readyPage()
+                    .createTransaction()
+                    .warning_comment("vlad comment")
+                    .close_warning(true);
+            ResultSet trans_out = getDB().select("SELECT * FROM terraleads.accounting_balance_transactions where payment_type = 1 ORDER BY id DESC limit 1");
+            try {
+                trans_out.next();
+                if (x.equals("COD AS+MS")) {
+                    Assert.assertEquals(trans_out.getInt("payment_type_id"), 24);
+                }else if (x.equals("COD MS")){
+                    Assert.assertEquals(trans_out.getInt("payment_type_id"), 27);
+                }else if (x.equals("COD AS")){
+                    Assert.assertEquals(trans_out.getInt("payment_type_id"), 28);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     public void negative_createTrans() {
         setOrderStatus(orders,10);
         createOrderStatusImportPage.open().readyPage()
@@ -105,6 +138,7 @@ public class OrderStatusImportTest extends BaseTest {
                 .setOrder_status("Bought")
                 .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
                 .setCod_sum("44")
+                .setCodType("COD AS+MS")
                 .setComment("comment")
                 .setFile("/Users/user/Documents/Deviart/test_orders.csv")
                 .clickSaveButton().readyPage();
@@ -129,6 +163,7 @@ public class OrderStatusImportTest extends BaseTest {
                 .setOrder_status("Bought")
                 .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
                 .setCod_sum("470.50")
+                .setCodType("COD AS+MS")
                 .setComment("comm")
                 .setFile("/Users/user/Documents/Deviart/test_orders.csv")
                 .clickSaveButton().readyPage()
@@ -154,6 +189,7 @@ public class OrderStatusImportTest extends BaseTest {
                 .setOrder_status("Bought")
                 .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
                 .setCod_sum("44")
+                .setCodType("COD AS+MS")
                 .setComment("comm")
                 .setFile("/Users/user/Documents/Deviart/test_orders.csv")
                 .clickSaveButton().readyPage()
@@ -170,6 +206,8 @@ public class OrderStatusImportTest extends BaseTest {
                 .setOrder_status_type("Confirmed")
                 .setOrder_status("Bought")
                 .setCod_sum("44")
+                .setComment("commentCreate")
+                .setCodType("COD AS+MS")
                 .setFile("/Users/user/Documents/Deviart/test_orders.csv")
                 .clickSaveButton();
         createOrderStatusImportPage.readyPage();
@@ -180,6 +218,8 @@ public class OrderStatusImportTest extends BaseTest {
                 .setDelivery_service_id("40")
                 .setOrder_status_type("Confirmed")
                 .setOrder_status("Bought")
+                .setCodType("COD AS+MS")
+                .setComment("commentCreate")
                 .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
                 .setFile("/Users/user/Documents/Deviart/test_orders.csv")
                 .clickSaveButton();
@@ -192,6 +232,20 @@ public class OrderStatusImportTest extends BaseTest {
                 .setOrder_status_type("Confirmed")
                 .setOrder_status("Bought")
                 .setCod_sum("44")
+                .setCodType("COD AS+MS")
+                .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
+                .setFile("/Users/user/Documents/Deviart/test_orders.csv")
+                .clickSaveButton();
+        createOrderStatusImportPage.readyPage();
+
+        //without CodType
+        createOrderStatusImportPage.open().readyPage()
+                .setName("VladTest "+DataHelper.getTime("yyyy-MM-dd k:m:ss"))
+                .setDelivery_service_id("40")
+                .setOrder_status_type("Confirmed")
+                .setOrder_status("Bought")
+                .setCod_sum("44")
+                .setComment("commentCreate")
                 .choseAccounting_system_requisites_account_id("testPaymentName 1112222")
                 .setFile("/Users/user/Documents/Deviart/test_orders.csv")
                 .clickSaveButton();

@@ -33,6 +33,14 @@ public abstract class CabinetPage extends SitePage{
         new Widget(Locators.page.locator(String.format("//ul[@role='listbox'][@aria-expanded='true']//*[contains(text(),'%s')]",data))).click();
     }
 
+    protected void choseDrop(String data, boolean contains){
+        if (contains){
+            choseDrop(data);
+        } else {
+            new Widget(Locators.page.locator(String.format("//ul[@role='listbox'][@aria-expanded='true']//*[text()='%s']",data))).click();
+        }
+    }
+
     protected void checkBox(Widget widget, boolean activate){
         String attribute = widget.getAttribute("class");
        if((attribute.contains("checked") && !activate) || (!attribute.contains("checked") && activate)){
@@ -68,6 +76,12 @@ public abstract class CabinetPage extends SitePage{
     protected CabinetPage setDomain_type(String data) {
         new Widget(Locators.page.locator("//button[@data-id='domain_type']")).click();
         choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setCode_type(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='code_type']")).click();
+        choseDrop(data,false);
         return this;
     }
 
@@ -332,7 +346,7 @@ public abstract class CabinetPage extends SitePage{
 
     protected CabinetPage choseAccounting_system_requisites_account_id(String data) {
         new Widget(Locators.page.locator("//button[@data-id='accounting_system_requisites_account_id']")).click();
-        choseDrop(data);
+        choseDrop(data,false);
         return this;
     }
 

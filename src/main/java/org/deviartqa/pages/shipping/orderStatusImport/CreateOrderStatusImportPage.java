@@ -2,6 +2,7 @@ package org.deviartqa.pages.shipping.orderStatusImport;
 
 import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Locators;
+import org.deviartqa.core.Widget;
 
 public class CreateOrderStatusImportPage extends CabinetPage {
 
@@ -29,6 +30,10 @@ public class CreateOrderStatusImportPage extends CabinetPage {
         return this;
     }
 
+    public CreateOrderStatusImportPage setCodType(String data){
+        super.setCode_type(data);
+        return this;
+    }
 
     public CreateOrderStatusImportPage setName(String data){
         super.setName(data);
