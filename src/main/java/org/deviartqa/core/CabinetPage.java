@@ -285,6 +285,11 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage clickStatus_operator_processing() {
+        new Widget(Locators.page.getByTestId(pageLoc+"[status_operator_processing]")).click();
+        return this;
+    }
+
     protected CabinetPage setFee_from(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[fee_from]")).fill(data);
         return this;

@@ -388,16 +388,16 @@ public class PaymentsTest extends BaseTest {
                 .clickSaveBatton();
         createPaymentPage.readyPage();
 
-//        //Without Amount
-//        createPaymentPage.open().readyPage()
-//                .setRoutePayment("out")
-//                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-//                .setPayment_type("Commission")
-//                .setCurrency("USD")
-//                .setPurpose_of_payment("testVlad")
-//                .setPayment_period("2024-08-01")
-//                .clickSaveBatton();
-//        createPaymentPage.readyPage();
+        //Without Amount
+        createPaymentPage.open().readyPage()
+                .setRoutePayment("out")
+                .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
+                .setPayment_type("Commission")
+                .setCurrency("USD")
+                .setPurpose_of_payment("testVlad")
+                .setPayment_period("2024-08-01")
+                .clickSaveBatton();
+        createPaymentPage.readyPage();
 
         //Without Payment_period
         createPaymentPage.open().readyPage()

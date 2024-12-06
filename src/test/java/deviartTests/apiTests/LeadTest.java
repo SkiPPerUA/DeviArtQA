@@ -19,13 +19,16 @@ public class LeadTest extends BaseTest {
     public LeadsAPI leads = new LeadsAPI();
     DBconnector dBconnector;
     int sleep = 10000;
-    public String offer_id = "8105";
+    public String offer_id = "8104";
     public int user_Id = TestScenario.userId;
+    private String phone;
+    private String name;
+    private String country;
 
     public void create_lead_positive() throws SQLException, InterruptedException {
-        String phone = String.valueOf(new Date().getTime());
-        String name = "test"+ DataHelper.getUuid();
-        String country = "RO";
+        phone = String.valueOf(new Date().getTime());
+        name = "test"+ DataHelper.getUuid();
+        country = "IT";
         makePositiveOffers(offer_id);
         makeLead();
         Thread.sleep(sleep);
@@ -614,9 +617,9 @@ public class LeadTest extends BaseTest {
                 "\"user_id\": "+user_Id+",\n" +
                 "    \"data\":{\n" +
                 "        \"offer_id\": \""+offer_id+"\",\n" +
-                "        \"name\": \""+ DataHelper.getUuid()+"\",\n" +
-                "        \"country\": \"RO\",\n" +
-                "        \"phone\": \""+new Date().getTime()+"\"\n" +
+                "        \"name\": \""+name+"\",\n" +
+                "        \"country\": \""+country+"\",\n" +
+                "        \"phone\": \""+phone+"\"\n" +
                 "        }\n" +
                 "}\n",user_Id);
     }

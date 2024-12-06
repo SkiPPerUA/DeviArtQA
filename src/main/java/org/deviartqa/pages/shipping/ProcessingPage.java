@@ -1,7 +1,10 @@
 package org.deviartqa.pages.shipping;
 
+import org.deviartqa.blocks.filters.ModalWindow;
 import org.deviartqa.core.CabinetPage;
+import org.deviartqa.core.Session;
 import org.deviartqa.core.Widget;
+import org.deviartqa.helper.TextLocalization;
 import org.deviartqa.pages.shipping.call.CallPage;
 
 public class ProcessingPage extends CabinetPage {
@@ -26,5 +29,9 @@ public class ProcessingPage extends CabinetPage {
         return this;
     }
 
+    public ModalWindow clickBusyCall(){
+        new Widget(page.locator("//a[@data-modal='result-busy-stick-top']")).click();
+        return new ModalWindow();
+    }
 
 }

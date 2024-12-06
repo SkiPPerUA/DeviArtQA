@@ -9,16 +9,8 @@ public class Credentials {
 
     public String getCredentials(RoleCred role){
         String cred = "";
-        if (role == RoleCred.webmaster && TestScenario.env.equals("prod")){
-            cred = "l6ve8pk4e2ttfjp02nsrt6a494";
-        }else if (role == RoleCred.webmaster && TestScenario.env.equals("sandbox")){
-            cred = "ocf77nqb8vfijlbe96u6sdci76";
-        }else if (role == RoleCred.webmaster && TestScenario.env.equals("prime")){
-            cred = "ltk1evbomcogdjl3a23btd6get";
-        }else if (role == RoleCred.admin && TestScenario.env.equals("sandbox")){
-            cred = "8fb3ukh2r67rrfsfshvcgp5rmm";
-        }else if (role == RoleCred.admin && TestScenario.env.equals("prime")){
-            cred = "uajoh6bgs9qtcmfv790m4kbtdg";
+        if (role == RoleCred.admin && TestScenario.env.equals("sandbox")){
+            cred = "a6mv99crlu48qk0eahbpvlgdtt";
         }
         return cred;
     }
