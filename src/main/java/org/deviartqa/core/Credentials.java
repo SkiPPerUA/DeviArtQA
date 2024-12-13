@@ -10,7 +10,7 @@ public class Credentials {
     public String getCredentials(RoleCred role){
         String cred = "";
         if (role == RoleCred.admin && TestScenario.env.equals("sandbox")){
-            cred = "a6mv99crlu48qk0eahbpvlgdtt";
+            cred = "ndcgukg0mvtr4v3i9u8004fnd1";
         }
         return cred;
     }

@@ -1,6 +1,6 @@
 package org.deviartqa.pages.accounting.systemRequisites;
 
-import org.deviartqa.blocks.ActionButtons;
+import org.deviartqa.blocks.actionButtons.ActionButtons;
 import org.deviartqa.core.CabinetPage;
 
 public class SystemRequisitesPage extends CabinetPage {

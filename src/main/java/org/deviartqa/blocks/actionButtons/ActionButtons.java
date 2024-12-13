@@ -1,4 +1,4 @@
-package org.deviartqa.blocks;
+package org.deviartqa.blocks.actionButtons;
 
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
@@ -9,7 +9,8 @@ public class ActionButtons {
     public int paidStatus = 9;
 
     public void paidAction(int id){
-        new Widget(Locators.page.locator(String.format(locatorActions,id,paidStatus))).click();
+        //new Widget(Locators.page.locator(String.format(locatorActions,id,paidStatus))).click();
+        new Widget(Locators.page.locator("//a[@data-toggle='tooltip'][contains(@href,'id="+id+"&status="+paidStatus+"')]")).click();
         wait(1);
     }
 
@@ -54,7 +55,7 @@ public class ActionButtons {
         wait(3);
     }
 
-    private void wait(int sec){
+    protected void wait(int sec){
         try {
             Thread.sleep(sec * 1000);
         } catch (InterruptedException e) {

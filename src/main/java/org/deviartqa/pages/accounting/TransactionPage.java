@@ -1,6 +1,6 @@
 package org.deviartqa.pages.accounting;
 
-import org.deviartqa.blocks.ActionButtons;
+import org.deviartqa.blocks.actionButtons.ActionButtonsTransPage;
 import org.deviartqa.blocks.PageData;
 import org.deviartqa.blocks.Paginator;
 import org.deviartqa.core.CabinetPage;
@@ -10,7 +10,7 @@ import org.deviartqa.core.Widget;
 public class TransactionPage extends CabinetPage {
 
     public final Paginator paginator = new Paginator();
-    public final ActionButtons actionButtons = new ActionButtons();
+    public final ActionButtonsTransPage actionButtons = new ActionButtonsTransPage();
     public final PageData pageData = new PageData();
 
     public TransactionPage() {

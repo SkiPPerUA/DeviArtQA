@@ -79,12 +79,11 @@ public class GeneralBalancesTest extends BaseTest {
                 .clickSaveTransferButton().readyPage();
 
         //in
-        generalBalancesPage.open().readyPage().clickMakeTransferButton();
+        generalBalancesPage.open().readyPage().clickMakeTransferButton().choiceTypeTrans("in");
         new CreatePaymentPage()
-                .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName6")
+                .choseSystem_requisites_account("testPaymentName2")
                 .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("10")
@@ -92,9 +91,8 @@ public class GeneralBalancesTest extends BaseTest {
         new TransactionPage().readyPage();
 
         //out
-        generalBalancesPage.open().readyPage().clickMakeTransferButton();
+        generalBalancesPage.open().readyPage().clickMakeTransferButton().choiceTypeTrans("out");
         new CreatePaymentPage()
-                .setRoutePayment("out")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de");
         Thread.sleep(2000);
         new CreatePaymentPage()
@@ -102,7 +100,7 @@ public class GeneralBalancesTest extends BaseTest {
                 .setPayment_type("Commission")
                 .setPurpose_of_payment("testVlad")
                 .setCurrency("USD")
-                .setAmount("-12")
+                .setAmount("12")
                 .clickSaveBatton();
         new TransactionPage().readyPage();
     }

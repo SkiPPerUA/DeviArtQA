@@ -1,10 +1,13 @@
 package org.deviartqa.core;
 
+import org.apache.log4j.Logger;
+
 import java.sql.*;
 import java.util.Map;
 
 public class DBconnector {
 
+    private final Logger logger = Logger.getLogger(DBconnector.class);
     private static Connection conn;
     private String schema = "terraleads";
     public DBconnector(){
@@ -27,6 +30,7 @@ public class DBconnector {
 
     public ResultSet select(String sql){
         Statement st = null;
+        logger.info(sql);
         try {
             st = conn.createStatement();
         } catch (SQLException e) {

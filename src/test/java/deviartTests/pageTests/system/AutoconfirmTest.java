@@ -21,8 +21,8 @@ public class AutoconfirmTest extends BaseTest {
     String offer_id = "8122";
     int user_id = 25696;
 
-    @Test(enabled = false)
-    public void pos() {
+    @Test(invocationCount = 2)
+    private void pos() {
         leads.createLead("{\n" +
                 "\"user_id\": "+user_id+",\n" +
                 "    \"data\":{\n" +

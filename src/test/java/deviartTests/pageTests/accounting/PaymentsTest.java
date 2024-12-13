@@ -33,8 +33,10 @@ public class PaymentsTest extends BaseTest {
     private UpdatePaymentPage updatePaymentPage = new UpdatePaymentPage();
     String system_company = "Testd068e119-d1ef-4998-b93f-1bc108dd6d21";
     private float rate;
+    //-89.4774	-96.6357
+    //-100.589	-108.636
 
-    public void ttt() throws InterruptedException {
+    private void ttt() throws InterruptedException {
         List<String> acc = List.of("PayPal", "Paxum", "Cash", "Payoneer");
         for (int i = 0; i < acc.size(); i++) {
             createPaymentPage.open().readyPage()
@@ -169,8 +171,8 @@ public class PaymentsTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPayment_system("Brocard")
-                .choseSystem_requisites_account("testPaymentName6")
+                .setPayment_system("Paxum")
+                .choseSystem_requisites_account("testPaymentName1")
                 .setPayment_typeId("Commission")
                 .setCurrency("EUR")
                 .setAmount("20")
@@ -194,8 +196,8 @@ public class PaymentsTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPayment_system("Brocard")
-                .choseSystem_requisites_account("testPaymentName6")
+                .setPayment_system("Paxum")
+                .choseSystem_requisites_account("testPaymentName1")
                 .clickAddAdvertiser()
                 .setAdvertiser("25554")
                 //.setAdvertiser_requisite("testAdver")
@@ -220,7 +222,7 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getString("payment_period"),"2024-08-01");
     }
 
-    public void changeStatus_payment() throws SQLException, InterruptedException {
+    public void changeStatus_payment() throws SQLException {
         create_payment_IN();
         ResultSet sqlRes = getBD_by("id > 0 order by id desc",false);
         sqlRes.next();
@@ -463,7 +465,7 @@ public class PaymentsTest extends BaseTest {
         createPaymentPage.readyPage();
     }
 
-    public void viewPayment_test() throws SQLException, InterruptedException {
+    public void viewPayment_test() throws SQLException {
         create_payment_IN();
         ResultSet sqlRes = getBD_by("seller_company_name='"+system_company+"' order by id desc limit 1",false);
         sqlRes.next();
@@ -567,7 +569,7 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getInt("status"),4);
     }
 
-    public void correct_payment_OUT_USD() throws SQLException, InterruptedException {
+    public void correct_payment_OUT_USD() throws SQLException {
         create_payment_OUT();
         StringBuffer url = new StringBuffer(Session.getPage().url());
         int old_id = Integer.parseInt(String.valueOf(url.delete(0,url.indexOf("id=")+3)));
@@ -596,7 +598,7 @@ public class PaymentsTest extends BaseTest {
         Assert.assertEquals(sqlRes.getInt("status"),4);
     }
 
-    public void test_LinkToAdv() throws SQLException, InterruptedException {
+    public void test_LinkToAdv() throws SQLException {
         TransactionPage transactionPage = new TransactionPage();
         ResultSet res;
         //in

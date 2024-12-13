@@ -1,6 +1,6 @@
 package org.deviartqa.pages.accounting.payment;
 
-import org.deviartqa.blocks.ActionButtons;
+import org.deviartqa.blocks.actionButtons.ActionButtons;
 import org.deviartqa.core.CabinetPage;
 
 public class PaymentPage extends CabinetPage {

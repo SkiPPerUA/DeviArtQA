@@ -24,7 +24,7 @@ public class TransactionTest extends BaseTest {
     ResultSet res;
     String sysComIn = "Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de";
     String sysComOut = "Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de";
-    String accIn = "testPaymentName6";
+    String accIn = "testPaymentName2";
     String accOut = "testPaymentName1";
 
     public void test_searchFields() throws SQLException {
@@ -192,7 +192,7 @@ public class TransactionTest extends BaseTest {
 
     }
 
-    public void change_status_paidAndConfirm() throws SQLException {
+    public void change_status_paid_confirm_verification() throws SQLException {
         ResultSet res;
         String sql = "SELECT * FROM terraleads.accounting_system_requisites_account " +
                 "WHERE accounting_system_requisites_id = (SELECT id FROM terraleads.accounting_system_requisites WHERE company_name = '%s') " +
@@ -221,6 +221,13 @@ public class TransactionTest extends BaseTest {
         res = getDB().select(String.format(sql,sysComIn,accIn));
         res.next();
         Assert.assertEquals(res.getFloat("amount_system_currency"),old_balance+10);
+        transactionPage.actionButtons.verificationPassed(id,"",true);
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        Assert.assertEquals(res.getInt("payment_status"),11);
+        res = getDB().select(String.format(sql,sysComIn,accIn));
+        res.next();
+        Assert.assertEquals(res.getFloat("amount_system_currency"),old_balance+10);
 
         //out
         res = getDB().select(String.format(sql,sysComOut,accOut));
@@ -243,6 +250,13 @@ public class TransactionTest extends BaseTest {
         res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
         res.next();
         Assert.assertEquals(res.getInt("payment_status"),10);
+        res = getDB().select(String.format(sql,sysComOut,accOut));
+        res.next();
+        Assert.assertEquals(res.getFloat("amount_system_currency"),old_balance-12);
+        transactionPage.actionButtons.verificationPassed(id,"",true);
+        res = getDB().select("SELECT x.* FROM terraleads.accounting_balance_transactions x ORDER BY x.id DESC");
+        res.next();
+        Assert.assertEquals(res.getInt("payment_status"),11);
         res = getDB().select(String.format(sql,sysComOut,accOut));
         res.next();
         Assert.assertEquals(res.getFloat("amount_system_currency"),old_balance-12);
@@ -284,8 +298,8 @@ public class TransactionTest extends BaseTest {
         new CreatePaymentPage()
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .choseSystem_requisites_account("testPaymentName6")
-                .setPayment_typeId("PaymentTypef5fa533a-3622-4e12-871b-08c876b69328")
+                .choseSystem_requisites_account("testPaymentName2")
+                .setPayment_typeId("Commission")
                 .setCurrency("USD")
                 .setAmount("10")
                 .clickSaveBatton();
@@ -305,7 +319,7 @@ public class TransactionTest extends BaseTest {
         }
     }
 
-    public void change_status_paidAndManualApprove() throws SQLException {
+    private void change_status_paidAndManualApprove() throws SQLException {
         //in
         createIn();
         transactionPage.readyPage();
@@ -369,8 +383,8 @@ public class TransactionTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPayment_system("Brocard")
-                .choseSystem_requisites_account("testPaymentName6")
+                .setPayment_system("Paxum")
+                .choseSystem_requisites_account("testPaymentName1")
                 .clickAddAdvertiser()
                 .setAdvertiser("25554")
                 //.setAdvertiser_requisite("testAdver")
@@ -400,8 +414,8 @@ public class TransactionTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPayment_system("Brocard")
-                .choseSystem_requisites_account("testPaymentName6")
+                .setPayment_system("Paxum")
+                .choseSystem_requisites_account("testPaymentName1")
                 .clickAddAdvertiser()
                 .setAdvertiser("25554")
                 //.setAdvertiser_requisite("testAdver")
@@ -431,8 +445,8 @@ public class TransactionTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPayment_system("Brocard")
-                .choseSystem_requisites_account("testPaymentName6")
+                .setPayment_system("Paxum")
+                .choseSystem_requisites_account("testPaymentName1")
                 .clickAddAdvertiser()
                 .setAdvertiser("25554")
                 //.setAdvertiser_requisite("testAdver")
@@ -462,8 +476,8 @@ public class TransactionTest extends BaseTest {
                 .setRoutePayment("in")
                 .setPurpose_of_payment("testVlad")
                 .setSystem_company("Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de")
-                .setPayment_system("Brocard")
-                .choseSystem_requisites_account("testPaymentName6")
+                .setPayment_system("Paxum")
+                .choseSystem_requisites_account("testPaymentName1")
                 .clickAddAdvertiser()
                 .setAdvertiser("25554")
                 //.setAdvertiser_requisite("testAdver")
