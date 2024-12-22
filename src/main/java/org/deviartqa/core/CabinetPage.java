@@ -170,6 +170,11 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setDay_process(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[day_process]")).fill(data);
+        return this;
+    }
+
     protected CabinetPage setComment(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[comment]")).fill(data);
         return this;

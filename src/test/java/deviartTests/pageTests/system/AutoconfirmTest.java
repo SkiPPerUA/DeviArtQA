@@ -21,7 +21,7 @@ public class AutoconfirmTest extends BaseTest {
     String offer_id = "8122";
     int user_id = 25696;
 
-    @Test(invocationCount = 2)
+    @Test(invocationCount = 10)
     private void pos() {
         leads.createLead("{\n" +
                 "\"user_id\": "+user_id+",\n" +
@@ -42,6 +42,7 @@ public class AutoconfirmTest extends BaseTest {
                 .setValid_approve_percent("80")
                 .setRate_from("10")
                 .setRate_to("50")
+                .setDay_process("2")
                 .clickSaveButton().readyPage();
         ResultSet res = getDB().select("SELECT x.* FROM terraleads.lead_autoconfirm x WHERE offer_id ="+offer_id);
         res.next();
@@ -49,6 +50,7 @@ public class AutoconfirmTest extends BaseTest {
         Assert.assertEquals(res.getInt("valid_approve_percent"),80);
         Assert.assertEquals(res.getInt("rate_from"),10);
         Assert.assertEquals(res.getInt("rate_to"),50);
+        Assert.assertEquals(res.getInt("day_process"),2);
     }
 
     public void create_Auto_approval_checkOffers() throws SQLException {
@@ -73,10 +75,27 @@ public class AutoconfirmTest extends BaseTest {
                 .setOffer(offer_id)
                 .setWebmaster("25696")
                 .setRate_from("10")
+                .setDay_process("2")
                 .setRate_to("50");
         List.of("fdfsda","one","44.4","44,43","100.01","101","100,01","0","-10").forEach(x->
                 {
                     createAutoconfirmPage.setValid_approve_percent(x).clickSaveButton();
+                    createAutoconfirmPage.readyPage();
+                }
+        );
+    }
+
+    public void create_Auto_approval_checkValid_day_process_nagative(){
+        getDB().update("delete FROM terraleads.lead_autoconfirm where offer_id="+offer_id);
+        createAutoconfirmPage.open().readyPage()
+                .setOffer(offer_id)
+                .setWebmaster("25696")
+                .setValid_approve_percent("80")
+                .setRate_from("10")
+                .setRate_to("50");
+        List.of("0","-10","100").forEach(x->
+                {
+                    createAutoconfirmPage.setDay_process(x).clickSaveButton();
                     createAutoconfirmPage.readyPage();
                 }
         );
@@ -90,6 +109,7 @@ public class AutoconfirmTest extends BaseTest {
                 .setOffer(offer_id)
                 .setWebmaster("25696")
                 .setValid_approve_percent("10")
+                .setDay_process("2")
                 .setRate_to("1000");
         cases.forEach(x->
                 {
@@ -103,6 +123,7 @@ public class AutoconfirmTest extends BaseTest {
                 .setOffer(offer_id)
                 .setWebmaster("25696")
                 .setValid_approve_percent("10")
+                .setDay_process("2")
                 .setRate_from("1");
         cases.forEach(x->
                 {
@@ -114,6 +135,7 @@ public class AutoconfirmTest extends BaseTest {
         createAutoconfirmPage
                 .setRate_from("51")
                 .setRate_to("50")
+                .setDay_process("2")
                 .clickSaveButton();
         createAutoconfirmPage.readyPage();
 
@@ -127,6 +149,7 @@ public class AutoconfirmTest extends BaseTest {
                 .setValid_approve_percent("85")
                 .setRate_from("100")
                 .setRate_to("500")
+                .setDay_process("5")
                 .clickSaveButton().readyPage();
         ResultSet res = getDB().select("SELECT x.* FROM terraleads.lead_autoconfirm x WHERE offer_id ="+offer_id);
         res.next();
@@ -134,6 +157,7 @@ public class AutoconfirmTest extends BaseTest {
         Assert.assertEquals(res.getInt("valid_approve_percent"),85);
         Assert.assertEquals(res.getInt("rate_from"),100);
         Assert.assertEquals(res.getInt("rate_to"),500);
+        Assert.assertEquals(res.getInt("day_process"),5);
     }
 
 }

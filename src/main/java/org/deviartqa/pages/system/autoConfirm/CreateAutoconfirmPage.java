@@ -47,6 +47,11 @@ public class CreateAutoconfirmPage extends CabinetPage {
         return this;
     }
 
+    public CreateAutoconfirmPage setDay_process(String data){
+        super.setDay_process(data);
+        return this;
+    }
+
     public AutoconfirmPage clickSaveButton(){
         super.clickSaveButton();
         return new AutoconfirmPage();
