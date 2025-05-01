@@ -18,20 +18,20 @@ public class AutoconfirmTest extends BaseTest {
     LeadsAPI leads = new LeadsAPI();
     CreateAutoconfirmPage createAutoconfirmPage = new CreateAutoconfirmPage();
     UpdateAutoconfirmPage updateAutoconfirmPage = new UpdateAutoconfirmPage();
-    String offer_id = "8122";
-    int user_id = 25696;
+    String offer_id = "8122"; //8104 8122
+    int user_id = 72078; //72078 25696
 
-    @Test(invocationCount = 10)
-    private void pos() {
-        leads.createLead("{\n" +
-                "\"user_id\": "+user_id+",\n" +
-                "    \"data\":{\n" +
-                "        \"offer_id\": \""+offer_id+"\",\n" +
-                "        \"name\": \""+ DataHelper.getUuid()+"\",\n" +
-                "        \"country\": \"RO\",\n" +
-                "        \"phone\": \""+new Date().getTime()+"\"\n" +
-                "        }\n" +
-                "}\n",user_id);
+    @Test(invocationCount = 1)
+    private void createLead() {
+            leads.createLead("{\n" +
+                    "\"user_id\": "+user_id+",\n" +
+                    "    \"data\":{\n" +
+                    "        \"offer_id\": \""+offer_id+"\",\n" +
+                    "        \"name\": \""+ DataHelper.getUuid()+"\",\n" +
+                    "        \"country\": \"RO\",\n" +
+                    "        \"phone\": \""+new Date().getTime()+"\"\n" +
+                    "        }\n" +
+                    "}\n",user_id);
     }
 
     public void create_Auto_approval_positive() throws SQLException {

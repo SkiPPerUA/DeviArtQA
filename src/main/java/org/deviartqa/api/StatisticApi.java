@@ -18,4 +18,13 @@ public class StatisticApi extends Restfull {
                 .when()
                 .post("http://212.224.112.44:8111/api/statistic/web"));
     }
+
+    public void adv(String body){
+        logger.info("Statistic adv");
+        request(given()
+                .contentType(ContentType.JSON)
+                .body(body)
+                .when()
+                .post("http://212.224.112.44:8111/api/statistic/adv"));
+    }
 }

@@ -92,6 +92,12 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setGroup_mode(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='group_mode']")).click();
+        choseDrop(data,false);
+        return this;
+    }
+
     protected CabinetPage setCity_id(String data) {
         new Widget(page.locator("//button[@data-id='city_id']")).click();
         choseDrop(data);
