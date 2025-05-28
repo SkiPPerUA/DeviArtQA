@@ -1,4 +1,4 @@
-package org.deviartqa.api.client;
+package org.deviartqa.api;
 
 import org.apache.log4j.Logger;
 import org.deviartqa.core.Restfull;

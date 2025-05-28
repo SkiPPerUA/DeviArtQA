@@ -3,7 +3,6 @@ package deviartTests.pageTests.accounting;
 import com.microsoft.playwright.TimeoutError;
 import deviartTests.BaseTest;
 import org.deviartqa.TestScenario;
-import org.deviartqa.api.accounting.PaymentAPI;
 import org.deviartqa.core.DBconnector;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Session;

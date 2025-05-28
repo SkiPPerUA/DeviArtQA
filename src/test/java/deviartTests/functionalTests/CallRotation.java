@@ -2,8 +2,7 @@ package deviartTests.functionalTests;
 
 import deviartTests.BaseTest;
 import org.deviartqa.TestScenario;
-import org.deviartqa.api.main.LeadsAPI;
-import org.deviartqa.core.Session;
+import org.deviartqa.api.LeadsAPI;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.pages.main.WelcomePage;
 import org.deviartqa.pages.shipping.ProcessingPage;

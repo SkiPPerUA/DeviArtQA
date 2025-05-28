@@ -1,4 +1,4 @@
-package org.deviartqa.api.main;
+package org.deviartqa.api;
 
 import io.restassured.http.ContentType;
 import org.apache.log4j.Logger;
@@ -27,6 +27,21 @@ public class LeadsAPI extends Restfull {
         if (getResponse().contains("\"status\":\"ok\"")) {
             lead_id = response.then().extract().response().jsonPath().getString("data.id");
         }
+    }
+
+    public void statusLead(int userId, int leadId){
+        logger.info("Статус лида");
+        String body = "{\n" +
+                "    \"user_id\":"+userId+",\n" +
+                "    \"data\":{\n" +
+                "        \"id\":"+leadId+"\n" +
+                "    }\n" +
+                "}";
+        request(given().
+                contentType(ContentType.JSON)
+                .body(body)
+                .queryParams("check_sum", ApiHelper.getCheckSum(body,userId))
+                .post(TestScenario.getUrl()+"/api/lead/status"));
     }
 
     public void updateLead(String lead_id, StatusLead status){

@@ -1,7 +1,7 @@
 package deviartTests.apiTests;
 
 import deviartTests.BaseTest;
-import org.deviartqa.api.client.Client;
+import org.deviartqa.api.Client;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.testng.Assert;

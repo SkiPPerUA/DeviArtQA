@@ -1,4 +1,4 @@
-package org.deviartqa.api.accounting;
+package org.deviartqa.api;
 
 import org.apache.log4j.Logger;
 import org.deviartqa.TestScenario;

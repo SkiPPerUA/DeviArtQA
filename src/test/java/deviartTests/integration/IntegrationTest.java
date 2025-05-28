@@ -1,7 +1,7 @@
 package deviartTests.integration;
 
 import deviartTests.BaseTest;
-import org.deviartqa.api.courier.Courier;
+import org.deviartqa.api.Courier;
 import org.deviartqa.helper.ApiHelper;
 import org.json.JSONObject;
 import org.testng.Assert;

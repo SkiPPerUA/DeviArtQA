@@ -2,7 +2,7 @@ package deviartTests.apiTests;
 
 import deviartTests.BaseTest;
 import org.deviartqa.TestScenario;
-import org.deviartqa.api.main.LeadsAPI;
+import org.deviartqa.api.LeadsAPI;
 import org.deviartqa.core.DBconnector;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.helper.TestCases;
@@ -42,7 +42,7 @@ public class LeadTest extends BaseTest {
 //        Assert.assertEquals(res.getString("status"),"expect");
     }
 
-    public void create_lead_allFields_positive() throws SQLException {
+    public String create_lead_allFields_positive() throws SQLException {
         String phone = String.valueOf(new Date().getTime());
         String name = "test"+ DataHelper.getUuid();
         makePositiveOffers(offer_id);
@@ -145,6 +145,7 @@ public class LeadTest extends BaseTest {
 //        Assert.assertEquals(res.getString("alstream"),"alstream");
         Assert.assertEquals(res.getString("campaign_id"),"9");
 //        Assert.assertEquals(res.getString("order_id"),"order_id");
+        return leads.getLead_id();
     }
 
     public void create_lead_allFields_test(){
