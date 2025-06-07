@@ -19,7 +19,7 @@ public class Statistics extends CabinetPage {
     }
 
     public Statistics open(String type){
-        super.openPage("/acp/statistic/"+type);
+        super.openPage("/acp/statisticNew/"+type);
         return this;
     }
 
