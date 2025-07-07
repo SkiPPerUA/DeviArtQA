@@ -17,6 +17,7 @@ import java.util.List;
 public class StatisticsTest extends BaseTest {
 
     Statistics statisticsPage = new Statistics();
+    String name;
 
     public void checkLinks() throws InterruptedException {
         statisticsPage.open("web")
@@ -101,13 +102,13 @@ public class StatisticsTest extends BaseTest {
 
     public void checkAllLinks() throws InterruptedException {
         String pageType = "web";
-        //List<String> fill = List.of("group_mode","price_type");//"dest_type","offer_type",
-        List<String> fill = List.of("user_group_id"); //"country_group_id","manager_id","product_base_category_id","user_group_id","country_id","offer_id"
+        //List<String> fill = List.of("offer_id","dest_type","offer_type","group_mode","price_type");//"offer_id","dest_type","offer_type","group_mode","price_type"
+        List<String> fill = List.of("country_group_id","manager_id","product_base_category_id","user_group_id","country_id","offer_id"); //"country_group_id","manager_id","product_base_category_id","user_group_id","country_id","offer_id"
 
 
         statisticsPage.open(pageType)
                 .readyPage()
-                .setDate_from("2025-03-24")
+                .setDate_from("2025-01-01")
                 .setDate_to("2025-06-06")
                 .clickShowButton();
         Thread.sleep(3000);
@@ -120,36 +121,15 @@ public class StatisticsTest extends BaseTest {
             filter.click();
             int count = new Widget(Session.getPage().locator(checkLoc+"/..//a")).element.count();
             for (int i = 0; i < count; i++) {
-                statisticsPage.open(pageType).readyPage()
-                        .setDate_from("2025-03-24")
-                        .setDate_to("2025-06-06");
-                filter.click();
-
-                Widget checkWid = new Widget(Session.getPage().locator(checkLoc + "/..//a"));
-                Locator el = checkWid.element.nth(i);
-                String name = el.textContent();
-                el.click();
-                filter.click();
-                statisticsPage.clickShowButton();
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-
-                logger.info(name+" ===> ");
-
-
-
-                for (int c = 0; c < 25; c++){
-                    if (c < widget.element.count()) {
+                for (int t = 0; t < 80; t++){
                         statisticsPage.open(pageType).readyPage()
-                                .setDate_from("2025-03-24")
+                                .setDate_from("2025-01-01")
                                 .setDate_to("2025-06-06");
                         filter.click();
 
-                        checkWid = new Widget(Session.getPage().locator(checkLoc + "/..//a"));
-                        el = checkWid.element.nth(i);
+                        Widget checkWid = new Widget(Session.getPage().locator(checkLoc + "/..//a"));
+                        Locator el = checkWid.element.nth(i);
+                        name = el.textContent();
                         el.click();
                         filter.click();
                         statisticsPage.clickShowButton();
@@ -158,10 +138,9 @@ public class StatisticsTest extends BaseTest {
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
-                        if (!checkLink(widget,c)){
+                        if (!checkLink(widget,t)){
                             break;
                         }
-                    }
                 }
             }
         });
@@ -195,14 +174,11 @@ public class StatisticsTest extends BaseTest {
 
     private boolean checkLink(Widget widget, int i){
         boolean contin = true;
-        Locator loc = null;
-        try {
-            loc = widget.element.nth(i);
-        }catch (TimeoutError e){
-            logger.info("стата пустая");
-            contin = false;
-        }
-        if (contin){
+        Locator loc = widget.element.nth(i);
+        if (loc.isVisible()){
+            if (i == 0){
+                logger.info(name+" ===> ");
+            }
             String countStats = loc.textContent();
             char [] arr = countStats.toCharArray();
             List<Integer> arrInt = new ArrayList<>();
@@ -218,26 +194,38 @@ public class StatisticsTest extends BaseTest {
                 result.append(str);
             }
             loc.click();
+
+            new Widget(Session.getPage().locator("//a[@class='btn btn-success']")).element.isVisible();
             try {
-                new Widget(Session.getPage().locator("//a[@class='btn btn-success']")).element.waitFor();
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if (new Widget(Session.getPage().locator("//div[@class='summary']")).isVisible()){
                 String findCount = "null";
                 try {
                     findCount = new Widget(Session.getPage().locator("//div[@class='summary']")).textContent();
-                    Assert.assertTrue(findCount.contains("1-"+result));
-                    logger.info("В стате -> {"+countStats+"} а по ссылке -> "+findCount);
+                    Assert.assertTrue(findCount.contains("of "+result+" result"));
+                    logger.info("В стате -> {"+countStats+"} И по ссылке -> "+findCount);
                 }catch (AssertionError e){
                     logger.error("В стате -> {"+countStats+"} а по ссылке -> "+findCount);
-                }catch (TimeoutError r){
+                }
+            }else {
+                if (Session.getPage().url().contains("acp/lead")){
                     if (Integer.parseInt(result.toString()) == 0){
-                        logger.info("В стате -> {"+countStats+"} а по ссылке -> 0");
+                        logger.info("В стате -> {"+countStats+"} И по ссылке -> 0");
                     }else {
                         logger.error("В стате -> {"+countStats+"} а по ссылке -> 0");
                     }
-
+                }else {
+                    logger.error("В стате -> {" + countStats + "} а ссылка НЕ acp/lead");
                 }
-            }catch (Throwable e){
-                System.out.println("В стате -> {"+countStats+"} а ссылка НЕ acp/lead");
             }
+        }else {
+            if (i == 0){
+                logger.info(name+" ===> стата пустая");
+            }
+            contin = false;
         }
         return contin;
     }
