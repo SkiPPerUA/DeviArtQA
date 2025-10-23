@@ -14,10 +14,30 @@ import java.sql.SQLException;
 @Test
 public class NormalizePhoneNumber extends BaseTest {
 
-    String phone = "074425691300";
-    String code = "40";
-    String country = "RO";
+    String phone = "3123456789";
+    String code = "39";
+    String country = "IT";
     String lead_id;
+
+    public void trash(){
+        StringBuilder stringBuilder = new StringBuilder(phone);
+        stringBuilder.replace(4,stringBuilder.length(),"");
+        getDB().update("DELETE FROM terraleads.lead WHERE phone = '"+stringBuilder+"'");
+        createLead(stringBuilder);
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        ResultSet res = getDB().select("SELECT * FROM terraleads.lead WHERE id = "+lead_id);
+        try {
+            res.next();
+            Assert.assertEquals(res.getString("status"),"trash");
+            Assert.assertEquals(res.getString("type"),"wrong_input_data");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public void deleteAllNotNumberSymbol(){
         //удалить всё, что не цифра и не ведущий «+»
@@ -169,6 +189,7 @@ public class NormalizePhoneNumber extends BaseTest {
                         "        \"offer_id\": \""+res.getInt("id")+"\",\n" +
                         "        \"name\": \"test"+ DataHelper.getUuid()+"\",\n" +
                         "        \"country\": \""+country+"\",\n" +
+                        "        \"campaign\": \"38\",\n" +
                         "        \"phone\": \""+phoneToCreate+"\"\n" +
                         "        }\n" +
                         "}\n",user_Id);
@@ -191,9 +212,13 @@ public class NormalizePhoneNumber extends BaseTest {
     }
 
     private void checkBDdata(String leadId){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         String phoneInBD;
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("+");
         stringBuilder.append(code);
         stringBuilder.append(phone);
         ResultSet res = getDB().select("SELECT * FROM terraleads.lead WHERE id = "+leadId);

@@ -19,18 +19,18 @@ public class LeadTest extends BaseTest {
     public LeadsAPI leads = new LeadsAPI();
     DBconnector dBconnector;
     int sleep = 10000;
-    public String offer_id = "8122";
+    public String offer_id = "8112";
     public int user_Id = 25696 ;//TestScenario.userId 25719 25696
     private String phone;
     private String name;
     private String country;
 
-    @Test(invocationCount = 1)
+    @Test(invocationCount = 10)
     public void create_lead_positive() throws SQLException, InterruptedException {
-        //phone = String.valueOf(new Date().getTime());
-        phone = "+33 (0)6 12-34-56-78";
+        phone = String.valueOf(new Date().getTime());
+        //phone = "+33 (0)6 12-34-56-78";
         name = "test"+ DataHelper.getUuid();
-        country = "IT";
+        country = "RO";
         makePositiveOffers(offer_id);
         makeLead();
 //        Thread.sleep(sleep);

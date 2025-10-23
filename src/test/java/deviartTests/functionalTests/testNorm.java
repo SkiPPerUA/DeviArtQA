@@ -59,6 +59,11 @@ public class testNorm extends BaseTest {
             }catch (AssertionError e){
                 System.out.println(country.get(i)+ " бага???????");
             }
+            try {
+                norm.trash();
+            }catch (AssertionError e){
+                System.out.println(country.get(i)+ " бага");
+            }
 
         }
     }

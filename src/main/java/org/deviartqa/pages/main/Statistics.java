@@ -19,7 +19,7 @@ public class Statistics extends CabinetPage {
     }
 
     public Statistics open(String type){
-        super.openPage("/acp/statisticNew/"+type);
+        super.openPage("/acp/statistic/"+type);
         return this;
     }
 
@@ -35,6 +35,11 @@ public class Statistics extends CabinetPage {
 
     public Statistics setGroupBy(String data){
         super.setGroup_mode(data);
+        return this;
+    }
+
+    public Statistics setTimezone(String data){
+        super.setTimezone(data);
         return this;
     }
 

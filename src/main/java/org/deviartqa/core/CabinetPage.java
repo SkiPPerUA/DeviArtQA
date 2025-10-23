@@ -98,6 +98,12 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setTimezone(String data) {
+        new Widget(Locators.page.locator("//button[contains(@data-id,'timezone')]")).click();
+        choseDrop(data,true);
+        return this;
+    }
+
     protected CabinetPage setCity_id(String data) {
         new Widget(page.locator("//button[@data-id='city_id']")).click();
         choseDrop(data);
