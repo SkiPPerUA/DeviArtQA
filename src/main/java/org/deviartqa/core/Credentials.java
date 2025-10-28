@@ -31,7 +31,11 @@ public class Credentials {
 
     public Map<String,String> getWebCreeds(){
         Map<String,String> creeds = new HashMap<>();
-        creeds.put("password", "p6&Rvgdl");
+        if (TestScenario.env.equals("prod")){
+            creeds.put("password","sdfhkhk@kjhdsf4");
+        }else {
+            creeds.put("password", "p6&Rvgdl");
+        }
         if (TestScenario.role == RoleCred.admin){
             creeds.put("email", "admin_savchukvi12@gmail.com");
         }else if (TestScenario.role == RoleCred.webmaster){

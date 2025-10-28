@@ -25,7 +25,7 @@ public class LeadTest extends BaseTest {
     private String name;
     private String country;
 
-    @Test(invocationCount = 10)
+    @Test(invocationCount = 20)
     public void create_lead_positive() throws SQLException, InterruptedException {
         phone = String.valueOf(new Date().getTime());
         //phone = "+33 (0)6 12-34-56-78";
