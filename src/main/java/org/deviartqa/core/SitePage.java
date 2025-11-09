@@ -3,6 +3,7 @@ package org.deviartqa.core;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.assertions.LocatorAssertions;
+import com.microsoft.playwright.options.WaitUntilState;
 import org.deviartqa.TestScenario;
 import org.deviartqa.blocks.Header;
 
@@ -13,7 +14,9 @@ public abstract class SitePage {
     protected Page page = Session.getPage();
 
     protected void openPage(String url){
-        page.navigate(TestScenario.getUrl()+url);
+        //page.navigate(TestScenario.getUrl()+url);
+        page.navigate(TestScenario.getUrl()+url,
+                new Page.NavigateOptions().setWaitUntil(WaitUntilState.COMMIT));
         if (!page.url().equals(TestScenario.getUrl()+url)){
             new Header().log_out();
             openPage(url);

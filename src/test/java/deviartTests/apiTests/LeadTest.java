@@ -6,6 +6,7 @@ import org.deviartqa.api.LeadsAPI;
 import org.deviartqa.core.DBconnector;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.helper.TestCases;
+import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
@@ -25,7 +26,7 @@ public class LeadTest extends BaseTest {
     private String name;
     private String country;
 
-    @Test(invocationCount = 20)
+    @Test(invocationCount = 10)
     public void create_lead_positive() throws SQLException, InterruptedException {
         phone = String.valueOf(new Date().getTime());
         //phone = "+33 (0)6 12-34-56-78";

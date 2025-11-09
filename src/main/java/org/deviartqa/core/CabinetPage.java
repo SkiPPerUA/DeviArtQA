@@ -19,12 +19,12 @@ public abstract class CabinetPage extends SitePage{
             Map<String, String> creeds = new Credentials().getWebCreeds();
             new AuthPage().open().readyPage()
                     .makeAuth(creeds.get("email"),creeds.get("password")).readyPage();
-            Session.getContext().cookies().forEach(x -> {
-                if (x.name.equals("PHPSESSID")){
-                    System.out.println("Добавь куку -> "+ x.value);
-                    System.out.println();
-                }
-            });
+//            Session.getContext().cookies().forEach(x -> {
+//                if (x.name.equals("PHPSESSID")){
+//                    System.out.println("Добавь куку -> "+ x.value);
+//                    System.out.println();
+//                }
+//            });
             openPage(url);
         }
     }
@@ -214,6 +214,11 @@ public abstract class CabinetPage extends SitePage{
 
     protected CabinetPage setHouse(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[house]")).fill(data);
+        return this;
+    }
+
+    protected CabinetPage setComment_order(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[comment_order]")).fill(data);
         return this;
     }
 
