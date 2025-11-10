@@ -29,6 +29,28 @@ public class ModalWindow extends SiteBlock {
     }
 
     public ModalWindow callProcess(CallResult callResult, ResultAdditional resultAdditional, String comment, OperatorStatus operatorStatus){
+        setCallResult(callResult);
+        setResultAdditional(callResult,resultAdditional);
+        if (comment.toCharArray().length > 0){
+            new Widget(page.getByTestId("ShippingFormCallRo[comment]")).fill(comment);
+        }
+        setOperatorStatus(operatorStatus);
+        return this;
+    }
+
+    public ModalWindow callProcess_busyWithTime(String time,String comment, OperatorStatus operatorStatus){
+        setCallResult(CallResult.busy);
+        setResultAdditional(CallResult.busy,ResultAdditional.busy_SelectCallTime);
+        Widget set_time = new Widget(page.getByTestId("ShippingFormCallRo[next_call_time]"));
+        set_time.element.evaluate("(el, value) => el.setAttribute('value', value)", time);
+        if (comment.toCharArray().length > 0){
+            new Widget(page.getByTestId("ShippingFormCallRo[comment]")).fill(comment);
+        }
+        setOperatorStatus(operatorStatus);
+        return this;
+    }
+
+    private void setCallResult(CallResult callResult){
         if (callResult == CallResult.approve){
             x_path_locator = "success";
         }else if (callResult == CallResult.techProblem){
@@ -38,25 +60,23 @@ public class ModalWindow extends SiteBlock {
         }
 
         new Widget(page.locator("//a[@data-modal='result-"+x_path_locator+"-stick-top']")).click();
+    }
 
-        //set resultAdditional
+    private void setResultAdditional(CallResult callResult, ResultAdditional resultAdditional){
         if (callResult == CallResult.trash || callResult == CallResult.busy) {
             new Widget(page.locator("//div[@name='ShippingFormCallRo[result_additional]']/button")).click();
             new Widget(page.locator("//div[@name='ShippingFormCallRo[result_additional]']//li[@data-original-index=\""+resultAdditional.value+"\"]")).click();
         }
+    }
 
-        if (comment.toCharArray().length > 0){
-            new Widget(page.getByTestId("ShippingFormCallRo[comment]")).fill(comment);
-        }
-
-        //set operator status
+    private void setOperatorStatus(OperatorStatus operatorStatus){
         Widget operStatus = new Widget(page.locator("//div[@id='result-"+x_path_locator+"-stick-top']//input[@type='radio'][@value="+operatorStatus.value+"]/.."));
         if (!operStatus.element.getAttribute("class").contains("active")){
             operStatus.click();
         }
-
-        return this;
     }
+
+
 
     public enum OperatorStatus{
         continueProcessing(1),pause(3),lunch(4),training(5),techProblem(6),stopProcessing(2);
@@ -72,7 +92,7 @@ public class ModalWindow extends SiteBlock {
 
     public enum ResultAdditional {
         busy_NoAnswer(0),busy_ThrownOff(1),busy_OutsideTheZone(2),busy_SelectCallTime(3),
-        trash_NotOrdered(0),trash_DuplicateOrder(1);
+        trash_NotOrdered(0),trash_DuplicateOrder(1),trash_wrongNumber(2),trash_test(3);
         private int value;
         ResultAdditional(int i) {
             value = i;

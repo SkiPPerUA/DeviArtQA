@@ -51,6 +51,11 @@ public class ProcessingPage extends CabinetPage {
             java.util.regex.Matcher matcher = java.util.regex.Pattern.compile(": (\\d+)").matcher(text);
             matcher.find();
             find_param = String.valueOf(matcher.group(1));
+        }else if (param == CallParameters.call_id){
+            text = new Widget(Session.getPage().locator(x_path+"[1]")).textContent();
+            java.util.regex.Matcher matcher = java.util.regex.Pattern.compile(": (\\d+)").matcher(text);
+            matcher.find();
+            find_param = String.valueOf(matcher.group(1));
         }
 
         return find_param;
