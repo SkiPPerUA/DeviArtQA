@@ -43,14 +43,20 @@ public class ModalWindow extends SiteBlock {
         setResultAdditional(CallResult.busy,ResultAdditional.busy_SelectCallTime);
         Widget set_time = new Widget(page.getByTestId("ShippingFormCallRo[next_call_time]"));
         set_time.element.evaluate("(el, value) => el.setAttribute('value', value)", time);
-        if (comment.toCharArray().length > 0){
-            new Widget(page.getByTestId("ShippingFormCallRo[comment]")).fill(comment);
-        }
+        setComment(comment);
         setOperatorStatus(operatorStatus);
         return this;
     }
 
-    private void setCallResult(CallResult callResult){
+    public ModalWindow setComment(String comment){
+        if (comment.toCharArray().length > 0){
+            new Widget(page.getByTestId("ShippingFormCallRo[comment]")).fill(comment);
+        }
+
+        return this;
+    }
+
+    public ModalWindow setCallResult(CallResult callResult){
         if (callResult == CallResult.approve){
             x_path_locator = "success";
         }else if (callResult == CallResult.techProblem){
@@ -60,6 +66,8 @@ public class ModalWindow extends SiteBlock {
         }
 
         new Widget(page.locator("//a[@data-modal='result-"+x_path_locator+"-stick-top']")).click();
+
+        return this;
     }
 
     private void setResultAdditional(CallResult callResult, ResultAdditional resultAdditional){
@@ -69,11 +77,13 @@ public class ModalWindow extends SiteBlock {
         }
     }
 
-    private void setOperatorStatus(OperatorStatus operatorStatus){
+    public ModalWindow setOperatorStatus(OperatorStatus operatorStatus){
         Widget operStatus = new Widget(page.locator("//div[@id='result-"+x_path_locator+"-stick-top']//input[@type='radio'][@value="+operatorStatus.value+"]/.."));
         if (!operStatus.element.getAttribute("class").contains("active")){
             operStatus.click();
         }
+
+        return this;
     }
 
 
@@ -92,7 +102,7 @@ public class ModalWindow extends SiteBlock {
 
     public enum ResultAdditional {
         busy_NoAnswer(0),busy_ThrownOff(1),busy_OutsideTheZone(2),busy_SelectCallTime(3),
-        trash_NotOrdered(0),trash_DuplicateOrder(1),trash_wrongNumber(2),trash_test(3);
+        trash_NotOrdered(0),trash_DuplicateOrder(1),trash_wrongNumber(2),trash_test(3),trash_rudeness(6);
         private int value;
         ResultAdditional(int i) {
             value = i;

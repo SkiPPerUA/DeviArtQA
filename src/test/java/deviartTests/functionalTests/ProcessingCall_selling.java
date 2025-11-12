@@ -68,14 +68,16 @@ public class ProcessingCall_selling extends BaseTest {
 
     public void busy_test_finishAfterSomeCalls() throws SQLException {
         processingCall_test.busy_call();
-        for (int i = 1; i <= 3; i++){
+        for (int i = 1; i <= 2; i++){
             getDB().update("update terraleads_shipping.`call` set type = 1, t_scheduled = '"+DataHelper.getTime("yyyy-MM-dd",-1)+" 00:00:01.000' where lead_id = "+call_lead_id);
             processingPage.startProcessing();
             Assert.assertEquals(processingPage.getCallInfo(ProcessingPage.CallParameters.lead_id),call_lead_id);
+            //make call
+            getDB().update("insert into terraleads_shipping.call_log(call_id,status,`time`) VALUES ("+processingPage.getCallInfo(ProcessingPage.CallParameters.call_id)+",'ANSWERED',5)");
             processingCall_test.busy_call();
             res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);
             res.next();
-            if (i == 3){
+            if (i == 2){
                 Assert.assertEquals(res.getString("status"),"trash");
                 Assert.assertEquals(res.getString("status_web"),"trash");
             }else {
@@ -124,7 +126,7 @@ public class ProcessingCall_selling extends BaseTest {
         Assert.assertEquals(res.getInt("status"),1);
         Assert.assertEquals(res.getInt("type"),3);
         Assert.assertEquals(res.getInt("operator_id"),25559);
-        Assert.assertEquals(res.getString("t_scheduled"),DataHelper.getTime("yyyy-MM-dd",3)+" 22:00"+":00");
+        Assert.assertEquals(res.getString("t_scheduled"),DataHelper.getTime("yyyy-MM-dd",3)+" 23:00"+":00");
     }
 
     public void reject_test() throws SQLException {
@@ -141,7 +143,7 @@ public class ProcessingCall_selling extends BaseTest {
 
         res = getDB().select("SELECT count(*) FROM terraleads_shipping.`call` where lead_id = "+call_lead_id);
         res.next();
-        Assert.assertEquals(res.getInt(1),2);
+        Assert.assertEquals(res.getInt(1),3);
 
         res = getDB().select("SELECT * FROM terraleads_shipping.`call` where lead_id = "+call_lead_id+ " order by id DESC");
         res.next();
@@ -190,7 +192,7 @@ public class ProcessingCall_selling extends BaseTest {
         res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);
         res.next();
         Assert.assertEquals(res.getString("status"),"trash");
-        Assert.assertEquals(res.getString("status_web"),"trash");
+        Assert.assertEquals(res.getString("status_web"),"expect");
 
         res = getDB().select("SELECT * FROM terraleads_shipping.`call` where id = "+call_id);
         res.next();
@@ -199,15 +201,48 @@ public class ProcessingCall_selling extends BaseTest {
 
         res = getDB().select("SELECT count(*) FROM terraleads_shipping.`call` where lead_id = "+call_lead_id);
         res.next();
-        Assert.assertEquals(res.getInt(1),2);
+        Assert.assertEquals(res.getInt(1),1);
 
         res = getDB().select("SELECT * FROM terraleads_shipping.`call` where lead_id = "+call_lead_id+ " order by id DESC");
         res.next();
         Assert.assertNull(res.getObject("parent_id"));
-        Assert.assertEquals(res.getInt("call_sequence_type"),5);
-        Assert.assertEquals(res.getInt("status"),1);
+        Assert.assertEquals(res.getInt("call_sequence_type"),1);
+        Assert.assertEquals(res.getInt("status"),3);
         Assert.assertEquals(res.getInt("type"),1);
-        Assert.assertNull(res.getObject("operator_id"));
+        Assert.assertEquals(res.getInt("operator_id"),25559);
+    }
+
+    public void trashTest_rudeness() throws SQLException {
+        String call_lead_id = processingPage.getCallInfo(ProcessingPage.CallParameters.lead_id);
+        String call_id = processingPage.getCallInfo(ProcessingPage.CallParameters.call_id);
+        processingPage
+                .setCallResult()
+                .callProcess(ModalWindow.CallResult.trash,
+                        ModalWindow.ResultAdditional.trash_rudeness,
+                        "trash",
+                        ModalWindow.OperatorStatus.stopProcessing)
+                .save(true);
+        res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);
+        res.next();
+        Assert.assertEquals(res.getString("status"),"trash");
+        Assert.assertEquals(res.getString("status_web"),"expect");
+
+        res = getDB().select("SELECT * FROM terraleads_shipping.`call` where id = "+call_id);
+        res.next();
+        Assert.assertEquals(res.getInt("call_sequence_type"),1);
+        Assert.assertEquals(res.getInt("status"),3);
+
+        res = getDB().select("SELECT count(*) FROM terraleads_shipping.`call` where lead_id = "+call_lead_id);
+        res.next();
+        Assert.assertEquals(res.getInt(1),1);
+
+        res = getDB().select("SELECT * FROM terraleads_shipping.`call` where lead_id = "+call_lead_id+ " order by id DESC");
+        res.next();
+        Assert.assertNull(res.getObject("parent_id"));
+        Assert.assertEquals(res.getInt("call_sequence_type"),1);
+        Assert.assertEquals(res.getInt("status"),3);
+        Assert.assertEquals(res.getInt("type"),1);
+        Assert.assertEquals(res.getInt("operator_id"),25559);
     }
 
     public void techProblem_test() throws SQLException {
@@ -246,6 +281,9 @@ public class ProcessingCall_selling extends BaseTest {
         processingPage.startProcessing();
         call_lead_id = processingPage.getCallInfo(ProcessingPage.CallParameters.lead_id);
         call_id = processingPage.getCallInfo(ProcessingPage.CallParameters.call_id);
+
+        //make call
+        //getDB().update("insert into terraleads_shipping.call_log(call_id,status,`time`) VALUES ("+call_id+",'ANSWERED',5)");
     }
 
 

@@ -45,6 +45,7 @@ public class DBconnector {
 
     public void update(String sql){
         Statement st = null;
+        logger.info(sql);
         try {
             st = conn.createStatement();
         } catch (SQLException e) {
