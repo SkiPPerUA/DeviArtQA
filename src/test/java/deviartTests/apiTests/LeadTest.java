@@ -29,8 +29,8 @@ public class LeadTest extends BaseTest {
     @Test(invocationCount = 1)
     public void create_lead_positive() throws SQLException, InterruptedException {
         phone = String.valueOf(new Date().getTime());
-        //phone = "+33 (0)6 12-34-56-78";
-        name = "test"+ DataHelper.getUuid();
+        //phone = "237";
+        name = "tst"+ DataHelper.getUuid();
         country = "RO";
         makePositiveOffers(offer_id);
         makeLead();

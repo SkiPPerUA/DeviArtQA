@@ -71,6 +71,8 @@ public class ProcessingCall_handlingPaidOrder extends BaseTest {
         for (int i = 1; i <= 3; i++){
             getDB().update("update terraleads_shipping.`call` set type = 1, t_scheduled = '"+DataHelper.getTime("yyyy-MM-dd",-1)+" 00:00:01.000' where lead_id = "+call_lead_id);
             processingPage.startProcessing();
+            //make call
+            //getDB().update("insert into terraleads_shipping.call_log(call_id,status,`time`) VALUES ("+processingPage.getCallInfo(ProcessingPage.CallParameters.call_id)+",'ANSWERED',5)");
             Assert.assertEquals(processingPage.getCallInfo(ProcessingPage.CallParameters.lead_id),call_lead_id);
             processingCall_test.busy_call();
             res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);
@@ -115,7 +117,7 @@ public class ProcessingCall_handlingPaidOrder extends BaseTest {
         Assert.assertEquals(res.getInt("status"),1);
         Assert.assertEquals(res.getInt("type"),3);
         Assert.assertEquals(res.getInt("operator_id"),25562);
-        Assert.assertEquals(res.getString("t_scheduled"),DataHelper.getTime("yyyy-MM-dd",3)+" 23:00"+":00");
+        Assert.assertEquals(res.getString("t_scheduled"),DataHelper.getTime("yyyy-MM-dd",3)+" 22:00"+":00");
     }
 
     public void reject_test() throws SQLException {
@@ -201,6 +203,7 @@ public class ProcessingCall_handlingPaidOrder extends BaseTest {
         Assert.assertEquals(res.getInt("operator_id"),25562);
     }
 
+    @Test(priority = 1)
     public void techProblem_test() throws SQLException {
         processingCall_test.techProblem_call();
         res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);
@@ -246,6 +249,10 @@ public class ProcessingCall_handlingPaidOrder extends BaseTest {
         processingPage.startProcessing();
         call_lead_id = processingPage.getCallInfo(ProcessingPage.CallParameters.lead_id);
         call_id = processingPage.getCallInfo(ProcessingPage.CallParameters.call_id);
+
+        //make call
+        //getDB().update("insert into terraleads_shipping.call_log(call_id,status,`time`) VALUES ("+processingPage.getCallInfo(ProcessingPage.CallParameters.call_id)+",'ANSWERED',5)");
+
     }
 
 
