@@ -13,9 +13,9 @@ import java.sql.SQLException;
 public class CheckActiveFilters extends BaseTest {
 
     public void test() throws InterruptedException, SQLException {
-        Session.getPage().navigate("https://sandbox.terraleads.com/acp/statistic/web");
+        Session.getPage().navigate("https://sandbox.terraleads.com/acp/shipping/lead");
         Thread.sleep(3000);
-        Widget filters = new Widget(Session.getPage().locator("//button[@data-id=\"offer_id\"]/..//li//span[1]"));
+        Widget filters = new Widget(Session.getPage().locator("//button[@data-id='user_adv_id']/..//li//span[1]"));
         for (int i = 0; i<filters.element.count(); i++){
             String text = filters.element.nth(i).textContent();
 
@@ -32,9 +32,8 @@ public class CheckActiveFilters extends BaseTest {
 
 
 
-            ResultSet res = getDB().select("SELECT * FROM terraleads.offer \n" +
-                    "WHERE id = "+number+" and status = 'active' and (SELECT count(*) FROM terraleads.lead \n" +
-                    "WHERE offer_id  = "+number+") > 0");
+            ResultSet res = getDB().select("SELECT * FROM terraleads.users \n" +
+                    "WHERE id = "+number+" and status = 1");
             Assert.assertTrue(res.next());
 
         }

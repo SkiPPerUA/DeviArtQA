@@ -3,6 +3,7 @@ package org.deviartqa.helper;
 import org.apache.commons.lang3.time.DateUtils;
 import org.deviartqa.core.DBconnector;
 
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -36,5 +37,14 @@ public interface DataHelper {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    static String getRandomNumber(int countNumber){
+        String count = "9";
+        for (int i = 0; i < countNumber-1; i++){
+            count = count.concat("0");
+        }
+        long s = (long) (Math.random() * Long.valueOf(count));
+        return String.valueOf(s);
     }
 }

@@ -24,6 +24,7 @@ public class ProcessingCall_selling extends BaseTest {
     String call_id = "";
     String call_lead_id = "";
 
+    @Test(invocationCount = 1)
     public void approve_test() throws SQLException {
         processingCall_test.approve_call();
         res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);
@@ -147,10 +148,10 @@ public class ProcessingCall_selling extends BaseTest {
 
         res = getDB().select("SELECT * FROM terraleads_shipping.`call` where lead_id = "+call_lead_id+ " order by id DESC");
         res.next();
-        Assert.assertNull(res.getObject("parent_id"));
-        Assert.assertEquals(res.getInt("call_sequence_type"),6);
+        Assert.assertNotNull(res.getObject("parent_id"));
+        Assert.assertEquals(res.getInt("call_sequence_type"),1);
         Assert.assertEquals(res.getInt("status"),1);
-        Assert.assertEquals(res.getInt("type"),1);
+        Assert.assertEquals(res.getInt("type"),2);
         Assert.assertNull(res.getObject("operator_id"));
     }
 
@@ -172,10 +173,10 @@ public class ProcessingCall_selling extends BaseTest {
 
         res = getDB().select("SELECT * FROM terraleads_shipping.`call` where lead_id = "+call_lead_id+ " order by id DESC");
         res.next();
-        Assert.assertNull(res.getObject("parent_id"));
-        Assert.assertEquals(res.getInt("call_sequence_type"),5);
+        Assert.assertNotNull(res.getObject("parent_id"));
+        Assert.assertEquals(res.getInt("call_sequence_type"),1);
         Assert.assertEquals(res.getInt("status"),1);
-        Assert.assertEquals(res.getInt("type"),1);
+        Assert.assertEquals(res.getInt("type"),2);
         Assert.assertNull(res.getObject("operator_id"));
     }
 
@@ -238,10 +239,10 @@ public class ProcessingCall_selling extends BaseTest {
 
         res = getDB().select("SELECT * FROM terraleads_shipping.`call` where lead_id = "+call_lead_id+ " order by id DESC");
         res.next();
-        Assert.assertNull(res.getObject("parent_id"));
-        Assert.assertEquals(res.getInt("call_sequence_type"),5);
+        Assert.assertNotNull(res.getObject("parent_id"));
+        Assert.assertEquals(res.getInt("call_sequence_type"),1);
         Assert.assertEquals(res.getInt("status"),1);
-        Assert.assertEquals(res.getInt("type"),1);
+        Assert.assertEquals(res.getInt("type"),2);
         Assert.assertNull(res.getObject("operator_id"));
     }
 
@@ -277,7 +278,7 @@ public class ProcessingCall_selling extends BaseTest {
 
     @BeforeMethod
     void startProcc() throws SQLException, InterruptedException {
-        new LeadTest().create_lead_positive();
+        //new LeadTest().create_lead_positive();
         processingPage.startProcessing();
         call_lead_id = processingPage.getCallInfo(ProcessingPage.CallParameters.lead_id);
         call_id = processingPage.getCallInfo(ProcessingPage.CallParameters.call_id);

@@ -14,9 +14,9 @@ import java.sql.SQLException;
 @Test
 public class NormalizePhoneNumber extends BaseTest {
 
-    String phone = "3123456789";
+    String phone = "3"+DataHelper.getRandomNumber(9);
     String code = "39";
-    String country = "IT";
+    String country = "RO";
     String lead_id;
 
     public void trash(){
@@ -175,6 +175,17 @@ public class NormalizePhoneNumber extends BaseTest {
         checkBDdata(lead_id);
     }
 
+    public void trashByGeo(){
+        //номер лида пренадлежит к другому гео
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("+");
+        //stringBuilder.append(code);
+        stringBuilder.append("40");
+        stringBuilder.append("3629576138");
+        createLead(stringBuilder);
+        checkBDdata(lead_id);
+    }
+
     private void createLead(StringBuilder phoneToCreate){
         ResultSet res = getDB().select("SELECT id FROM terraleads.offer where country_id = (SELECT id FROM terraleads.country WHERE country_code = '"+country+"' and status = 'active' and access_type = 'public')");
         try {
@@ -187,7 +198,7 @@ public class NormalizePhoneNumber extends BaseTest {
                         "\"user_id\": "+user_Id+",\n" +
                         "    \"data\":{\n" +
                         "        \"offer_id\": \""+res.getInt("id")+"\",\n" +
-                        "        \"name\": \"test"+ DataHelper.getUuid()+"\",\n" +
+                        "        \"name\": \"te"+ DataHelper.getUuid()+"\",\n" +
                         "        \"country\": \""+country+"\",\n" +
                         "        \"campaign\": \"38\",\n" +
                         "        \"phone\": \""+phoneToCreate+"\"\n" +

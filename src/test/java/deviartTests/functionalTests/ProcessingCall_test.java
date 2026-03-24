@@ -24,13 +24,15 @@ public class ProcessingCall_test extends BaseTest {
 
     public void approve_call() {
         processingPage
-                .setSendTime(DataHelper.getTime("yyyy-MM-dd",1))
+                .setDelivery_service_id("LocalShipment Test")
+                .setSendTime(DataHelper.getTime("yyyy-MM-dd",0))
                 .setZipcode("03111",3)
                 .setStreet("fdsfsdfs")
                 .setHouse("sdfds")
                 .setAge(3)
                 .setSex(false)
                 .setComment_order("coment")
+                //.addProductToCart(ProcessingPage.TypeProduct.crossale,"Bactericidal UV lamp")
                 .setCallResult()
                         .callProcess(ModalWindow.CallResult.approve,
                         ModalWindow.ResultAdditional.busy_ThrownOff,

@@ -6,6 +6,7 @@ import org.deviartqa.blocks.filters.ModalWindow;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.pages.main.WelcomePage;
 import org.deviartqa.pages.shipping.ProcessingPage;
+import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
@@ -265,12 +266,14 @@ public class ProcessingCall_rejectExtra extends BaseTest {
     @BeforeClass
     void auth() throws SQLException, InterruptedException {
         //make test calls
-        new WelcomePage().open().header.changeUser(25559);
-        for (int i = 0; i<5; i++) {
-            new LeadTest().create_lead_positive();
-            processingPage.startProcessing();
-            new ProcessingCall_test().reject_call();
-            getDB().update("update terraleads_shipping.`call` set t_scheduled = '2025-11-10 16:09:16.000', `type`= 1 ORDER BY id DESC limit 1");
+        for (int i = 0; i<10; i++) {
+            LeadTest leadTest = new LeadTest();
+            leadTest.create_lead_positive();
+            String lead = new JSONObject(leadTest.leads.getResponse()).getJSONObject("data").getString("id");
+            Thread.sleep(1000);
+            getDB().update("update terraleads_shipping.`call` set call_sequence_type = 6, order_id = " +
+                    "(SELECT id FROM terraleads_shipping.`order` order by id desc limit 1) where lead_id = "+lead);
+            getDB().update("update terraleads_shipping.call_sequence set type = 6 where lead_id = "+lead);
         }
         new WelcomePage().open().header.changeUser(25561);
     }

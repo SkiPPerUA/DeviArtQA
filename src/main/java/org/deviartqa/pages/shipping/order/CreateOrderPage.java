@@ -54,6 +54,11 @@ public class CreateOrderPage extends CabinetPage {
         return this;
     }
 
+    public CreateOrderPage setApartment(String data){
+        super.setApartment(data);
+        return this;
+    }
+
     public CreateOrderPage setSend_date(String data){
         super.setSend_date(data);
         return this;

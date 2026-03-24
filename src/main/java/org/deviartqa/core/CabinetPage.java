@@ -217,13 +217,19 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage setApartment(String data) {
+        new Widget(Locators.page.getByTestId(pageLoc+"[apartment]")).fill(data);
+        return this;
+    }
+
     protected CabinetPage setComment_order(String data) {
         new Widget(Locators.page.getByTestId(pageLoc+"[comment_order]")).fill(data);
         return this;
     }
 
     protected CabinetPage setSend_date(String data) {
-        new Widget(Locators.page.locator("//input[@id='send_date']")).clear().fill(data);
+        new Widget(Locators.page.locator("//input[@id='send_date']")).click();
+        new Widget(Locators.page.locator("//td[@data-handler='selectDay']/a[text()='"+data+"']")).click();
         return this;
     }
 

@@ -3,6 +3,7 @@ package deviartTests.pageTests.shipping;
 import deviartTests.BaseTest;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.helper.TextLocalization;
+import org.deviartqa.pages.main.WelcomePage;
 import org.deviartqa.pages.shipping.order.CreateOrderPage;
 import org.deviartqa.pages.shipping.order.UpdateOrderPage;
 import org.testng.Assert;
@@ -125,5 +126,21 @@ public class OrdersTest extends BaseTest {
             }
         });
 
+    }
+
+    public void positive_addManualOrder(){
+        new WelcomePage().open().readyPage().header.changeUser(25554);
+        createOrderPage.open(157).readyPage() .setFull_name("Vlad Sava")
+                .setPhone("0999999999")
+                .setZipCode("031113")
+                .setCity("Bucuresti (Sector 3)")
+                .setStreet("street 22")
+                .setHouse("3333")
+                .setApartment("3333apart")
+                .setSend_date(DataHelper.getTime("dd",1))
+                .setType("Selling")
+                .changeProductGroup("crossale")
+                .addProduct("crossale","Steam cleaner - Steam Mop X12")
+                .clickSaveButton().readyPage();
     }
 }

@@ -118,6 +118,19 @@ public class ProcessingPage extends CabinetPage {
         return this;
     }
 
+    public ProcessingPage addProductToCart(TypeProduct typeProduct, String product){
+        new Widget(page.locator("//a[@href='#"+typeProduct+"']")).click();
+        new Widget(page.locator("//div[@id='"+typeProduct+"']//span[contains(text(),'"+product+"')]/../..//span[contains(@class,'add-to-cart')]")).click();
+        return this;
+    }
+
+    public ProcessingPage setDelivery_service_id(String data){
+        super.setDelivery_service_id(data);
+        return this;
+    }
+
     public enum CallParameters {call_id,lead_id,country}
+
+    public enum TypeProduct{crossale}
 
 }
