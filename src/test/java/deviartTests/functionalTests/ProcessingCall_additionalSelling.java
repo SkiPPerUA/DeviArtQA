@@ -95,7 +95,7 @@ public class ProcessingCall_additionalSelling extends BaseTest {
     }
 
     public void busy_newTime_test() throws SQLException {
-        processingCall_test.busy_call_selectTime(DataHelper.getTime("yyyy-MM-dd",3)+" 22:00");
+        processingCall_test.busy_call_selectTime(DataHelper.getTime("yyyy-MM-dd",5)+" 22:00");
         res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);
         res.next();
         Assert.assertEquals(res.getString("status"),"expect");
@@ -117,7 +117,7 @@ public class ProcessingCall_additionalSelling extends BaseTest {
         Assert.assertEquals(res.getInt("status"),1);
         Assert.assertEquals(res.getInt("type"),3);
         Assert.assertEquals(res.getInt("operator_id"),25562);
-        Assert.assertEquals(res.getString("t_scheduled"),DataHelper.getTime("yyyy-MM-dd",3)+" 22:00"+":00");
+        Assert.assertEquals(res.getString("t_scheduled"),DataHelper.getTime("yyyy-MM-dd",5)+" 22:00"+":00");
     }
 
     public void reject_test() throws SQLException {

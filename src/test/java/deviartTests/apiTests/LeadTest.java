@@ -20,8 +20,8 @@ public class LeadTest extends BaseTest {
     public LeadsAPI leads = new LeadsAPI();
     DBconnector dBconnector;
     int sleep = 10000;
-    public String offer_id = "8112";
-    public int user_Id = 25696 ;//TestScenario.userId 25719 25696
+    public String offer_id = "14423";
+    public int user_Id = 66611 ;//TestScenario.userId 25719 25696
     private String phone;
     private String name;
     private String country;

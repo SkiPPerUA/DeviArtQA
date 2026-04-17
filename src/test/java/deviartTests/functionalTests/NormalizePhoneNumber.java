@@ -180,8 +180,8 @@ public class NormalizePhoneNumber extends BaseTest {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("+");
         //stringBuilder.append(code);
-        stringBuilder.append("40");
-        stringBuilder.append("3629576138");
+        stringBuilder.append("4836");
+        stringBuilder.append("3629576142");
         createLead(stringBuilder);
         checkBDdata(lead_id);
     }

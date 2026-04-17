@@ -19,12 +19,12 @@ public class Credentials {
 
     public Map getDBcred(){
         Map<String,String> creeds = new HashMap<>();
-        creeds.put("user","vlad");
-        creeds.put("password", "niVt).Ax");
+        creeds.put("user","terraleads");
+        creeds.put("password", "vZTzv&ChQQ)K)ckj");
         if (TestScenario.env.equals("sandbox")){
-            creeds.put("port","8319");
+            creeds.put("port","33306");
         }else if (TestScenario.env.equals("prime")){
-            creeds.put("port","8320");
+            creeds.put("port","33306");
         }
         return creeds;
     }

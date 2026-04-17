@@ -105,7 +105,7 @@ public class ProcessingCall_selling extends BaseTest {
     }
 
     public void busy_newTime_test() throws SQLException {
-        processingCall_test.busy_call_selectTime(DataHelper.getTime("yyyy-MM-dd",3)+" 22:00");
+        processingCall_test.busy_call_selectTime(DataHelper.getTime("yyyy-MM-dd",4)+" 22:00");
         res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);
         res.next();
         Assert.assertEquals(res.getString("status"),"expect");
@@ -127,7 +127,20 @@ public class ProcessingCall_selling extends BaseTest {
         Assert.assertEquals(res.getInt("status"),1);
         Assert.assertEquals(res.getInt("type"),3);
         Assert.assertEquals(res.getInt("operator_id"),25559);
-        Assert.assertEquals(res.getString("t_scheduled"),DataHelper.getTime("yyyy-MM-dd",3)+" 22:00"+":00");
+        Assert.assertEquals(res.getString("t_scheduled"),DataHelper.getTime("yyyy-MM-dd",4)+" 22:00"+":00");
+    }
+
+    public void busy_newTime_negativeTest() throws SQLException {
+        processingCall_test.busy_call_selectTime(DataHelper.getTime("yyyy-MM-dd",5)+" 22:00");
+        res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);
+        res.next();
+        Assert.assertEquals(res.getString("status"),"expect");
+        Assert.assertEquals(res.getString("status_web"),"expect");
+
+        res = getDB().select("SELECT * FROM terraleads_shipping.`call` where id = "+call_id);
+        res.next();
+        Assert.assertEquals(res.getInt("call_sequence_type"),1);
+        Assert.assertEquals(res.getInt("status"),2);
     }
 
     public void reject_test() throws SQLException {
@@ -278,13 +291,13 @@ public class ProcessingCall_selling extends BaseTest {
 
     @BeforeMethod
     void startProcc() throws SQLException, InterruptedException {
-        //new LeadTest().create_lead_positive();
+        new LeadTest().create_lead_positive();
         processingPage.startProcessing();
         call_lead_id = processingPage.getCallInfo(ProcessingPage.CallParameters.lead_id);
         call_id = processingPage.getCallInfo(ProcessingPage.CallParameters.call_id);
 
         //make call
-        //getDB().update("insert into terraleads_shipping.call_log(call_id,status,`time`) VALUES ("+call_id+",'ANSWERED',5)");
+        getDB().update("insert into terraleads_shipping.call_log(call_id,status,`time`) VALUES ("+call_id+",'ANSWERED',5)");
     }
 
 

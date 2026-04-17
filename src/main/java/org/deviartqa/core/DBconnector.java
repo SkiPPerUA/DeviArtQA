@@ -22,7 +22,8 @@ public class DBconnector {
     private void openConn(){
         Map creeds = new Credentials().getDBcred();
         try {
-            conn = DriverManager.getConnection("jdbc:mariadb://103.75.127.37:"+creeds.get("port")+"/"+schema+"?user="+creeds.get("user")+"&password="+creeds.get("password"));
+            //conn = DriverManager.getConnection("jdbc:mariadb://103.75.127.37:33306/"+schema+"?user="+creeds.get("user")+"&password="+creeds.get("password"));
+            conn = DriverManager.getConnection("jdbc:mariadb://103.75.127.37:33306/terraleads","terraleads","vZTzv&ChQQ)K)ckj");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
