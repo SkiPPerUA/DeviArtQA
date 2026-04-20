@@ -5,11 +5,13 @@ import org.deviartqa.TestScenario;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
+import org.deviartqa.pages.analytics.OpexPage;
 import org.deviartqa.pages.clients.behaviorFactors.AddBehaviorFactors;
 import org.deviartqa.pages.clients.behaviorFactors.BehaviorFactors;
 import org.deviartqa.pages.clients.behaviorFactors.UpdateBehaviorFactors;
 import org.testng.Assert;
 import org.testng.SkipException;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -63,8 +65,15 @@ public class BehaviorFactorsTest extends BaseTest {
         }
     }
 
-    BehaviorFactors behaviorFactors = new BehaviorFactors();
-    AddBehaviorFactors addBehaviorFactors = new AddBehaviorFactors();
-    UpdateBehaviorFactors updateBehaviorFactors = new UpdateBehaviorFactors();
+    @BeforeMethod
+    public void init() {
+        behaviorFactors = new BehaviorFactors();
+        addBehaviorFactors = new AddBehaviorFactors();
+        updateBehaviorFactors = new UpdateBehaviorFactors();
+    }
+
+    BehaviorFactors behaviorFactors;
+    AddBehaviorFactors addBehaviorFactors;
+    UpdateBehaviorFactors updateBehaviorFactors;
     int id = 1;
 }
