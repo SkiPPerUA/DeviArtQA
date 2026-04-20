@@ -2,7 +2,9 @@ package deviartTests.pageTests.shipping;
 
 import deviartTests.BaseTest;
 import org.deviartqa.pages.shipping.call.CallTransferPage;
+import org.deviartqa.pages.shipping.callCenter.UpdateCallCenterPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.util.List;
@@ -10,10 +12,15 @@ import java.util.List;
 @Test
 public class MoveCalls extends BaseTest {
 
-    CallTransferPage callTransferPage = new CallTransferPage();
+    CallTransferPage callTransferPage;
     int operator_from = 25573;
     int operator_to = 25572;
     int call_id = 47034;
+
+    @BeforeMethod
+    public void init() {
+        callTransferPage = new CallTransferPage();
+    }
 
     public void positive_move() {
         List<String> call_sequence_types = List.of("Selling","Remainder","Reason for non-payment of the order, rehabilitation of the order",

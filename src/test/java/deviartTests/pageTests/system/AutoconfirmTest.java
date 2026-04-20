@@ -3,9 +3,12 @@ package deviartTests.pageTests.system;
 import deviartTests.BaseTest;
 import org.deviartqa.api.LeadsAPI;
 import org.deviartqa.helper.DataHelper;
+import org.deviartqa.pages.shipping.production.Production;
+import org.deviartqa.pages.shipping.production.UpdateProduction;
 import org.deviartqa.pages.system.autoConfirm.CreateAutoconfirmPage;
 import org.deviartqa.pages.system.autoConfirm.UpdateAutoconfirmPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,10 +19,17 @@ import java.util.List;
 public class AutoconfirmTest extends BaseTest {
 
     LeadsAPI leads = new LeadsAPI();
-    CreateAutoconfirmPage createAutoconfirmPage = new CreateAutoconfirmPage();
-    UpdateAutoconfirmPage updateAutoconfirmPage = new UpdateAutoconfirmPage();
+    CreateAutoconfirmPage createAutoconfirmPage;
+    UpdateAutoconfirmPage updateAutoconfirmPage;
     String offer_id = "8122"; //8104 8122
     int user_id = 72078; //72078 25696
+
+    @BeforeMethod
+    public void init() {
+        leads = new LeadsAPI();
+        createAutoconfirmPage = new CreateAutoconfirmPage();
+        updateAutoconfirmPage = new UpdateAutoconfirmPage();
+    }
 
     @Test(invocationCount = 1)
     private void createLead() {

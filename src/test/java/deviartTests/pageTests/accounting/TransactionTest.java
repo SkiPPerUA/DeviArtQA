@@ -9,7 +9,12 @@ import org.deviartqa.helper.TextLocalization;
 import org.deviartqa.pages.accounting.GeneralBalancesPage;
 import org.deviartqa.pages.accounting.TransactionPage;
 import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
+import org.deviartqa.pages.accounting.systemRequisites.CreateSystemRequisitesPage;
+import org.deviartqa.pages.accounting.systemRequisites.SystemRequisitesPage;
+import org.deviartqa.pages.accounting.systemRequisites.UpdateSystemRequisitesPage;
+import org.deviartqa.pages.accounting.systemRequisites.ViewSystemRequisitesPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,13 +24,19 @@ import java.util.List;
 @Test
 public class TransactionTest extends BaseTest {
 
-    TransactionPage transactionPage = new TransactionPage();
-    GeneralBalancesPage generalBalancesPage = new GeneralBalancesPage();
+    TransactionPage transactionPage;
+    GeneralBalancesPage generalBalancesPage;
     ResultSet res;
     String sysComIn = "Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de";
     String sysComOut = "Test9dc364f6-c1ce-4a20-bea5-2402b5b4e9de";
     String accIn = "testPaymentName2";
     String accOut = "testPaymentName1";
+
+    @BeforeMethod
+    public void init() {
+        transactionPage = new TransactionPage();
+        generalBalancesPage = new GeneralBalancesPage();
+    }
 
     public void test_searchFields() throws SQLException {
         String resultLoc = "//tbody/tr[@class]";

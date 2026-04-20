@@ -26,14 +26,22 @@ import java.util.List;
 @Test
 public class PaymentsTest extends BaseTest {
 
-    private CreatePaymentPage createPaymentPage = new CreatePaymentPage();
-    private PaymentPage paymentPage = new PaymentPage();
-    private ViewPaymentPage viewPaymentPage = new ViewPaymentPage();
-    private UpdatePaymentPage updatePaymentPage = new UpdatePaymentPage();
+    private CreatePaymentPage createPaymentPage;
+    private PaymentPage paymentPage;
+    private ViewPaymentPage viewPaymentPage;
+    private UpdatePaymentPage updatePaymentPage;
     String system_company = "Testd068e119-d1ef-4998-b93f-1bc108dd6d21";
     private float rate;
     //-89.4774	-96.6357
     //-100.589	-108.636
+
+    @BeforeTest
+    public void init() {
+        createPaymentPage = new CreatePaymentPage();
+        paymentPage = new PaymentPage();
+        viewPaymentPage = new ViewPaymentPage();
+        updatePaymentPage = new UpdatePaymentPage();
+    }
 
     private void ttt() throws InterruptedException {
         List<String> acc = List.of("PayPal", "Paxum", "Cash", "Payoneer");

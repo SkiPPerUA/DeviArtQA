@@ -6,19 +6,29 @@ import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.helper.TextLocalization;
+import org.deviartqa.pages.main.Statistics;
 import org.deviartqa.pages.main.stream.CreateStreamsPage;
 import org.deviartqa.pages.main.stream.StreamsPage;
 import org.deviartqa.pages.main.stream.ViewStreamsPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 @Test
 public class StreamsTest extends BaseTest {
-    StreamsPage streamsPage = new StreamsPage();
-    CreateStreamsPage createStreamsPage = new CreateStreamsPage();
-    ViewStreamsPage viewStreamsPage = new ViewStreamsPage();
+    StreamsPage streamsPage;
+    CreateStreamsPage createStreamsPage;
+    ViewStreamsPage viewStreamsPage;
+
+    @BeforeMethod
+    public void init() {
+        streamsPage = new StreamsPage();
+        createStreamsPage = new CreateStreamsPage();
+        viewStreamsPage = new ViewStreamsPage();
+    }
+
     public void filter_test(){
         streamsPage.open().readyPage()
                 .filter

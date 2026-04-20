@@ -5,15 +5,24 @@ import org.deviartqa.TestScenario;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Session;
 import org.deviartqa.core.Widget;
+import org.deviartqa.pages.main.stream.CreateStreamsPage;
+import org.deviartqa.pages.main.stream.StreamsPage;
+import org.deviartqa.pages.main.stream.ViewStreamsPage;
 import org.deviartqa.pages.noAuth.AuthPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 @Test
 public class AuthTest extends BaseTest {
 
-    AuthPage authPage = new AuthPage();
+    AuthPage authPage;
+
+    @BeforeMethod
+    public void init() {
+        authPage = new AuthPage();
+    }
 
     @BeforeTest
     void open(){

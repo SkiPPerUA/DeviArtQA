@@ -2,8 +2,11 @@ package deviartTests.pageTests.main;
 
 import deviartTests.BaseTest;
 import org.deviartqa.helper.DataHelper;
+import org.deviartqa.pages.accounting.GeneralBalancesPage;
+import org.deviartqa.pages.accounting.TransactionPage;
 import org.deviartqa.pages.main.product.CreateProductPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.sql.ResultSet;
@@ -12,7 +15,12 @@ import java.sql.SQLException;
 @Test
 public class ProductTest extends BaseTest {
 
-    CreateProductPage createProductPage = new CreateProductPage();
+    CreateProductPage createProductPage;
+
+    @BeforeMethod
+    public void init() {
+        createProductPage = new CreateProductPage();
+    }
 
     public void positive_createProduct() throws SQLException {
         String uuid = DataHelper.getUuid();

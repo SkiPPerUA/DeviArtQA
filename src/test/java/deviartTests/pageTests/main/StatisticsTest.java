@@ -8,7 +8,9 @@ import org.deviartqa.TestScenario;
 import org.deviartqa.core.Session;
 import org.deviartqa.core.Widget;
 import org.deviartqa.pages.main.Statistics;
+import org.deviartqa.pages.main.product.CreateProductPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +18,13 @@ import java.util.List;
 @Test
 public class StatisticsTest extends BaseTest {
 
-    Statistics statisticsPage = new Statistics();
+    Statistics statisticsPage;
     String name;
+
+    @BeforeMethod
+    public void init() {
+        statisticsPage = new Statistics();
+    }
 
     public void checkLinks() throws InterruptedException {
         statisticsPage.open("web")

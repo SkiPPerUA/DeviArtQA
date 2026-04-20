@@ -6,7 +6,10 @@ import org.deviartqa.helper.TextLocalization;
 import org.deviartqa.pages.main.WelcomePage;
 import org.deviartqa.pages.shipping.order.CreateOrderPage;
 import org.deviartqa.pages.shipping.order.UpdateOrderPage;
+import org.deviartqa.pages.shipping.orderStatusImport.CreateOrderStatusImportPage;
+import org.deviartqa.pages.shipping.orderStatusImport.UpdateOrderStatusImportPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.sql.ResultSet;
@@ -18,8 +21,14 @@ import java.util.Map;
 @Test
 public class OrdersTest extends BaseTest {
 
-    UpdateOrderPage updateOrderPage = new UpdateOrderPage();
-    CreateOrderPage createOrderPage = new CreateOrderPage();
+    UpdateOrderPage updateOrderPage;
+    CreateOrderPage createOrderPage;
+
+    @BeforeMethod
+    public void init() {
+        updateOrderPage = new UpdateOrderPage();
+        createOrderPage = new CreateOrderPage();
+    }
 
     public void extra_price_test() throws SQLException {
         ResultSet orders = getDB().select("SELECT x.* FROM terraleads_shipping.`order` x WHERE extra_price is NULL and status = 1 limit 1");

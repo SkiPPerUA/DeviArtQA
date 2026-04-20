@@ -8,7 +8,11 @@ import org.deviartqa.helper.TestCases;
 import org.deviartqa.pages.accounting.GeneralBalancesPage;
 import org.deviartqa.pages.accounting.TransactionPage;
 import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
+import org.deviartqa.pages.tools.domain.CreateDomainsPage;
+import org.deviartqa.pages.tools.domain.DomainPage;
+import org.deviartqa.pages.tools.domain.UpdateDomainsPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +22,12 @@ import java.util.List;
 @Test
 public class GeneralBalancesTest extends BaseTest {
 
-    GeneralBalancesPage generalBalancesPage = new GeneralBalancesPage();
+    GeneralBalancesPage generalBalancesPage;
+
+    @BeforeTest
+    public void init() {
+        generalBalancesPage = new GeneralBalancesPage();
+    }
 
     public void test_totalImbalance() throws SQLException {
         generalBalancesPage.open().readyPage();

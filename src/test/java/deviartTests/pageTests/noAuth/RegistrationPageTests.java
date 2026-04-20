@@ -8,6 +8,7 @@ import org.deviartqa.pages.noAuth.registrationPage.RegistrationPage1;
 import org.deviartqa.pages.noAuth.registrationPage.RegistrationPage2;
 import org.deviartqa.pages.noAuth.registrationPage.RegistrationPage3;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,10 +16,18 @@ import java.sql.SQLException;
 @Test
 public class RegistrationPageTests extends BaseTest {
 
-    RegistrationPage1 registrationPage = new RegistrationPage1();
-    RegistrationPage2 registrationPage2 = new RegistrationPage2();
-    RegistrationPage3 registrationPage3 = new RegistrationPage3();
-    AuthPage authPage = new AuthPage();
+    RegistrationPage1 registrationPage;
+    RegistrationPage2 registrationPage2;
+    RegistrationPage3 registrationPage3;
+    AuthPage authPage;
+
+    @BeforeMethod
+    public void init() {
+        registrationPage = new RegistrationPage1();
+        registrationPage2 = new RegistrationPage2();
+        registrationPage3 = new RegistrationPage3();
+        authPage = new AuthPage();
+    }
 
     public void positive_registration() throws SQLException, InterruptedException {
         ResultSet res;

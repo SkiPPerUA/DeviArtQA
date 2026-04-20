@@ -7,12 +7,14 @@ import org.deviartqa.core.Session;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.helper.TextLocalization;
+import org.deviartqa.pages.accounting.paymentType.PaymentTypePage;
 import org.deviartqa.pages.accounting.systemRequisites.CreateSystemRequisitesPage;
 import org.deviartqa.pages.accounting.systemRequisites.SystemRequisitesPage;
 import org.deviartqa.pages.accounting.systemRequisites.UpdateSystemRequisitesPage;
 import org.deviartqa.pages.accounting.systemRequisites.ViewSystemRequisitesPage;
 import org.opentest4j.AssertionFailedError;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
@@ -348,10 +350,10 @@ public class SystemRequisitesTest extends BaseTest {
         Assert.assertEquals(res.getString("invoice_corrective_number_template"),"{number} - invoice corrective number, {year} - year"+uuid);
     }
 
-    SystemRequisitesPage systemRequisitesPage = new SystemRequisitesPage();
-    CreateSystemRequisitesPage createSystemRequisitesPage = new CreateSystemRequisitesPage();
-    ViewSystemRequisitesPage viewSystemRequisitesPage = new ViewSystemRequisitesPage();
-    UpdateSystemRequisitesPage updateSystemRequisitesPage = new UpdateSystemRequisitesPage();
+    SystemRequisitesPage systemRequisitesPage;
+    CreateSystemRequisitesPage createSystemRequisitesPage;
+    ViewSystemRequisitesPage viewSystemRequisitesPage;
+    UpdateSystemRequisitesPage updateSystemRequisitesPage;
     DBconnector dBconnector;
     String name = "";
     String regNumber = "";
@@ -361,6 +363,14 @@ public class SystemRequisitesTest extends BaseTest {
     @BeforeTest
     public void openBD(){
         dBconnector = new DBconnector();
+    }
+
+    @BeforeMethod
+    public void init() {
+        systemRequisitesPage = new SystemRequisitesPage();
+        createSystemRequisitesPage = new CreateSystemRequisitesPage();
+        viewSystemRequisitesPage = new ViewSystemRequisitesPage();
+        updateSystemRequisitesPage = new UpdateSystemRequisitesPage();
     }
 
     private ResultSet getBD_by(String condition,boolean count){

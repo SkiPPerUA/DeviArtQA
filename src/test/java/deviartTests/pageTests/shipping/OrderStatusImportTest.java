@@ -3,9 +3,11 @@ package deviartTests.pageTests.shipping;
 import com.microsoft.playwright.TimeoutError;
 import deviartTests.BaseTest;
 import org.deviartqa.helper.DataHelper;
+import org.deviartqa.pages.shipping.call.CallTransferPage;
 import org.deviartqa.pages.shipping.orderStatusImport.CreateOrderStatusImportPage;
 import org.deviartqa.pages.shipping.orderStatusImport.UpdateOrderStatusImportPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,9 +17,15 @@ import java.util.List;
 @Test
 public class OrderStatusImportTest extends BaseTest {
 
-    CreateOrderStatusImportPage createOrderStatusImportPage = new CreateOrderStatusImportPage();
-    UpdateOrderStatusImportPage updateOrderStatusImportPage = new UpdateOrderStatusImportPage();
+    CreateOrderStatusImportPage createOrderStatusImportPage;
+    UpdateOrderStatusImportPage updateOrderStatusImportPage;
     String orders = "307,309";
+
+    @BeforeMethod
+    public void init() {
+        createOrderStatusImportPage = new CreateOrderStatusImportPage();
+        updateOrderStatusImportPage = new UpdateOrderStatusImportPage();
+    }
 
     public void positive_createTrans() throws SQLException {
         ResultSet trans_out;

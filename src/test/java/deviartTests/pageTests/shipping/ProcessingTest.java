@@ -2,8 +2,10 @@ package deviartTests.pageTests.shipping;
 
 import com.microsoft.playwright.TimeoutError;
 import deviartTests.BaseTest;
+import org.deviartqa.pages.shipping.OrdersToPack;
 import org.deviartqa.pages.shipping.ProcessingPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.sql.ResultSet;
@@ -12,7 +14,12 @@ import java.sql.SQLException;
 @Test
 public class ProcessingTest extends BaseTest {
 
-    ProcessingPage processingPage = new ProcessingPage();
+    ProcessingPage processingPage;
+
+    @BeforeMethod
+    public void init() {
+        processingPage = new ProcessingPage();
+    }
 
     public void positive_checkRemiderMessage() throws SQLException {
         String where = "status = 1 and `type` = 3 and parent_id = 45969 and t_max_assignment is not null";

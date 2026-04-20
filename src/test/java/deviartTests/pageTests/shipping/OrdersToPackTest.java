@@ -6,7 +6,10 @@ import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.TextLocalization;
 import org.deviartqa.pages.shipping.OrdersToPack;
+import org.deviartqa.pages.shipping.order.CreateOrderPage;
+import org.deviartqa.pages.shipping.order.UpdateOrderPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -16,7 +19,13 @@ import java.sql.SQLException;
 @Test
 public class OrdersToPackTest extends BaseTest {
 
-    OrdersToPack ordersToPack = new OrdersToPack();
+    OrdersToPack ordersToPack;
+
+    @BeforeMethod
+    public void init() {
+        ordersToPack = new OrdersToPack();
+    }
+
     public void params_test() throws SQLException {
         //ID
         ordersToPack.open().readyPage()

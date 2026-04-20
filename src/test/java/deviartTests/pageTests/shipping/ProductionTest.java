@@ -1,9 +1,11 @@
 package deviartTests.pageTests.shipping;
 
 import deviartTests.BaseTest;
+import org.deviartqa.pages.shipping.ProcessingPage;
 import org.deviartqa.pages.shipping.production.Production;
 import org.deviartqa.pages.shipping.production.UpdateProduction;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.sql.ResultSet;
@@ -12,10 +14,16 @@ import java.sql.SQLException;
 @Test
 public class ProductionTest extends BaseTest {
 
-    Production production = new Production();
-    UpdateProduction updateProduction = new UpdateProduction();
+    Production production;
+    UpdateProduction updateProduction;
     int product_base_id = 1418;
     int store_id = 2;
+
+    @BeforeMethod
+    public void init() {
+        production = new Production();
+        updateProduction = new UpdateProduction();
+    }
 
     public void positive_activeDisable_onProductionPage() throws SQLException {
         getDB().update("UPDATE terraleads_shipping.production SET status = 1 WHERE product_base_id = "+product_base_id+" AND store_id = "+store_id);

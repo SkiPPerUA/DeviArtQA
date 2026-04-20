@@ -6,9 +6,14 @@ import org.deviartqa.core.Locators;
 import org.deviartqa.core.Session;
 import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
+import org.deviartqa.pages.accounting.payment.CreatePaymentPage;
+import org.deviartqa.pages.accounting.payment.PaymentPage;
+import org.deviartqa.pages.accounting.payment.UpdatePaymentPage;
+import org.deviartqa.pages.accounting.payment.ViewPaymentPage;
 import org.deviartqa.pages.accounting.paymentType.PaymentTypePage;
 import org.opentest4j.AssertionFailedError;
 import org.testng.Assert;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,8 +21,13 @@ import java.sql.SQLException;
 @Test
 public class PaymentTypeTest extends BaseTest {
 
-    PaymentTypePage paymentTypePage = new PaymentTypePage();
+    PaymentTypePage paymentTypePage;
     String name;
+
+    @BeforeTest
+    public void init() {
+        paymentTypePage = new PaymentTypePage();
+    }
 
     public void create_paymentType() {
         name = "PaymentType"+ DataHelper.getUuid();
