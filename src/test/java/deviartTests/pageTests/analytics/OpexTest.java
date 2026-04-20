@@ -16,7 +16,7 @@ import java.util.List;
 public class OpexTest extends BaseTest {
 
 
-    OpexPage opexPage = new OpexPage();
+    OpexPage opexPage;
 
     @BeforeMethod
     public void init() {
