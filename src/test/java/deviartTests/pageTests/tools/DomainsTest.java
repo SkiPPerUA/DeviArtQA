@@ -9,10 +9,14 @@ import org.deviartqa.core.Widget;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.helper.TestCases;
 import org.deviartqa.helper.TextLocalization;
+import org.deviartqa.pages.clients.behaviorFactors.AddBehaviorFactors;
+import org.deviartqa.pages.clients.behaviorFactors.BehaviorFactors;
+import org.deviartqa.pages.clients.behaviorFactors.UpdateBehaviorFactors;
 import org.deviartqa.pages.tools.domain.CreateDomainsPage;
 import org.deviartqa.pages.tools.domain.DomainPage;
 import org.deviartqa.pages.tools.domain.UpdateDomainsPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -355,10 +359,16 @@ public class DomainsTest extends BaseTest {
     private Locator list(){
         return new Widget(Locators.page.locator("//tr[@class=\"odd\"]")).element;
     }
-    CreateDomainsPage createDomainsPage = new CreateDomainsPage();
-    UpdateDomainsPage updateDomainsPage = new UpdateDomainsPage();
-    DomainPage domainPage = new DomainPage();
+    CreateDomainsPage createDomainsPage;
+    UpdateDomainsPage updateDomainsPage;
+    DomainPage domainPage;
     private int domain_id = 12081;
     private String name = "09a88e98-6baa-4dc2-9738-7c867ee019fe.com";
     private final HashSet<String> permissions = new HashSet<>();
+    @BeforeMethod
+    public void init() {
+        domainPage = new DomainPage();
+        createDomainsPage = new CreateDomainsPage();
+        updateDomainsPage = new UpdateDomainsPage();
+    }
 }
