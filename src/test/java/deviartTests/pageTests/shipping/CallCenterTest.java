@@ -1,7 +1,7 @@
 package deviartTests.pageTests.shipping;
 
 import deviartTests.BaseTest;
-import org.deviartqa.pages.shipping.callCenter.UpdateСallCenterPage;
+import org.deviartqa.pages.shipping.callCenter.UpdateCallCenterPage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 @Test
 public class CallCenterTest extends BaseTest {
 
-    UpdateСallCenterPage updateСallCenterPage = new UpdateСallCenterPage();
+    UpdateCallCenterPage updateСallCenterPage = new UpdateCallCenterPage();
 
     public void positive_deliverySettings_test() throws SQLException {
         ResultSet res;

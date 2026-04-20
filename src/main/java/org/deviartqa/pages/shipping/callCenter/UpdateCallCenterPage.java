@@ -5,23 +5,23 @@ import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 
 
-public class UpdateСallCenterPage extends CabinetPage {
+public class UpdateCallCenterPage extends CabinetPage {
 
-    public UpdateСallCenterPage(){
+    public UpdateCallCenterPage(){
         pageLoc = "ShippingFormCallCenter";
     }
 
-    public UpdateСallCenterPage readyPage() {
+    public UpdateCallCenterPage readyPage() {
         checkPage(Locators.save);
         return this;
     }
 
-    public UpdateСallCenterPage open(int id) {
+    public UpdateCallCenterPage open(int id) {
         openPage("/acp/shipping/callCenter/modify?id="+id);
         return this;
     }
 
-    public UpdateСallCenterPage setDelivery(String days){
+    public UpdateCallCenterPage setDelivery(String days){
         new Widget(page.getByTestId(pageLoc+"[send_date]")).fill(days);
         return this;
     }
