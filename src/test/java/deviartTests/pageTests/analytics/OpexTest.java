@@ -5,6 +5,7 @@ import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
 import org.deviartqa.pages.analytics.OpexPage;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +15,13 @@ import java.util.List;
 @Test
 public class OpexTest extends BaseTest {
 
+
     OpexPage opexPage = new OpexPage();
+
+    @BeforeMethod
+    public void init() {
+        opexPage = new OpexPage();
+    }
 
     public void test_allAdv(){
         opexPage.open().readyPage();
