@@ -284,13 +284,13 @@ public class ProcessingCall_sellingTest extends BaseTest {
 
     @BeforeClass
     void auth(){
-        processingCall_test = new ProcessingCall_test();
-        processingPage = new ProcessingPage();
         new WelcomePage().open().header.changeUser(region.getSelling_operator_id());
     }
 
     @BeforeMethod
     void startProcc() throws SQLException, InterruptedException {
+        processingCall_test = new ProcessingCall_test();
+        processingPage = new ProcessingPage();
         new LeadTest().create_lead_positive();
         processingPage.startProcessing();
         call_lead_id = processingPage.getCallInfo(ProcessingPage.CallParameters.lead_id);
