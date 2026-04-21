@@ -7,7 +7,7 @@ import static org.deviartqa.core.Credentials.RoleCred.*;
 
 public abstract class TestScenario {
 
-    public static final boolean headless = false;
+    public static final boolean headless = true;
     public static final String browser = "chromium";
     public static String local = "en"; // en ru
     public static String env = "sandbox"; // prod sandbox prime
