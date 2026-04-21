@@ -17,8 +17,8 @@ import java.sql.SQLException;
 @Test(groups = "calls")
 public class ProcessingCall_sellingTest extends BaseTest {
 
-    ProcessingCall_test processingCall_test = new ProcessingCall_test();
-    ProcessingPage processingPage = new ProcessingPage();
+    ProcessingCall_test processingCall_test;
+    ProcessingPage processingPage;
     ResultSet res;
     String call_id = "";
     String call_lead_id = "";
@@ -284,6 +284,8 @@ public class ProcessingCall_sellingTest extends BaseTest {
 
     @BeforeClass
     void auth(){
+        processingCall_test = new ProcessingCall_test();
+        processingPage = new ProcessingPage();
         new WelcomePage().open().header.changeUser(region.getSelling_operator_id());
     }
 
