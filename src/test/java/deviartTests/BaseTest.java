@@ -41,6 +41,7 @@ public abstract class BaseTest {
     public void setEnv(){
         FactoryRegion factoryRegion = new FactoryRegion();
         String jenkinsRegion = System.getenv("region");
+        System.out.println("======== "+ jenkinsRegion +" ========");
         if (jenkinsRegion == null){
             region = factoryRegion.setRegion(TestScenario.region);
         }else {
