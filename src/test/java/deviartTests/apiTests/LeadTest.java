@@ -20,8 +20,8 @@ public class LeadTest extends BaseTest {
     public LeadsAPI leads = new LeadsAPI();
     DBconnector dBconnector;
     int sleep = 10000;
-    public String offer_id = "14423";
-    public int user_Id = 66611 ;//TestScenario.userId 25719 25696
+    public String offer_id = "111";
+    public int user_Id = 66611;
     private String phone;
     private String name;
     private String country;
@@ -31,8 +31,7 @@ public class LeadTest extends BaseTest {
         phone = String.valueOf(new Date().getTime());
         //phone = "237";
         name = "tst"+ DataHelper.getUuid();
-        country = "RO";
-        makePositiveOffers(offer_id);
+        makePositiveOffers(String.valueOf(region.getOffer_id()));
         makeLead();
 //        Thread.sleep(sleep);
 //        ResultSet res = getDB_byId(leads.getLead_id());
@@ -619,9 +618,9 @@ public class LeadTest extends BaseTest {
         leads.createLead("{\n" +
                 "\"user_id\": "+user_Id+",\n" +
                 "    \"data\":{\n" +
-                "        \"offer_id\": \""+offer_id+"\",\n" +
+                "        \"offer_id\": \""+region.getOffer_id()+"\",\n" +
                 "        \"name\": \""+name+"\",\n" +
-                "        \"country\": \""+country+"\",\n" +
+                "        \"country\": \""+region.getCode()+"\",\n" +
                 "        \"phone\": \""+phone+"\"\n" +
                 "        }\n" +
                 "}\n",user_Id);

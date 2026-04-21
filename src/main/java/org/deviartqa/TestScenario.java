@@ -1,6 +1,8 @@
 package org.deviartqa;
 
 import org.deviartqa.core.Credentials;
+import org.deviartqa.regions.Country;
+
 import static org.deviartqa.core.Credentials.RoleCred.*;
 
 public abstract class TestScenario {
@@ -10,8 +12,10 @@ public abstract class TestScenario {
     public static String local = "en"; // en ru
     public static String env = "sandbox"; // prod sandbox prime
     public static final Credentials.RoleCred role = admin;
+    public static Country region = Country.Romania;
     public static final int userId = 66611;
     public static final boolean enable = false;
+
     public static String getUrl(){
         String url = "";
         if (env.equals("prod")){

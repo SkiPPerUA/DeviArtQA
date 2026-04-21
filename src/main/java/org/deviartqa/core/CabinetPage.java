@@ -33,6 +33,10 @@ public abstract class CabinetPage extends SitePage{
         new Widget(Locators.page.locator(String.format("//ul[@role='listbox'][@aria-expanded='true']//*[contains(text(),'%s')]",data))).click();
     }
 
+    protected void choseDropEquals(String data){
+        new Widget(Locators.page.locator(String.format("//ul[@role='listbox'][@aria-expanded='true']//*[text()='%s']",data))).click();
+    }
+
     protected void choseDrop(String data, boolean contains){
         if (contains){
             choseDrop(data);
@@ -484,7 +488,7 @@ public abstract class CabinetPage extends SitePage{
 
     protected CabinetPage setDelivery_service_id(String data) {
         new Widget(Locators.page.locator("//button[@data-id='delivery_service_id']")).click();
-        choseDrop(data);
+        choseDropEquals(data);
         return this;
     }
 

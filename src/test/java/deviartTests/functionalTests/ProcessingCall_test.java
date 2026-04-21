@@ -24,7 +24,7 @@ public class ProcessingCall_test extends BaseTest {
 
     public void approve_call() {
         processingPage
-                .setDelivery_service_id("LocalShipment Test")
+                .setDelivery_service_id(region.getDelivery_service())
                 .setSendTime(DataHelper.getTime("yyyy-MM-dd",0))
                 .setZipcode("03111",3)
                 .setStreet("fdsfsdfs")
