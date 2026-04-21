@@ -6,7 +6,6 @@ import org.deviartqa.api.LeadsAPI;
 import org.deviartqa.core.DBconnector;
 import org.deviartqa.helper.DataHelper;
 import org.deviartqa.helper.TestCases;
-import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import java.sql.ResultSet;

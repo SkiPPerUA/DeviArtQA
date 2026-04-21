@@ -9,14 +9,13 @@ import org.deviartqa.pages.shipping.ProcessingPage;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Test(groups = "calls")
-public class ProcessingCall_selling extends BaseTest {
+public class ProcessingCall_sellingTest extends BaseTest {
 
     ProcessingCall_test processingCall_test = new ProcessingCall_test();
     ProcessingPage processingPage = new ProcessingPage();
@@ -24,7 +23,6 @@ public class ProcessingCall_selling extends BaseTest {
     String call_id = "";
     String call_lead_id = "";
 
-    @Test(invocationCount = 1)
     public void approve_test() throws SQLException {
         processingCall_test.approve_call();
         res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);
