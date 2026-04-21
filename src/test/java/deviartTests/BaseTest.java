@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 public abstract class BaseTest {
 
     private DBconnector dBconnector;
-    protected static Region region = new Romania();
+    protected static Region region = new FactoryRegion().setRegion(System.getProperty("region"));
 
     protected static final Logger logger = Logger.getLogger(BaseTest.class);
 
@@ -26,7 +26,6 @@ public abstract class BaseTest {
 
     @BeforeMethod
     public void start(Method method){
-        System.out.println("========1 "+ System.getenv("region") +" 1========");
         logger.info("---------------------   "+method.getName()+"   ---------------------");
     }
 
@@ -35,18 +34,5 @@ public abstract class BaseTest {
             dBconnector = new DBconnector();
         }
         return dBconnector;
-    }
-
-    @BeforeSuite
-    public void setEnv(){
-        FactoryRegion factoryRegion = new FactoryRegion();
-        String jenkinsRegion = System.getProperty("region");
-        System.out.println("======== "+ jenkinsRegion +" ========");
-        if (jenkinsRegion == null){
-            region = factoryRegion.setRegion(TestScenario.region);
-        }else {
-            region = factoryRegion.setRegion(jenkinsRegion);
-        }
-
     }
 }
