@@ -10,7 +10,6 @@ import org.deviartqa.regions.Romania;
 import org.testng.annotations.*;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 public abstract class BaseTest {
 
@@ -27,6 +26,7 @@ public abstract class BaseTest {
 
     @BeforeMethod
     public void start(Method method){
+        System.out.println("======== "+ System.getenv("region") +" ========");
         logger.info("---------------------   "+method.getName()+"   ---------------------");
     }
 
@@ -40,7 +40,7 @@ public abstract class BaseTest {
     @BeforeSuite
     public void setEnv(){
         FactoryRegion factoryRegion = new FactoryRegion();
-        String jenkinsRegion = System.getenv("region");
+        String jenkinsRegion = System.getProperty("region");
         System.out.println("======== "+ jenkinsRegion +" ========");
         if (jenkinsRegion == null){
             region = factoryRegion.setRegion(TestScenario.region);

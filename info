@@ -1,1 +1,1 @@
-mvn test -Dgroups=api
+mvn test -Dgroups=api -Dregion=IT
