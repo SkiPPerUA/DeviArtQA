@@ -4,10 +4,10 @@ public class FactoryRegion {
 
     Region region;
 
-    public Region setRegion(Country country){
-        if (country == Country.Italy){
+    public Region setRegion(String country){
+        if (country.equals("IT")){
             region = new Italy();
-        }else if (country == Country.Romania){
+        }else if (country.equals("RO")){
             region = new Romania();
         }
 

@@ -1,18 +1,17 @@
 package org.deviartqa;
 
 import org.deviartqa.core.Credentials;
-import org.deviartqa.regions.Country;
 
 import static org.deviartqa.core.Credentials.RoleCred.*;
 
 public abstract class TestScenario {
 
-    public static final boolean headless = true;
-    public static final String browser = "chromium";
+    public static final boolean headless = false;
+    public static final String browser = "chrome";
     public static String local = "en"; // en ru
     public static String env = "sandbox"; // prod sandbox prime
     public static final Credentials.RoleCred role = admin;
-    public static Country region = Country.Romania;
+    public static String region = "RO";
     public static final int userId = 66611;
     public static final boolean enable = false;
 

@@ -20,10 +20,9 @@ public class LeadTest extends BaseTest {
     DBconnector dBconnector;
     int sleep = 10000;
     public String offer_id = "111";
-    public int user_Id = 66611;
+    public int user_Id = TestScenario.userId;
     private String phone;
     private String name;
-    private String country;
 
     @Test(groups = "api")
     public void create_lead_positive() throws SQLException, InterruptedException {

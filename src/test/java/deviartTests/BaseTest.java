@@ -40,6 +40,12 @@ public abstract class BaseTest {
     @BeforeSuite
     public void setEnv(){
         FactoryRegion factoryRegion = new FactoryRegion();
-        region = factoryRegion.setRegion(TestScenario.region);
+        String jenkinsRegion = System.getenv("region");
+        if (jenkinsRegion == null){
+            region = factoryRegion.setRegion(TestScenario.region);
+        }else {
+            region = factoryRegion.setRegion(jenkinsRegion);
+        }
+
     }
 }

@@ -16,9 +16,13 @@ public abstract class Session {
         if (browser == null) {
             Playwright playwright = Playwright.create();
             playwright.selectors().setTestIdAttribute("name");
-            browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
-                    .setHeadless(TestScenario.headless));
-                    //.setChannel(TestScenario.browser));
+            if (System.getenv("region") != null){
+                browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
+            }else {
+                browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
+                        .setHeadless(TestScenario.headless)
+                        .setChannel(TestScenario.browser));
+            }
             context = browser.newContext();
             addCookies();
             page = context.newPage();
