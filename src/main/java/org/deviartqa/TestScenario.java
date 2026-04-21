@@ -8,7 +8,7 @@ import static org.deviartqa.core.Credentials.RoleCred.*;
 public abstract class TestScenario {
 
     public static final boolean headless = false;
-    public static final String browser = "chrome";
+    public static final String browser = "chromium";
     public static String local = "en"; // en ru
     public static String env = "sandbox"; // prod sandbox prime
     public static final Credentials.RoleCred role = admin;
