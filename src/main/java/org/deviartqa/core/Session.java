@@ -17,8 +17,8 @@ public abstract class Session {
             Playwright playwright = Playwright.create();
             playwright.selectors().setTestIdAttribute("name");
             browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
-                    .setHeadless(TestScenario.headless)
-                    .setChannel(TestScenario.browser));
+                    .setHeadless(TestScenario.headless));
+                    //.setChannel(TestScenario.browser));
             context = browser.newContext();
             addCookies();
             page = context.newPage();
