@@ -2,7 +2,6 @@ package deviartTests.pageTests.shipping;
 
 import deviartTests.BaseTest;
 import org.deviartqa.pages.shipping.call.CallTransferPage;
-import org.deviartqa.pages.shipping.callCenter.UpdateCallCenterPage;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;

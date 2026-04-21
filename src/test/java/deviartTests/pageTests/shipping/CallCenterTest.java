@@ -1,11 +1,7 @@
 package deviartTests.pageTests.shipping;
 
 import deviartTests.BaseTest;
-import org.deviartqa.pages.noAuth.AuthPage;
-import org.deviartqa.pages.noAuth.registrationPage.RegistrationPage1;
-import org.deviartqa.pages.noAuth.registrationPage.RegistrationPage2;
-import org.deviartqa.pages.noAuth.registrationPage.RegistrationPage3;
-import org.deviartqa.pages.shipping.callCenter.UpdateCallCenterPage;
+import org.deviartqa.pages.shipping.callCenter.UpdateallCenterPage;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -16,11 +12,11 @@ import java.sql.SQLException;
 @Test
 public class CallCenterTest extends BaseTest {
 
-    UpdateCallCenterPage updateСallCenterPage;
+    UpdateallCenterPage updateСallCenterPage;
 
     @BeforeMethod
     public void init() {
-        updateСallCenterPage = new UpdateCallCenterPage();
+        updateСallCenterPage = new UpdateallCenterPage();
     }
 
     public void positive_deliverySettings_test() throws SQLException {
