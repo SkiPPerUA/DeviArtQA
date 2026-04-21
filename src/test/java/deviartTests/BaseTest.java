@@ -26,7 +26,7 @@ public abstract class BaseTest {
 
     @BeforeMethod
     public void start(Method method){
-        System.out.println("======== "+ System.getenv("region") +" ========");
+        System.out.println("========1 "+ System.getenv("region") +" 1========");
         logger.info("---------------------   "+method.getName()+"   ---------------------");
     }
 
