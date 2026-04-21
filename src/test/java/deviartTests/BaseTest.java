@@ -26,6 +26,8 @@ public abstract class BaseTest {
 
     @BeforeMethod
     public void start(Method method){
+        FactoryRegion factoryRegion = new FactoryRegion();
+        region = factoryRegion.setRegion(TestScenario.region);
         logger.info("---------------------   "+method.getName()+"   ---------------------");
     }
 
@@ -38,7 +40,6 @@ public abstract class BaseTest {
 
     @BeforeSuite
     public void setEnv(){
-        FactoryRegion factoryRegion = new FactoryRegion();
-        region = factoryRegion.setRegion(TestScenario.region);
+
     }
 }
