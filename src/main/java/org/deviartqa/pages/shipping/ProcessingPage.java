@@ -12,6 +12,8 @@ public class ProcessingPage extends CabinetPage {
 
     public ProcessingPage(){
         pageLoc = "ShippingFormCall"+ DataHelper.capitalize(TestScenario.region);
+        System.out.println("====");
+        System.out.println(TestScenario.region);
     }
 
     public ProcessingPage readyPage() {
