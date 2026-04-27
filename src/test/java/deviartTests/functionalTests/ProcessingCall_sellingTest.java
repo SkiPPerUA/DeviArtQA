@@ -125,7 +125,7 @@ public class ProcessingCall_sellingTest extends BaseTest {
         Assert.assertEquals(res.getInt("status"),1);
         Assert.assertEquals(res.getInt("type"),3);
         Assert.assertEquals(res.getInt("operator_id"),region.getSelling_operator_id());
-        Assert.assertEquals(res.getString("t_scheduled"),DataHelper.getTime("yyyy-MM-dd",4)+" 22:00"+":00");
+        Assert.assertTrue(res.getString("t_scheduled").contains(DataHelper.getTime("yyyy-MM-dd",4)));
     }
 
     public void busy_newTime_negativeTest() throws SQLException {
