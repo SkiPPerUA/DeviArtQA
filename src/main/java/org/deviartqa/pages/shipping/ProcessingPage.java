@@ -12,6 +12,7 @@ public class ProcessingPage extends CabinetPage {
 
     public ProcessingPage(){
         pageLoc = "ShippingFormCall"+ DataHelper.capitalize(TestScenario.region);
+        System.out.println(pageLoc);
     }
 
     public ProcessingPage readyPage() {

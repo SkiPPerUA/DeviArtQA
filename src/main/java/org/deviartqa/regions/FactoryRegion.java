@@ -19,6 +19,7 @@ public class FactoryRegion {
 
         }
 
+        TestScenario.region = country;
         return region;
     }
 }
