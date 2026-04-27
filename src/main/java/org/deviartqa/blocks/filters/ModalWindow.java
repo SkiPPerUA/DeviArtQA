@@ -1,7 +1,10 @@
 package org.deviartqa.blocks.filters;
 
+import org.deviartqa.TestScenario;
 import org.deviartqa.core.SiteBlock;
 import org.deviartqa.core.Widget;
+import org.deviartqa.helper.DataHelper;
+import org.deviartqa.helper.TextLocalization;
 
 public class ModalWindow extends SiteBlock {
 
@@ -22,7 +25,13 @@ public class ModalWindow extends SiteBlock {
 
     public void save(boolean save){
         if (save){
-            new Widget(page.locator("//div[@id='result-"+x_path_locator+"-stick-top']//button[@name='ShippingFormCallRo[result]']")).click();
+            new Widget(page.locator("//div[@id='result-"+x_path_locator+"-stick-top']//button[@name='ShippingFormCall"+ DataHelper.capitalize(TestScenario.region) +"[result]']")).click();
+            //ожидание обработки звонка
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }else {
             new Widget(page.locator("//div[@id='result-"+x_path_locator+"-stick-top']//a")).click();
         }
@@ -32,7 +41,7 @@ public class ModalWindow extends SiteBlock {
         setCallResult(callResult);
         setResultAdditional(callResult,resultAdditional);
         if (comment.toCharArray().length > 0){
-            new Widget(page.getByTestId("ShippingFormCallRo[comment]")).fill(comment);
+            new Widget(page.getByTestId("ShippingFormCall"+ DataHelper.capitalize(TestScenario.region) +"[comment]")).fill(comment);
         }
         setOperatorStatus(operatorStatus);
         return this;
@@ -41,7 +50,7 @@ public class ModalWindow extends SiteBlock {
     public ModalWindow callProcess_busyWithTime(String time,String comment, OperatorStatus operatorStatus){
         setCallResult(CallResult.busy);
         setResultAdditional(CallResult.busy,ResultAdditional.busy_SelectCallTime);
-        Widget set_time = new Widget(page.getByTestId("ShippingFormCallRo[next_call_time]"));
+        Widget set_time = new Widget(page.getByTestId("ShippingFormCall"+ DataHelper.capitalize(TestScenario.region) +"[next_call_time]"));
         set_time.element.evaluate("(el, value) => el.setAttribute('value', value)", time);
         setComment(comment);
         setOperatorStatus(operatorStatus);
@@ -50,7 +59,7 @@ public class ModalWindow extends SiteBlock {
 
     public ModalWindow setComment(String comment){
         if (comment.toCharArray().length > 0){
-            new Widget(page.getByTestId("ShippingFormCallRo[comment]")).fill(comment);
+            new Widget(page.getByTestId("ShippingFormCall"+ DataHelper.capitalize(TestScenario.region) +"[comment]")).fill(comment);
         }
 
         return this;
@@ -72,8 +81,8 @@ public class ModalWindow extends SiteBlock {
 
     private void setResultAdditional(CallResult callResult, ResultAdditional resultAdditional){
         if (callResult == CallResult.trash || callResult == CallResult.busy) {
-            new Widget(page.locator("//div[@name='ShippingFormCallRo[result_additional]']/button")).click();
-            new Widget(page.locator("//div[@name='ShippingFormCallRo[result_additional]']//li[@data-original-index=\""+resultAdditional.value+"\"]")).click();
+            new Widget(page.locator("//div[@name='ShippingFormCall"+ DataHelper.capitalize(TestScenario.region) +"[result_additional]']/button")).click();
+            new Widget(page.locator("//div[@name='ShippingFormCall"+ DataHelper.capitalize(TestScenario.region) +"[result_additional]']//li[@data-original-index=\""+resultAdditional.value+"\"]")).click();
         }
     }
 

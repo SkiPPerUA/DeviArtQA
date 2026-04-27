@@ -7,6 +7,7 @@ public class Italy extends Region {
         super.offer_id = 14437;
         super.code = "IT";
         super.selling_operator_id = 16317;
-        super.delivery_service = "";
+        super.delivery_service = "BRT";
+        super.zip_code = "51031";
     }
 }

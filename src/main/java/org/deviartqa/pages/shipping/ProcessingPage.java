@@ -1,19 +1,21 @@
 package org.deviartqa.pages.shipping;
 
+import org.deviartqa.TestScenario;
 import org.deviartqa.blocks.filters.ModalWindow;
 import org.deviartqa.core.CabinetPage;
 import org.deviartqa.core.Session;
 import org.deviartqa.core.Widget;
+import org.deviartqa.helper.DataHelper;
 import org.deviartqa.pages.shipping.call.CallPage;
 
 public class ProcessingPage extends CabinetPage {
 
     public ProcessingPage(){
-        pageLoc = "ShippingFormCallRo";
+        pageLoc = "ShippingFormCall"+ DataHelper.capitalize(TestScenario.region);
     }
 
     public ProcessingPage readyPage() {
-        checkPage(page.getByTestId("ShippingFormCallRo[full_name]"));
+        checkPage(page.getByTestId(pageLoc+"[full_name]"));
         return this;
     }
 
@@ -62,7 +64,7 @@ public class ProcessingPage extends CabinetPage {
     }
 
     public ProcessingPage setSendTime(String data){
-        Widget send_data = new Widget(page.getByTestId("ShippingFormCallRo[send_date]"));
+        Widget send_data = new Widget(page.locator("//input[@id='send_date']"));
         send_data.element.evaluate("(el, value) => el.setAttribute('value', value)", data);
         return this;
     }

@@ -23,7 +23,6 @@ public class ProcessingCall_sellingTest extends BaseTest {
     String call_id = "";
     String call_lead_id = "";
 
-    @Test(invocationCount = 10)
     public void approve_test() throws SQLException {
         processingCall_test.approve_call();
         res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);

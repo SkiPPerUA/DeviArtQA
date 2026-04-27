@@ -8,9 +8,14 @@ public abstract class Region {
     protected int selling_operator_id;
     protected int reminder_operator_id;
     protected String delivery_service;
+    protected String zip_code;
 
     public String getName() {
         return name;
+    }
+
+    public String getZip_code() {
+        return zip_code;
     }
 
     public int getReminder_operator_id() {
