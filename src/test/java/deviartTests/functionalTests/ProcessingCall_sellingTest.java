@@ -23,6 +23,7 @@ public class ProcessingCall_sellingTest extends BaseTest {
     String call_id = "";
     String call_lead_id = "";
 
+    @Test(invocationCount = 10)
     public void approve_test() throws SQLException {
         processingCall_test.approve_call();
         res = getDB().select("SELECT * FROM terraleads.lead where id = "+call_lead_id);
@@ -138,7 +139,10 @@ public class ProcessingCall_sellingTest extends BaseTest {
         res = getDB().select("SELECT * FROM terraleads_shipping.`call` where id = "+call_id);
         res.next();
         Assert.assertEquals(res.getInt("call_sequence_type"),1);
-        Assert.assertEquals(res.getInt("status"),3);
+        Assert.assertEquals(res.getInt("status"),2);
+
+        //удаление привязаного звонка (в ходе теста) к оператору
+        getDB().update("DELETE FROM terraleads_shipping.`call` where id = "+call_id);
     }
 
     public void reject_test() throws SQLException {

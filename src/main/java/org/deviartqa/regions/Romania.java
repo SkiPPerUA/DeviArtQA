@@ -8,5 +8,6 @@ public class Romania extends Region {
         super.code = "RO";
         super.selling_operator_id = 15556;
         super.delivery_service = "GLS";
+        super.reminder_operator_id = 15567;
     }
 }
