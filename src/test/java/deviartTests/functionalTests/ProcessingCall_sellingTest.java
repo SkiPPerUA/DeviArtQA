@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@Test(groups = "calls")
+@Test(groups = {"calls","regress"})
 public class ProcessingCall_sellingTest extends BaseTest {
 
     ProcessingCall_test processingCall_test;

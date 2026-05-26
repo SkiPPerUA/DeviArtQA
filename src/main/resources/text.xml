@@ -27,6 +27,7 @@
     <entry key="processing">{"en":"Processing","ru":"Обработка"}</entry>
     <entry key="error_of_addition">{"en":"Error of addition","ru":"Ошибка добавления"}</entry>
     <entry key="all">{"en":"All","ru":"Все"}</entry>
+    <entry key="show_results">{"en":"Show results","ru":"Показать результаты"}</entry>
     <entry key="new">{"en":"New","ru":"Новый"}</entry>
     <entry key="payment_on_delivery">{"en":"Payment on delivery","ru":"Оплата при доставке"}</entry>
     <entry key="not_paid">{"en":"Not paid","ru":"Не оплачен"}</entry>

@@ -1,15 +1,18 @@
 package org.deviartqa.core;
 
 import com.microsoft.playwright.Locator;
+import org.apache.log4j.Logger;
 
 public class Widget {
 
+    private static Logger logger = Logger.getLogger(Widget.class);
     public Locator element;
     public Widget(Locator locator){
         this.element = locator;
     }
     public Widget click(){
         element.click();
+        logger.info("Click element -> "+element);
         return this;
     }
 

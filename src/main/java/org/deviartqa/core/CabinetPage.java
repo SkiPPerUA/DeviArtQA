@@ -72,6 +72,12 @@ public abstract class CabinetPage extends SitePage{
         return this;
     }
 
+    protected CabinetPage changeDate(int date_range){
+        new Widget(Locators.page.getByTestId("date_range")).click();
+        new Widget(Locators.page.locator("//div[@class='ranges']//li")).element.nth(4).click();
+        return this;
+    }
+
     protected CabinetPage clickDelete(int id){
         new Widget(Locators.page.locator("//a[@href=\"/acp/"+pagePoint+"/delete?id="+id+"\"]")).click();
         return this;
@@ -79,6 +85,18 @@ public abstract class CabinetPage extends SitePage{
 
     protected CabinetPage setDomain_type(String data) {
         new Widget(Locators.page.locator("//button[@data-id='domain_type']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setOffer_id(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='"+pageLoc+"_offer_id']")).click();
+        choseDrop(data);
+        return this;
+    }
+
+    protected CabinetPage setUserAdv_id(String data) {
+        new Widget(Locators.page.locator("//button[@data-id='"+pageLoc+"_user_adv_id']")).click();
         choseDrop(data);
         return this;
     }

@@ -14,9 +14,9 @@ import java.sql.SQLException;
 @Test
 public class NormalizePhoneNumber extends BaseTest {
 
-    String phone = "3"+DataHelper.getRandomNumber(9);
-    String code = "39";
-    String country = "RO";
+    String phone = "91"+DataHelper.getRandomNumber(7);
+    String code = "385";
+    String country = "HR";
     String lead_id;
 
     public void trash(){

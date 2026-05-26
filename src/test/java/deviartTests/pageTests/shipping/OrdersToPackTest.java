@@ -1,6 +1,8 @@
 package deviartTests.pageTests.shipping;
 
 import deviartTests.BaseTest;
+import deviartTests.functionalTests.ProcessingCall_sellingTest;
+import org.deviartqa.TestScenario;
 import org.deviartqa.core.DBconnector;
 import org.deviartqa.core.Locators;
 import org.deviartqa.core.Widget;
@@ -24,6 +26,30 @@ public class OrdersToPackTest extends BaseTest {
     @BeforeMethod
     public void init() {
         ordersToPack = new OrdersToPack();
+    }
+
+    @Test(groups = "regress")
+    public void positive_sendOrder() throws InterruptedException, SQLException {
+        ordersToPack.open().readyPage();
+
+        //find order for test
+        ordersToPack
+                .setCountry(region.getCode())
+                .setStatus(TextLocalization.get("new"))
+                .changeDate(4)
+                .clickShowResultButton().readyPage();
+        int order_id = Integer.parseInt(new Widget(Locators.page.locator("//tbody/tr[1]/td[2]")).textContent());
+        Assert.assertNotNull(order_id);
+
+        ordersToPack.choiceOrder(order_id)
+                .getTracker("Lumina Nova LTD","RON")
+                .getProforma("Lumina Nova LTD","RON","#366 - RO_LuminaNova_Altexrpress_GLOBAL")
+                .prepareForShipping(true)
+                .shipped(true);
+
+        ResultSet res = getDB().select("SELECT status FROM terraleads_shipping.`order` WHERE id = "+order_id);
+        res.next();
+        Assert.assertEquals(res.getInt("status"),5,"Ордер "+order_id+" НЕ отправлен");
     }
 
     public void params_test() throws SQLException {

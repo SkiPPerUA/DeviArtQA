@@ -19,7 +19,7 @@ public class OrdersToPack extends CabinetPage {
     }
 
     public OrdersToPack open() {
-        openPage("/acp/shipping/order/listPack");
+        openPage("/acp/shipping/newOrders/listPack");
         return this;
     }
 
@@ -68,6 +68,11 @@ public class OrdersToPack extends CabinetPage {
         return this;
     }
 
+    public OrdersToPack setStatus(String data){
+        super.setStatus(data);
+        return this;
+    }
+
     public OrdersToPack setAdvertiser(String data){
         super.setAdvertiser_id(data);
         return this;
@@ -81,7 +86,12 @@ public class OrdersToPack extends CabinetPage {
 
     public OrdersToPack clickShowResultButton(){
         super.clickShowResultButton();
-        return readyPage();
+        return this;
+    }
+
+    public OrdersToPack choiceOrder(int order_id){
+        new Widget(page.locator("//td[text()='"+order_id+"']/..//input")).click();
+        return this;
     }
 
     public OrdersToPack setCompany(String data){
@@ -91,6 +101,11 @@ public class OrdersToPack extends CabinetPage {
 
     public OrdersToPack setProduct(String data){
         super.setProduct_base_id(data);
+        return this;
+    }
+
+    public OrdersToPack changeDate(int date){
+        super.changeDate(date);
         return this;
     }
 
@@ -123,6 +138,48 @@ public class OrdersToPack extends CabinetPage {
 
     public OrdersToPack setPayment_status(String data){
         super.setPayment_status(data);
+        return this;
+    }
+
+    public OrdersToPack getTracker(String company, String currency) throws InterruptedException {
+        new Widget(page.locator("//a[@data-action='get_tracker']")).click();
+        new Widget(page.locator("//button[@data-id='get_tracker_company_account_id']")).click();
+        new Widget(page.locator("//ul[@role='listbox'][@aria-expanded='true']//*[contains(text(),'"+company+"') and contains(text(),'"+currency+"')]")).click();
+        new Widget(page.locator("//button[@data-action='get_tracker']")).click();
+        Thread.sleep(3000);
+        return this;
+    }
+
+    public OrdersToPack getProforma(String company, String currency, String store) throws InterruptedException {
+        new Widget(page.locator("//a[@data-action='get_proforma']")).click();
+        new Widget(page.locator("//button[@data-id='proforma_company_account_id']")).click();
+        new Widget(page.locator("//ul[@role='listbox'][@aria-expanded='true']//*[contains(text(),'"+company+"') and contains(text(),'"+currency+"')]")).click();
+        new Widget(page.locator("//button[@data-id='proforma_store_id']")).click();
+        choseDrop(store);
+        new Widget(page.locator("//a[@id='send-form-proforma']")).click();
+        Thread.sleep(3000);
+        return this;
+    }
+
+    public OrdersToPack prepareForShipping(boolean confirm) throws InterruptedException {
+        new Widget(page.locator("//a[@data-action='prepare_for_shipping']")).click();
+        if (confirm){
+            new Widget(page.locator("//button[@id='btn-prepare-for-shipping']")).click();
+        }else {
+            new Widget(page.locator("//button[@id='btn-prepare-for-shipping']/../a")).click();
+        }
+        Thread.sleep(3000);
+        return this;
+    }
+
+    public OrdersToPack shipped(boolean confirm) throws InterruptedException {
+        new Widget(page.locator("//a[@data-action='shipped']")).click();
+        if (confirm){
+            new Widget(page.locator("//button[@id='btn-form-set-shipped']")).click();
+        }else {
+            new Widget(page.locator("//button[@id='btn-form-set-shipped']/../a")).click();
+        }
+        Thread.sleep(10000);
         return this;
     }
 }
