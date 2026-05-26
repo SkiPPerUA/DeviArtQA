@@ -30,6 +30,7 @@ public class OrdersToPackTest extends BaseTest {
 
     @Test(groups = {"order","regress"})
     public void positive_sendOrder() throws InterruptedException, SQLException {
+        OrdersToPack ordersToPack = new OrdersToPack();
         ordersToPack.open().readyPage();
 
         //find order for test
