@@ -48,6 +48,8 @@ public class OrdersToPackTest extends BaseTest {
                 .prepareForShipping(true)
                 .shipped(true);
 
+        Thread.sleep(3000);
+
         ResultSet res = getDB().select("SELECT status FROM terraleads_shipping.`order` WHERE id = "+order_id);
         res.next();
         Assert.assertEquals(res.getInt("status"),5,"Ордер "+order_id+" НЕ отправлен");
