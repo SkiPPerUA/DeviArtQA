@@ -186,9 +186,9 @@ public class ProcessingCall_reasonForNotBougth extends BaseTest {
                     "(SELECT id FROM terraleads_shipping.`order` order by id desc limit 1) where lead_id = "+lead);
             getDB().update("update terraleads_shipping.call_sequence set type = 3 where lead_id = "+lead);
         }
-        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25555 where operator_id = 25562");
-        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25562 where call_queue_id = 21");
-        new WelcomePage().open().header.changeUser(25562);
+//        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25555 where operator_id = 25562");
+//        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25562 where call_queue_id = 21");
+        new WelcomePage().open().header.changeUser(region.getReasonForNotPaymentOrder_operator_id());
     }
 
     @BeforeMethod

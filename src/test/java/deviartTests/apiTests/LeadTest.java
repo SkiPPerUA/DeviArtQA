@@ -596,6 +596,10 @@ public class LeadTest extends BaseTest {
         makeLead();
     }
 
+    public void getList(){
+        leads.getListLead();
+    }
+
     private String findPrimeLeadIdByTerraId(String terraID){
         String id = "";
         try{
@@ -619,6 +623,7 @@ public class LeadTest extends BaseTest {
                 "        \"offer_id\": \""+region.getOffer_id()+"\",\n" +
                 "        \"name\": \""+name+"\",\n" +
                 "        \"country\": \""+region.getCode()+"\",\n" +
+                "        \"ip\": \"2001:0db8:ac10:fe01:0000:0000:0000:1111\",\n" +
                 "        \"phone\": \""+phone+"\"\n" +
                 "        }\n" +
                 "}\n",user_Id);

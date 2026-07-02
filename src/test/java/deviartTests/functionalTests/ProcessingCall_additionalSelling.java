@@ -271,9 +271,9 @@ public class ProcessingCall_additionalSelling extends BaseTest {
             getDB().update("update terraleads_shipping.`call` set call_sequence_type = 4 where lead_id = "+lead);
             getDB().update("update terraleads_shipping.call_sequence set type = 4 where lead_id = "+lead);
         }
-        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25555 where operator_id = 25562");
-        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25562 where call_queue_id = 22");
-        new WelcomePage().open().header.changeUser(25562);
+//        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25555 where operator_id = 25562");
+//        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25562 where call_queue_id = 22");
+        new WelcomePage().open().header.changeUser(region.getAdditionalSelling_operator_id());
     }
 
     @BeforeMethod

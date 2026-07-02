@@ -28,5 +28,6 @@ public class LeadNewTest extends BaseTest {
     @BeforeMethod
     void start(){
         page = new LeadNewPage();
+        getDB().update("update terraleads.users set status = 1 where id = "+region.getWebmaster_id());
     }
 }

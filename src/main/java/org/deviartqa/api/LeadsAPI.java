@@ -45,7 +45,7 @@ public class LeadsAPI extends Restfull {
     }
 
     public void updateLead(String lead_id, StatusLead status){
-        logger.info("Confirm лида");
+        logger.info("update лида");
         request(given()
                 .header("cookie","PHPSESSID="+new Credentials().getCredentials(TestScenario.role))
                 .queryParams("id",lead_id)
@@ -60,5 +60,13 @@ public class LeadsAPI extends Restfull {
 
     public enum StatusLead{
         confirm, trash, reject
+    }
+
+    public void getListLead(){
+        logger.info("getListLead");
+        request(given().
+                contentType(ContentType.JSON)
+                //.queryParams("check_sum", ApiHelper.getCheckSum(body,userId))
+                .get(TestScenario.getUrl()+"/acp/leadApi/list?country_id=157&page=1"));
     }
 }

@@ -271,9 +271,9 @@ public class ProcessingCall_handlingNotPaidOrder extends BaseTest {
             getDB().update("update terraleads_shipping.`call` set call_sequence_type = 8 where lead_id = "+lead);
             getDB().update("update terraleads_shipping.call_sequence set type = 8 where lead_id = "+lead);
         }
-        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25555 where operator_id = 25562");
-        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25562 where call_queue_id = 26");
-        new WelcomePage().open().header.changeUser(25562);
+//        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25555 where operator_id = 25562");
+//        getDB().update("update terraleads_shipping.call_queue_ref_operator set operator_id = 25562 where call_queue_id = 26");
+        new WelcomePage().open().header.changeUser(region.getHandlingNotPaidOrder_operator_id());
     }
 
     @BeforeMethod

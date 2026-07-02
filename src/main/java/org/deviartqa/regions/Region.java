@@ -10,9 +10,29 @@ public abstract class Region {
     protected String delivery_service;
     protected String zip_code;
     protected int webmaster_id;
+    protected int advertiser_id;
+    protected int handlingNotPaidOrder_operator_id;
+    protected int reasonForNotPaymentOrder_operator_id;
+    protected int additionalSelling_operator_id;
 
     public String getName() {
         return name;
+    }
+
+    public int getAdditionalSelling_operator_id() {
+        return additionalSelling_operator_id;
+    }
+
+    public int getHandlingNotPaidOrder_operator_id() {
+        return handlingNotPaidOrder_operator_id;
+    }
+
+    public int getReasonForNotPaymentOrder_operator_id() {
+        return reasonForNotPaymentOrder_operator_id;
+    }
+
+    public int getAdvertiser_id() {
+        return advertiser_id;
     }
 
     public int getWebmaster_id() {

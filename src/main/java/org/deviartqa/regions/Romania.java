@@ -11,5 +11,9 @@ public class Romania extends Region {
         super.reminder_operator_id = 15567;
         super.zip_code = "03111";
         super.webmaster_id = 85366;
+        super.advertiser_id = 15552;
+        super.handlingNotPaidOrder_operator_id = 18081;
+        super.reasonForNotPaymentOrder_operator_id = 15730;
+        super.additionalSelling_operator_id = 16031;
     }
 }

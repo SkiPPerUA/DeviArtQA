@@ -131,6 +131,11 @@ public class ProcessingPage extends CabinetPage {
         return this;
     }
 
+    public ProcessingPage setFull_name(String data){
+        super.setFull_name(data);
+        return this;
+    }
+
     public enum CallParameters {call_id,lead_id,country}
 
     public enum TypeProduct{crossale}

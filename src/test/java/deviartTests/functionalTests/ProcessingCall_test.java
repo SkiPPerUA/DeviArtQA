@@ -24,6 +24,7 @@ public class ProcessingCall_test extends BaseTest {
 
     public void approve_call() {
         processingPage
+                .setFull_name("Vlad "+DataHelper.getTime("yyyy-MM-ddk:m:ss"))
                 .setDelivery_service_id(region.getDelivery_service())
                 .setSendTime(DataHelper.getTime("yyyy-MM-dd",1))
                 .setZipcode(region.getZip_code(), 3)
